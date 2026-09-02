@@ -14,7 +14,7 @@ import Footer from "../components/Footer";
 
 export default function Home() {
   return (
-    <main className="relative w-full bg-[#050608] text-[#F4F4F6] overflow-hidden">
+    <main className="relative w-full bg-[#050608] text-[#F4F4F6] overflow-x-clip">
       {/* Top Film-House Navbar */}
       <Navbar />
 

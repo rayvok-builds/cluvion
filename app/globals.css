@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap');
+@import url('https://fonts.cdnfonts.com/css/thegoodmonolith');
 
 @tailwind base;
 @tailwind components;
@@ -173,5 +174,22 @@ html.lenis, html.lenis body {
 
 .animate-shimmer {
   animation: shimmer 1.8s infinite;
+}
+
+/* 3D Perspective & Layout Exploration Utilities */
+.perspective-800 {
+  perspective: 800px;
+}
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+.backface-hidden {
+  backface-visibility: hidden;
+}
+.transform-origin-top {
+  transform-origin: center top;
+}
+.clip-closed {
+  clip-path: inset(100% 0 0 0);
 }
 
