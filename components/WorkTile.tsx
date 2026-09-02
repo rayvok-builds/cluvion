@@ -4,25 +4,33 @@ import { useRef, useEffect, useState } from "react";
 import { WorkItem } from "../lib/data";
 
 // Helper to optimize Cloudinary video stream & poster thumbnails
-function getCloudinaryMedia(url: string, fallbackPoster: string) {
+function getCloudinaryMedia(url: string, fallbackPoster: string, isFullWidth?: boolean) {
   if (url.includes("res.cloudinary.com")) {
-    const videoUrl = url.replace("/upload/", "/upload/q_auto:eco,f_auto,w_720/");
+    const widthParam = isFullWidth ? "w_1280" : "w_720";
+    const videoUrl = url.replace("/upload/", `/upload/q_auto:eco,f_auto,${widthParam}/`);
     const posterUrl = url
-      .replace("/upload/", "/upload/so_0,q_auto,f_jpg,w_720/")
+      .replace("/upload/", `/upload/so_0,q_auto,f_jpg,${widthParam}/`)
       .replace(/\.mp4$/, ".jpg");
     return { videoUrl, posterUrl };
   }
   return { videoUrl: url, posterUrl: fallbackPoster };
 }
 
-export default function WorkTile({ item }: { item: WorkItem; index?: number }) {
+export default function WorkTile({ 
+  item, 
+  isFullWidth = false 
+}: { 
+  item: WorkItem; 
+  index?: number; 
+  isFullWidth?: boolean; 
+}) {
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isInView, setIsInView] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasTriggeredLoad, setHasTriggeredLoad] = useState(false);
 
-  const { videoUrl, posterUrl } = getCloudinaryMedia(item.videoUrl, item.posterUrl);
+  const { videoUrl, posterUrl } = getCloudinaryMedia(item.videoUrl, item.posterUrl, isFullWidth);
 
   // Viewport Intersection Observer (Async lazy loading & auto-pause when scrolled offscreen)
   useEffect(() => {
@@ -115,7 +123,11 @@ export default function WorkTile({ item }: { item: WorkItem; index?: number }) {
       onClick={handleClick}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className="relative w-full aspect-[4/5] sm:aspect-[3/4] overflow-hidden bg-[#0A0B0E] border border-white/[0.04] select-none [transform:translateZ(0)] cursor-pointer"
+      className={`relative w-full overflow-hidden bg-[#0A0B0E] border border-white/[0.04] select-none [transform:translateZ(0)] cursor-pointer ${
+        isFullWidth 
+          ? "w-full h-screen" 
+          : "aspect-[4/5] sm:aspect-[3/4]"
+      }`}
     >
       {/* Skeleton Loading Indicator */}
       {!isLoaded && (

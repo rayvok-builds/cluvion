@@ -12,7 +12,34 @@ export interface WorkItem {
   year: string;
 }
 
-export const WORK_ITEMS: WorkItem[] = [
+export const FEATURED_VIDEOS = {
+  heroLarge1: {
+    id: "large-mercedes",
+    client: "MERCEDES-BENZ",
+    isPlaceholder: false,
+    tagline: "Cinematic Luxury",
+    category: "Brand Film",
+    duration: "0:45",
+    aspectRatio: "16:9" as const,
+    videoUrl: "https://res.cloudinary.com/dokrpo5fl/video/upload/v1788358969/Copy-of-mercedece.hevc_hhojlb.mp4",
+    posterUrl: "https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=1200&auto=format&fit=crop",
+    year: "2026"
+  },
+  heroLarge2: {
+    id: "large-okapiswim",
+    client: "OKAPI SWIM",
+    isPlaceholder: false,
+    tagline: "Coastal Summer Campaign",
+    category: "Fashion & Swimwear",
+    duration: "0:50",
+    aspectRatio: "16:9" as const,
+    videoUrl: "https://res.cloudinary.com/dokrpo5fl/video/upload/v1788358987/okapiswim.hevc_wgp3od.mp4",
+    posterUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop",
+    year: "2026"
+  }
+};
+
+export const REEL_GRID_1: WorkItem[] = [
   {
     id: "wish-u",
     client: "WISH U",
@@ -20,7 +47,7 @@ export const WORK_ITEMS: WorkItem[] = [
     tagline: "Brand film, shot nowhere.",
     category: "Brand Film",
     duration: "0:45",
-    aspectRatio: "2.39:1",
+    aspectRatio: "9:16",
     videoUrl: "https://res.cloudinary.com/dokrpo5fl/video/upload/v1788349391/6.hevc_q4albe.mp4",
     posterUrl: "https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=1200&auto=format&fit=crop",
     metrics: "4.8M Views · 0 Flights",
@@ -33,7 +60,7 @@ export const WORK_ITEMS: WorkItem[] = [
     tagline: "Paris to Jaipur. Zero flights.",
     category: "Haute Couture & Fine Jewelry",
     duration: "0:52",
-    aspectRatio: "16:9",
+    aspectRatio: "9:16",
     videoUrl: "https://res.cloudinary.com/dokrpo5fl/video/upload/v1788349406/2.hevc_vmuagc.mp4",
     posterUrl: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1200&auto=format&fit=crop",
     metrics: "78% Lower Cost · Global Campaign",
@@ -51,7 +78,10 @@ export const WORK_ITEMS: WorkItem[] = [
     posterUrl: "https://images.unsplash.com/photo-1616469829941-c7200edec809?q=80&w=1200&auto=format&fit=crop",
     metrics: "14 Iterations · 3.2x ROAS",
     year: "2026"
-  },
+  }
+];
+
+export const REEL_GRID_2: WorkItem[] = [
   {
     id: "client-prod",
     client: "[CLIENT]",
@@ -59,7 +89,7 @@ export const WORK_ITEMS: WorkItem[] = [
     tagline: "Product film. No sample shipped.",
     category: "Photoreal Packshot",
     duration: "0:38",
-    aspectRatio: "16:9",
+    aspectRatio: "9:16",
     videoUrl: "https://res.cloudinary.com/dokrpo5fl/video/upload/v1788349390/9.hevc_d5gmk6.mp4",
     posterUrl: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=1200&auto=format&fit=crop",
     metrics: "100% Digital Asset · 4K Macro",
@@ -92,6 +122,8 @@ export const WORK_ITEMS: WorkItem[] = [
     year: "2026"
   }
 ];
+
+export const WORK_ITEMS: WorkItem[] = [...REEL_GRID_1, ...REEL_GRID_2];
 
 export const MARQUEE_CLIENTS = [
   "WISH U",
