@@ -1,0 +1,177 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Switzer';
+  src: url('/fonts/switzer/Switzer-Variable.woff2') format('woff2'),
+       url('/fonts/switzer/Switzer-Variable.woff') format('woff'),
+       url('/fonts/switzer/Switzer-Variable.ttf') format('truetype');
+  font-weight: 100 900;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Switzer';
+  src: url('/fonts/switzer/Switzer-VariableItalic.woff2') format('woff2'),
+       url('/fonts/switzer/Switzer-VariableItalic.woff') format('woff'),
+       url('/fonts/switzer/Switzer-VariableItalic.ttf') format('truetype');
+  font-weight: 100 900;
+  font-display: swap;
+  font-style: italic;
+}
+
+:root {
+  --font-switzer: 'Switzer', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-dmsans: 'DM Sans', sans-serif;
+  --accent: #E5A93C;
+  --bg-dark: #070709;
+}
+
+html {
+  scroll-behavior: auto !important; /* Managed by Lenis */
+  background-color: #070709;
+  color: #F4F4F6;
+  font-family: var(--font-dmsans);
+}
+
+body {
+  background-color: #070709;
+  color: #F4F4F6;
+  overflow-x: hidden;
+  font-family: var(--font-dmsans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Headings, subheadings, CTA buttons use Primary font (Switzer) */
+h1, h2, h3, h4, h5, h6, .font-heading, .btn-primary {
+  font-family: var(--font-switzer);
+}
+
+/* Links, navlinks, secondary buttons, labels use Secondary font (DM Sans) */
+a, nav, button:not(.btn-primary), .font-body, .font-nav, .font-link {
+  font-family: var(--font-dmsans);
+}
+
+/* Custom Film Selection */
+::selection {
+  background-color: rgba(229, 169, 60, 0.25);
+  color: #ffffff;
+}
+
+/* Signature Italic Accent Word per major statement */
+.accent-italic, em, .italic-accent {
+  font-style: italic;
+  font-weight: inherit;
+  color: #E5A93C;
+  display: inline-block;
+  transform: skewX(-2deg);
+}
+
+/* Lenis Recommended CSS */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* Subtle Film Grain */
+.film-grain-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Subtle Vignette */
+.cinema-vignette {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9998;
+  background: radial-gradient(circle at center, transparent 60%, rgba(5, 5, 7, 0.6) 100%);
+}
+
+/* Subtle custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #070709;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1C1D24;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #E5A93C;
+}
+
+/* Utility Animations */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: 200%;
+  animation: marquee 25s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Hide scrollbar but keep scroll functionality */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Skeleton Shimmer Animation */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 1.8s infinite;
+}
+
