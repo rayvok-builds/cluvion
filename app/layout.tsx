@@ -7,6 +7,8 @@ import VideoLightbox from "../components/VideoLightbox";
 import CaseStudyModal from "../components/CaseStudyModal";
 import ArchiveModal from "../components/ArchiveModal";
 
+import Preloader from "../components/Preloader";
+
 export const metadata: Metadata = {
   title: "CLUVION — The AI Film House",
   description:
@@ -40,6 +42,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className="bg-[#070709] text-[#F4F4F6] min-h-screen antialiased selection:bg-accent/30 selection:text-white font-secondary">
+        {/* Cinematic Preloader Animation */}
+        <Preloader />
+
         {/* Subtle Ambient Film Grain */}
         <div className="film-grain-overlay" aria-hidden="true" />
         

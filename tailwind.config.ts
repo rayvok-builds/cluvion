@@ -29,11 +29,13 @@ const config: Config = {
         "hero-sub": "rgb(136, 136, 136)",
       },
       fontFamily: {
-        primary: ["var(--font-switzer)", "Switzer", "sans-serif"],
-        secondary: ["var(--font-dmsans)", "DM Sans", "sans-serif"],
-        switzer: ["var(--font-switzer)", "Switzer", "sans-serif"],
-        dmsans: ["var(--font-dmsans)", "DM Sans", "sans-serif"],
-        inter: ["Inter", "sans-serif"],
+        primary: ["var(--font-thegoodmonolith)", "TheGoodMonolith", "monospace"],
+        secondary: ["var(--font-thegoodmonolith)", "TheGoodMonolith", "monospace"],
+        switzer: ["var(--font-thegoodmonolith)", "TheGoodMonolith", "monospace"],
+        dmsans: ["var(--font-thegoodmonolith)", "TheGoodMonolith", "monospace"],
+        inter: ["var(--font-thegoodmonolith)", "TheGoodMonolith", "monospace"],
+        mono: ["var(--font-thegoodmonolith)", "TheGoodMonolith", "monospace"],
+        thegoodmonolith: ["var(--font-thegoodmonolith)", "TheGoodMonolith", "monospace"],
       },
       fontSize: {
         "hero-h1": ["64px", { lineHeight: "64px" }],

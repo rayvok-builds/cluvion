@@ -11,6 +11,7 @@ import WhyItWorks from "../components/WhyItWorks";
 import FAQ from "../components/FAQ";
 import FinalCTA from "../components/FinalCTA";
 import Footer from "../components/Footer";
+import GradualBlur from "../components/GradualBlur";
 
 export default function Home() {
   return (
@@ -30,23 +31,15 @@ export default function Home() {
       {/* 03 · The Statement: Full-viewport type only */}
       <Statement />
 
- 
-
       {/* 05 · Services / Capabilities Section */}
       <WhatWeDo />
 
       {/* 06 · How We Work: 4 Code-Labelled Steps */}
       <HowWeWork />
 
-      {/* 07 · Case Study: Featured Client & Metrics
-      <CaseStudy />
-       */}
+      {/* 07 · Case Study: Featured Client & Metrics */}
 
-      {/* 08 · Why It Works: Craft Personality Section
-      <WhyItWorks />
-      */}
-
-           {/* 04 · Numbers: Animated Counters & Shoot Calculator */}
+      {/* 04 · Numbers: Animated Counters & Shoot Calculator */}
       <Numbers />
 
       {/* 09 · FAQ: Accordion */}
@@ -57,6 +50,15 @@ export default function Home() {
 
       {/* Footer with Giant Bottom Typography */}
       <Footer />
+
+      {/* Gradual Blur at the bottom of the site */}
+      <GradualBlur
+        preset="page-footer"
+        height="6rem"
+        strength={2}
+        curve="bezier"
+        divCount={5}
+      />
     </main>
   );
 }

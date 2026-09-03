@@ -1,9 +1,8 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Volume2, VolumeX } from "lucide-react";
 import { useFilm } from "./FilmContext";
 
 export default function Hero() {
@@ -16,15 +15,7 @@ export default function Hero() {
   const videoOverlayRef = useRef<HTMLDivElement>(null);
   const overlayContentRef = useRef<HTMLDivElement>(null);
 
-  const [isMuted, setIsMuted] = useState(true);
   const { openProjectModal } = useFilm();
-
-  const toggleSound = () => {
-    if (!videoRef.current) return;
-    const nextMuted = !videoRef.current.muted;
-    videoRef.current.muted = nextMuted;
-    setIsMuted(nextMuted);
-  };
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -36,6 +27,73 @@ export default function Hero() {
       video.volume = 0.8;
       video.play().catch(() => {});
     }
+
+    // ── Slow, Stately Cinematic Entrance Timeline ──
+    let hasAnimated = false;
+    const playEntrance = () => {
+      if (hasAnimated) return;
+      hasAnimated = true;
+
+      const items = headerContentRef.current?.children;
+      if (items && videoContainerRef.current) {
+        const entranceTl = gsap.timeline();
+
+        // 1. Main Headline emerges gracefully after Navbar starts sliding down
+        entranceTl
+          .fromTo(
+            items[0], // H1 Main Headline
+            { y: 60, opacity: 0, filter: "blur(10px)" },
+            {
+              y: 0,
+              opacity: 1,
+              filter: "blur(0px)",
+              duration: 1.4,
+              ease: "power2.out",
+            },
+            0.6
+          )
+          // 2. Subheading floats up smoothly
+          .fromTo(
+            items[1], // Subtitle Paragraph
+            { y: 40, opacity: 0 },
+            {
+              y: 0,
+              opacity: 1,
+              duration: 1.2,
+              ease: "power2.out",
+            },
+            1.4
+          )
+          // 3. CTA Button appears
+          .fromTo(
+            items[2], // CTA Button Container
+            { y: 30, opacity: 0, scale: 0.95 },
+            {
+              y: 0,
+              opacity: 1,
+              scale: 1,
+              duration: 1.0,
+              ease: "power2.out",
+            },
+            2.1
+          )
+          // 4. Video Box smoothly emerges
+          .fromTo(
+            videoContainerRef.current, // Video Box
+            { opacity: 0, scale: 0.92 },
+            {
+              opacity: 1,
+              scale: 1,
+              duration: 1.3,
+              ease: "power2.out",
+            },
+            2.7
+          );
+      }
+    };
+
+    window.addEventListener("preloaderComplete", playEntrance);
+    const fallbackTimer = setTimeout(playEntrance, 4000);
 
     const ctx = gsap.context(() => {
       // 1. 3D Film Roll Flip-Away on Hero Text
@@ -95,7 +153,6 @@ export default function Hero() {
           },
         });
 
-        // Starts positioned down, then transitions to 100vw x 100vh full screen with sharp edges
         tl.to(
           videoContainerRef.current,
           {
@@ -152,6 +209,8 @@ export default function Hero() {
     });
 
     return () => {
+      window.removeEventListener("preloaderComplete", playEntrance);
+      clearTimeout(fallbackTimer);
       ctx.revert();
     };
   }, []);
@@ -173,7 +232,7 @@ export default function Hero() {
         >
           {/* Main Headline */}
           <h1
-            className="font-switzer font-medium uppercase text-4xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight text-white mb-5 leading-[0.95] drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]"
+            className="opacity-0 font-switzer font-medium uppercase text-4xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight text-white mb-5 leading-[0.95] drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]"
             style={{
               transformStyle: "preserve-3d",
               backfaceVisibility: "hidden",
@@ -185,7 +244,7 @@ export default function Hero() {
 
           {/* Subtitle / Description */}
           <p
-            className="font-dmsans text-base sm:text-lg md:text-xl text-white/70 max-w-2xl mx-auto leading-relaxed mb-8 drop-shadow-[0_2px_15px_rgba(0,0,0,0.8)]"
+            className="opacity-0 font-dmsans text-base sm:text-lg md:text-xl text-white/70 max-w-2xl mx-auto leading-relaxed mb-8 drop-shadow-[0_2px_15px_rgba(0,0,0,0.8)]"
             style={{
               transformStyle: "preserve-3d",
               backfaceVisibility: "hidden",
@@ -196,8 +255,9 @@ export default function Hero() {
             physical shoots, sets, crews, or flights.
           </p>
 
-          {/* CTA Button: Sharp edges (no rounded radius) */}
+          {/* CTA Button */}
           <div
+            className="opacity-0"
             style={{
               transformStyle: "preserve-3d",
               backfaceVisibility: "hidden",
@@ -223,12 +283,11 @@ export default function Hero() {
         className="relative w-full h-[300vh] -mt-[100vh] pointer-events-none z-20"
       >
         <div className="sticky top-0 left-0 w-full h-screen flex justify-center items-center pointer-events-auto overflow-hidden">
-          
-          {/* Video Container Box: starts down a little so hero text above is fully visible */}
+          {/* Video Container Box */}
           <div
             id="video-container"
             ref={videoContainerRef}
-            className="relative w-[220px] h-[210px] sm:w-[420px] sm:h-[260px] md:w-[280px] md:h-[290px] overflow-hidden bg-[#070709] rounded-none shadow-[0_25px_70px_rgba(0,0,0,0.95)] will-change-transform translate-y-[10vh] sm:translate-y-[32vh]"
+            className="opacity-0 relative w-[220px] h-[210px] sm:w-[420px] sm:h-[260px] md:w-[280px] md:h-[290px] overflow-hidden bg-[#070709] rounded-none shadow-[0_25px_70px_rgba(0,0,0,0.95)] will-change-transform translate-y-[10vh] sm:translate-y-[32vh]"
             style={{
               borderRadius: "0px",
               clipPath: "inset(0 0 0 0)",
@@ -262,8 +321,6 @@ export default function Hero() {
               className="absolute inset-0 z-10 pointer-events-none bg-black/0 transition-colors duration-300"
             />
 
-          
-
             {/* Video Frosted Glass Overlay with Reveal Animation */}
             <div
               ref={videoOverlayRef}
@@ -274,7 +331,6 @@ export default function Hero() {
                 WebkitBackdropFilter: "blur(6px)",
               }}
             >
-              {/* Revealed Statement: "Bold agency for bold brands." with brands highlighted */}
               <div
                 ref={overlayContentRef}
                 className="content flex flex-col justify-center items-center max-w-4xl mx-auto px-6"

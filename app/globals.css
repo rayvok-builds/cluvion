@@ -6,6 +6,17 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Base font - TheGoodMonolith */
+@font-face {
+  font-family: "TheGoodMonolith";
+  font-style: normal;
+  font-weight: 500;
+  src: local("TheGoodMonolith"),
+    url("https://fonts.cdnfonts.com/s/32398/TheGoodMonolith.woff")
+      format("woff");
+  font-display: swap;
+}
+
 @font-face {
   font-family: 'Switzer';
   src: url('/fonts/switzer/Switzer-Variable.woff2') format('woff2'),
@@ -27,8 +38,10 @@
 }
 
 :root {
-  --font-switzer: 'Switzer', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-dmsans: 'DM Sans', sans-serif;
+  --font-thegoodmonolith: 'TheGoodMonolith', monospace;
+  --font-switzer: 'TheGoodMonolith', monospace;
+  --font-dmsans: 'TheGoodMonolith', monospace;
+  --font-mono: 'TheGoodMonolith', monospace;
   --accent: #E5A93C;
   --bg-dark: #070709;
 }
@@ -37,26 +50,26 @@ html {
   scroll-behavior: auto !important; /* Managed by Lenis */
   background-color: #070709;
   color: #F4F4F6;
-  font-family: var(--font-dmsans);
+  font-family: 'TheGoodMonolith', monospace;
 }
 
 body {
   background-color: #070709;
   color: #F4F4F6;
   overflow-x: hidden;
-  font-family: var(--font-dmsans);
+  font-family: 'TheGoodMonolith', monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Headings, subheadings, CTA buttons use Primary font (Switzer) */
+/* Headings, subheadings, CTA buttons use TheGoodMonolith font */
 h1, h2, h3, h4, h5, h6, .font-heading, .btn-primary {
-  font-family: var(--font-switzer);
+  font-family: 'TheGoodMonolith', monospace;
 }
 
-/* Links, navlinks, secondary buttons, labels use Secondary font (DM Sans) */
-a, nav, button:not(.btn-primary), .font-body, .font-nav, .font-link {
-  font-family: var(--font-dmsans);
+/* Links, navlinks, secondary buttons, labels use TheGoodMonolith font */
+a, nav, button, .font-body, .font-nav, .font-link {
+  font-family: 'TheGoodMonolith', monospace;
 }
 
 /* Custom Film Selection */
