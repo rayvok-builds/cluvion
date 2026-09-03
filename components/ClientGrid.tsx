@@ -24,11 +24,11 @@ export default function ClientGrid() {
 
       {/* Cards marquee row + edge fade masks */}
       <div className="relative w-full overflow-hidden">
-        {/* Left fade mask */}
-        <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-24 sm:w-36 z-10 bg-gradient-to-r from-[#050608] via-[#050608]/80 to-transparent" />
+        {/* Left fade mask - wide dark gradient to cover much more left */}
+        <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-48 sm:w-72 md:w-96 lg:w-[460px] z-10 bg-gradient-to-r from-[#050608] via-[#050608]/95 via-35% to-transparent" />
 
         {/* Right fade mask */}
-        <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-24 sm:w-36 z-10 bg-gradient-to-l from-[#050608] via-[#050608]/80 to-transparent" />
+        <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-32 sm:w-56 md:w-72 z-10 bg-gradient-to-l from-[#050608] via-[#050608]/90 via-35% to-transparent" />
 
         {/* Infinite Left Marquee Track */}
         <div className="flex gap-3 sm:gap-4 w-max animate-marquee hover:[animation-play-state:paused] py-1">
@@ -38,7 +38,7 @@ export default function ClientGrid() {
               className={`
                 flex-shrink-0 flex flex-col items-center justify-center
                 w-[160px] sm:w-[190px] h-[90px] sm:h-[105px]
-                rounded-xl border transition-all duration-300 select-none
+                rounded-none border transition-all duration-300 select-none
                 ${c.placeholder
                   ? "bg-[#0A0B0E] border-white/[0.06]"
                   : "bg-[#0D0E11] border-white/[0.09] hover:border-white/20 hover:bg-[#111215]"

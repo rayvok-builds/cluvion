@@ -163,7 +163,7 @@ export default function Hero() {
       ────────────────────────────────────────────────────────── */}
       <div
         ref={containerRef}
-        className="relative min-h-screen w-full flex flex-col justify-start items-center pt-28 sm:pt-32 pb-26 px-6 sm:px-8 text-center"
+        className="relative min-h-screen w-full flex flex-col justify-start items-center pt-24 sm:pt-32 pb-16 sm:pb-26 px-6 sm:px-8 text-center"
         style={{ perspective: "800px" }}
       >
         <div
@@ -228,9 +228,8 @@ export default function Hero() {
           <div
             id="video-container"
             ref={videoContainerRef}
-            className="relative w-[340px] h-[210px] sm:w-[420px] sm:h-[260px] md:w-[280px] md:h-[290px] overflow-hidden bg-[#070709] rounded-none shadow-[0_25px_70px_rgba(0,0,0,0.95)] will-change-transform"
+            className="relative w-[220px] h-[210px] sm:w-[420px] sm:h-[260px] md:w-[280px] md:h-[290px] overflow-hidden bg-[#070709] rounded-none shadow-[0_25px_70px_rgba(0,0,0,0.95)] will-change-transform translate-y-[10vh] sm:translate-y-[32vh]"
             style={{
-              transform: "translateY(32vh)",
               borderRadius: "0px",
               clipPath: "inset(0 0 0 0)",
             }}

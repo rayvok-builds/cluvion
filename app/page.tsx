@@ -30,8 +30,7 @@ export default function Home() {
       {/* 03 · The Statement: Full-viewport type only */}
       <Statement />
 
-      {/* 04 · Numbers: Animated Counters & Shoot Calculator */}
-      <Numbers />
+ 
 
       {/* 05 · Services / Capabilities Section */}
       <WhatWeDo />
@@ -39,11 +38,16 @@ export default function Home() {
       {/* 06 · How We Work: 4 Code-Labelled Steps */}
       <HowWeWork />
 
-      {/* 07 · Case Study: Featured Client & Metrics */}
+      {/* 07 · Case Study: Featured Client & Metrics
       <CaseStudy />
+       */}
 
-      {/* 08 · Why It Works: Craft Personality Section */}
+      {/* 08 · Why It Works: Craft Personality Section
       <WhyItWorks />
+      */}
+
+           {/* 04 · Numbers: Animated Counters & Shoot Calculator */}
+      <Numbers />
 
       {/* 09 · FAQ: Accordion */}
       <FAQ />
