@@ -336,12 +336,12 @@ export default function Hero() {
                 className="content flex flex-col justify-center items-center max-w-4xl mx-auto px-6"
                 style={{ filter: "blur(10px)", transform: "scale(1.08)" }}
               >
-                <h2 className="font-switzer font-medium uppercase text-3xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tight text-white leading-tight select-none">
+                <h2 className="font-switzer font-semibold uppercase text-3xl sm:text-5xl  lg:text-8xl tracking-tight text-white leading-tight select-none">
                   Bold agency for bold{" "}
-                  <span className="text-accent italic font-semibold underline decoration-accent/40 underline-offset-8 drop-shadow-[0_0_35px_rgba(229,169,60,0.6)]">
+                  <span className="text-accent  font-semibold underline decoration-accent/40 underline-offset-8 drop-shadow-[0_0_35px_rgba(229,169,60,0.6)]">
                     brands
                   </span>
-                  .
+                  
                 </h2>
               </div>
             </div>

@@ -45,38 +45,41 @@ export default function Statement() {
   return (
     <section
       ref={sectionRef}
-      className="relative w-full min-h-[85vh] lg:min-h-screen flex flex-col justify-center items-center bg-[#070709] border-b border-white/[0.08] py-24 sm:py-32 overflow-hidden"
+      className="relative w-full min-h-[85vh] lg:min-h-screen flex flex-col justify-center items-center bg-[#050608] border-b border-white/[0.08] py-24 sm:py-32 overflow-hidden select-none"
     >
-      {/* Background Subtle Light Glow */}
-      <div className="absolute w-[600px] h-[600px] bg-accent/5 rounded-full blur-[140px] pointer-events-none -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" />
+      {/* Background Subtle Warm Amber Glow */}
+      <div className="absolute w-[600px] h-[600px] bg-accent/5 rounded-full blur-[160px] pointer-events-none -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" />
 
       <div className="max-w-6xl mx-auto px-6 sm:px-10 text-center relative z-10">
         {/* Section Marker */}
         <div className="inline-flex items-center gap-2 mb-8 sm:mb-12">
           <span className="text-xs font-mono text-accent tracking-widest font-semibold">03</span>
-          <span className="text-xs font-secondary uppercase tracking-[0.25em] text-cinema-dim">
+          <span className="text-xs font-mono uppercase tracking-[0.25em] text-white/40">
             // THE STATEMENT
           </span>
         </div>
 
-        {/* Big Bold Headline (Exact Copy: SAME CINEMA. *A FRACTION* OF THE INVOICE.) */}
+        {/* Big Bold Headline */}
         <h2
           ref={headlineRef}
-          className="font-primary font-black text-4xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight uppercase text-white leading-[1.08] sm:leading-[1.05] mb-8 sm:mb-10 max-w-5xl mx-auto"
+          className="font-switzer font-medium text-4xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight uppercase text-white leading-[1.05] mb-8 sm:mb-10 max-w-5xl mx-auto"
         >
           SAME CINEMA.{" "}
-          <span className="accent-italic font-bold text-accent px-1">
+          <span className="text-accent underline decoration-accent/40 underline-offset-8">
             A FRACTION
           </span>{" "}
-          OF THE INVOICE.
+          OF THE PRODUCTION.
         </h2>
 
-        {/* Subtext (Exact Copy: Everything a ₹40-lakh shoot delivers — the light, the skin, the story — without the sets, the crew, or the flights.) */}
+        {/* Subtext */}
         <p
           ref={subtextRef}
-          className="font-secondary text-lg sm:text-2xl md:text-3xl text-cinema-muted leading-relaxed sm:leading-normal max-w-3xl mx-auto font-light tracking-wide"
+          className="font-dmsans text-lg sm:text-2xl md:text-3xl text-white/60 leading-relaxed sm:leading-normal max-w-3xl mx-auto font-light tracking-wide"
         >
-          Everything a ₹40-lakh shoot delivers — the light, the skin, the story — without the sets, the crew, or the flights.
+          The cinema of a traditional production. Without the traditional production.
+          <span className="block text-sm sm:text-base text-white/35 font-mono uppercase tracking-widest mt-4">
+            The light, the skin, the texture — without the permits, the flights, or the physical crew.
+          </span>
         </p>
       </div>
     </section>

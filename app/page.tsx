@@ -1,13 +1,16 @@
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
 import ClientGrid from "../components/ClientGrid";
-import WorkGrid from "../components/WorkGrid";
 import Statement from "../components/Statement";
-import Numbers from "../components/Numbers";
 import WhatWeDo from "../components/WhatWeDo";
 import HowWeWork from "../components/HowWeWork";
 import CaseStudy from "../components/CaseStudy";
+import WorkGrid from "../components/WorkGrid";
+import ImpossibleShot from "../components/ImpossibleShot";
+import QualityControl from "../components/QualityControl";
 import WhyItWorks from "../components/WhyItWorks";
+import TasteManifesto from "../components/TasteManifesto";
+import Numbers from "../components/Numbers";
 import FAQ from "../components/FAQ";
 import FinalCTA from "../components/FinalCTA";
 import Footer from "../components/Footer";
@@ -16,42 +19,55 @@ import GradualBlur from "../components/GradualBlur";
 export default function Home() {
   return (
     <main className="relative w-full bg-[#050608] text-[#F4F4F6] overflow-x-clip">
-      {/* Top Film-House Navbar */}
+      {/* 00 · Top Film-House Navbar */}
       <Navbar />
 
-      {/* 01 · Hero Section with Rounded Bottom Stage & Giant Typography */}
+      {/* 01 · Hero Section: Minimal Fullscreen Cinema & Pixel Typography */}
       <Hero />
 
-      {/* 01.2 · Client Cards Grid & Awards Accolades */}
+      {/* 02 · Selected Clients: Editorial Credits Wall with Hover Previews */}
       <ClientGrid />
 
-      {/* 02 · Projects Section: 2-Column Showcase */}
-      <WorkGrid />
-
-      {/* 03 · The Statement: Full-viewport type only */}
+      {/* 03 · The Statement: Brutalist Typographic Manifesto */}
       <Statement />
 
-      {/* 05 · Services / Capabilities Section */}
+      {/* 04 · Services: Interactive Production Console (5 Visual Modes) */}
       <WhatWeDo />
 
-      {/* 06 · How We Work: 4 Code-Labelled Steps */}
+      {/* 05 · The Process: From Idea to Frame Production Timeline */}
       <HowWeWork />
 
-      {/* 07 · Case Study: Featured Client & Metrics */}
+      {/* 06 · Selected Work: Featured Client Production Dossier */}
+      <CaseStudy />
 
-      {/* 04 · Numbers: Animated Counters & Shoot Calculator */}
+      {/* 06.2 · 2-Column Film Showcase Archive */}
+      <WorkGrid />
+
+      {/* 07 · The Impossible Shot: Layer Deconstruction Reveal */}
+      <ImpossibleShot />
+
+      {/* 08 · Quality Control: Studio Inspection HUD */}
+      <QualityControl />
+
+      {/* 09 · Why Cluvion: "The Signal" Connected Intelligence System */}
+      <WhyItWorks />
+
+      {/* 10 · The Taste Manifesto: Huge Typographic Statement */}
+      <TasteManifesto />
+
+      {/* 11 · Investments: Transparent Minute-Based Cost Model */}
       <Numbers />
 
-      {/* 09 · FAQ: Accordion */}
+      {/* 12 · FAQ: Minimal Editorial Policy List */}
       <FAQ />
 
-      {/* 10 · Let's Talk: Split-card brief intake & CTA */}
+      {/* 13 · Final CTA: "The Frame" Brief Convergence Experience */}
       <FinalCTA />
 
-      {/* Footer with Giant Bottom Typography */}
+      {/* 14 · Footer: Film Studio Directory with Live IST Clock */}
       <Footer />
 
-      {/* Gradual Blur at the bottom of the site */}
+      {/* Gradual Blur at the bottom of the viewport */}
       <GradualBlur
         preset="page-footer"
         height="6rem"

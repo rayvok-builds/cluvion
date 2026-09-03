@@ -1,1 +1,1 @@
-redesign of the service section, in  left 
+redesign of the service section, in  left the content and in right side the video, sharp edges and video is auto play and loop and audo on of funtionality . the service section layout should be clean and minul 
