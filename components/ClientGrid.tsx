@@ -1,16 +1,13 @@
 "use client";
 
-import { useState } from "react";
-import { ArrowUpRight } from "lucide-react";
+import { useRef, useEffect } from "react";
 
 interface ClientCredit {
   id: string;
   name: string;
   category: string;
-  scope: string;
   year: string;
-  previewUrl: string;
-  videoUrl?: string;
+  image: string;
 }
 
 const CLIENT_CREDITS: ClientCredit[] = [
@@ -18,158 +15,175 @@ const CLIENT_CREDITS: ClientCredit[] = [
     id: "wish-u",
     name: "WISH U",
     category: "Luxury Fashion",
-    scope: "Global Brand Film & Social Suite",
     year: "2026",
-    previewUrl: "https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=1200&auto=format&fit=crop",
-    videoUrl: "https://res.cloudinary.com/dokrpo5fl/video/upload/v1788349391/6.hevc_q4albe.mp4",
+    image:
+      "https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=1600&auto=format&fit=crop",
   },
   {
     id: "auraashe",
     name: "AURAASHÈ",
     category: "Haute Joaillerie",
-    scope: "High-Jewelry Macro & Campaign Stills",
     year: "2026",
-    previewUrl: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1200&auto=format&fit=crop",
-    videoUrl: "https://res.cloudinary.com/dokrpo5fl/video/upload/v1788349406/2.hevc_vmuagc.mp4",
+    image:
+      "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1600&auto=format&fit=crop",
   },
   {
     id: "hastutii",
     name: "HASTUTII CRAFT",
     category: "Heritage Apparel",
-    scope: "Episodic Campaign & Lookbook",
     year: "2026",
-    previewUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1200&auto=format&fit=crop",
-    videoUrl: "https://res.cloudinary.com/dokrpo5fl/video/upload/v1788350306/4-tujvmy.hevc_pg3wkf.mp4",
+    image:
+      "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1600&auto=format&fit=crop",
   },
   {
-    id: "client-04",
-    name: "[CLIENT 04]",
+    id: "mercedes",
+    name: "MERCEDES-BENZ",
     category: "Automotive EV",
-    scope: "Cinematic Launch & Visual Stills",
     year: "2026",
-    previewUrl: "https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=1200&auto=format&fit=crop",
-    videoUrl: "https://res.cloudinary.com/dokrpo5fl/video/upload/v1788358969/Copy-of-mercedece.hevc_hhojlb.mp4",
+    image:
+      "https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=1600&auto=format&fit=crop",
   },
   {
-    id: "client-05",
-    name: "[CLIENT 05]",
-    category: "D2C Cosmetics",
-    scope: "14 Performance Variations & UGC Set",
+    id: "cosmetics",
+    name: "LUMEN COSMETICS",
+    category: "D2C Performance",
     year: "2026",
-    previewUrl: "https://images.unsplash.com/photo-1616469829941-c7200edec809?q=80&w=1200&auto=format&fit=crop",
-    videoUrl: "https://res.cloudinary.com/dokrpo5fl/video/upload/v1788349395/7.hevc_fltmal.mp4",
+    image:
+      "https://images.unsplash.com/photo-1616469829941-c7200edec809?q=80&w=1600&auto=format&fit=crop",
+  },
+  {
+    id: "okapi",
+    name: "OKAPI SWIM",
+    category: "Coastal Apparel",
+    year: "2026",
+    image:
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1600&auto=format&fit=crop",
+  },
+  {
+    id: "monochrome",
+    name: "MONOCHROME LABS",
+    category: "Spatial Audio",
+    year: "2026",
+    image:
+      "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1600&auto=format&fit=crop",
+  },
+  {
+    id: "elysian",
+    name: "ELYSIAN HOROLOGY",
+    category: "Swiss Watchmaking",
+    year: "2026",
+    image:
+      "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=1600&auto=format&fit=crop",
   },
 ];
 
 export default function ClientGrid() {
-  const [activeClient, setActiveClient] = useState<ClientCredit | null>(null);
+  const bgImageRef = useRef<HTMLImageElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Preload all client images for instantaneous response
+  useEffect(() => {
+    CLIENT_CREDITS.forEach((client) => {
+      const img = new Image();
+      img.src = client.image;
+    });
+  }, []);
+
+  const handleMouseEnter = (imageUrl: string) => {
+    const bgImage = bgImageRef.current;
+    if (!bgImage) return;
+
+    // Reset transform & transition
+    bgImage.style.transition = "none";
+    bgImage.style.transform = "scale(1.2)";
+
+    // Set source and reveal
+    bgImage.src = imageUrl;
+    bgImage.style.opacity = "0.75";
+
+    // Double rAF ensures browser paints the scale(1.2) before triggering 1.0 ease
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        bgImage.style.transition =
+          "transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.4s ease";
+        bgImage.style.transform = "scale(1.0)";
+      });
+    });
+  };
+
+  const handleMouseLeave = () => {
+    const bgImage = bgImageRef.current;
+    if (!bgImage) return;
+    bgImage.style.opacity = "0";
+  };
 
   return (
-    <section className="relative w-full py-20 sm:py-28 bg-[#050608] border-b border-white/[0.08] overflow-hidden select-none">
-      {/* Background Subtle Ambience on Hover */}
-      <div
-        className="pointer-events-none absolute inset-0 transition-opacity duration-700 z-0"
-        style={{ opacity: activeClient ? 0.22 : 0 }}
-      >
-        {activeClient?.videoUrl ? (
-          <video
-            key={activeClient.id}
-            src={activeClient.videoUrl}
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full h-full object-cover filter blur-md grayscale brightness-50"
-          />
-        ) : null}
+    <section className="relative w-full min-h-[90vh] flex flex-col justify-center bg-[#070709] border-b border-white/[0.08] overflow-hidden select-none py-20 sm:py-28">
+      {/* ── Background Zoom Image Container (CodePen Style) ── */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        <img
+          ref={bgImageRef}
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover will-change-transform opacity-0 filter brightness-90 contrast-105"
+          style={{
+            transform: "scale(1.2)",
+            transition: "transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.4s ease",
+          }}
+        />
+        {/* Subtle Dark Vignette & Gradient Overlays for optimal readability */}
+        <div className="absolute inset-0 bg-black/40 backdrop-blur-[1px] pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#070709] via-transparent to-[#070709]/80 pointer-events-none" />
       </div>
 
-      <div className="max-w-[1400px] mx-auto px-6 sm:px-10 relative z-10">
+      {/* ── Foreground Content Container ── */}
+      <div
+        ref={containerRef}
+        onMouseLeave={handleMouseLeave}
+        className="w-full max-w-[1050px] mx-auto px-6 sm:px-10 relative z-10"
+      >
         {/* Section Header */}
-        <div className="flex flex-col sm:flex-row sm:items-baseline justify-between pb-8 border-b border-white/[0.12] mb-2">
+        <div className="flex flex-col sm:flex-row sm:items-baseline justify-between pb-6 border-b border-white/[0.12] mb-4">
           <div className="flex items-center gap-3">
-            <span className="text-xs font-mono text-accent tracking-widest font-semibold">02</span>
+            <span className="text-xs font-mono text-accent tracking-widest font-semibold">
+              02
+            </span>
             <span className="text-xs font-mono uppercase tracking-[0.25em] text-white/50">
               // SELECTED CLIENTS · PRODUCTION ARCHIVE
             </span>
           </div>
           <span className="text-[11px] font-mono text-white/30 uppercase tracking-widest mt-2 sm:mt-0">
-            NAME → EVIDENCE
+            NAME → PORTFOLIO
           </span>
         </div>
 
-        {/* Editorial Credits List */}
-        <div className="divide-y divide-white/[0.08]">
+        {/* ── Projects List with Exclusion Invert Hover Wipe ── */}
+        <div className="w-full">
           {CLIENT_CREDITS.map((client, idx) => {
-            const isHovered = activeClient?.id === client.id;
+            const indexFormatted = String(idx + 1).padStart(2, "0");
             return (
               <div
                 key={client.id}
-                onMouseEnter={() => setActiveClient(client)}
-                onMouseLeave={() => setActiveClient(null)}
-                className={`group relative py-7 sm:py-9 transition-all duration-300 cursor-pointer ${
-                  isHovered ? "bg-white/[0.02]" : ""
-                }`}
+                onMouseEnter={() => handleMouseEnter(client.image)}
+                className="client-codepen-item group"
               >
-                {/* Thin active indicator line on hover */}
-                <div
-                  className={`absolute left-0 top-0 bottom-0 w-[2px] bg-accent transition-all duration-300 ${
-                    isHovered ? "opacity-100 scale-y-100" : "opacity-0 scale-y-0"
-                  }`}
-                />
+                {/* Title */}
+                <div className="client-codepen-title flex items-baseline gap-4 sm:gap-6">
+                  <span className="font-mono text-xs sm:text-sm text-white/40 tracking-wider">
+                    [{indexFormatted}]
+                  </span>
+                  <h3 className="font-primary text-2xl sm:text-4xl md:text-5xl uppercase tracking-tight text-[#f8f5f2] leading-tight transition-transform duration-200 group-hover:translate-x-1">
+                    {client.name}
+                  </h3>
+                </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-12 items-center gap-4 px-2 sm:px-4">
-                  {/* Index / Code */}
-                  <div className="md:col-span-1">
-                    <span
-                      className={`text-xs font-mono transition-colors duration-200 ${
-                        isHovered ? "text-accent" : "text-white/25"
-                      }`}
-                    >
-                      [0{idx + 1}]
-                    </span>
-                  </div>
-
-                  {/* Client Name */}
-                  <div className="md:col-span-5">
-                    <h3
-                      className={`font-switzer font-medium text-2xl sm:text-3xl md:text-4xl tracking-tight uppercase transition-all duration-200 ${
-                        isHovered ? "text-white translate-x-1" : "text-white/70"
-                      }`}
-                    >
-                      {client.name}
-                    </h3>
-                  </div>
-
-                  {/* Category & Scope */}
-                  <div className="md:col-span-4 flex flex-col">
-                    <span
-                      className={`font-mono text-xs uppercase tracking-widest transition-colors duration-200 ${
-                        isHovered ? "text-accent" : "text-white/50"
-                      }`}
-                    >
-                      {client.category}
-                    </span>
-                    <span className="font-dmsans text-xs text-white/35 mt-0.5 tracking-wide">
-                      {client.scope}
-                    </span>
-                  </div>
-
-                  {/* Year & Action Indicator */}
-                  <div className="md:col-span-2 flex items-center justify-between md:justify-end gap-4">
-                    <span className="font-mono text-xs text-white/25">
-                      {client.year}
-                    </span>
-                    <div
-                      className={`w-7 h-7 flex items-center justify-center border transition-all duration-300 ${
-                        isHovered
-                          ? "border-accent text-accent bg-accent/10"
-                          : "border-white/10 text-white/30"
-                      }`}
-                    >
-                      <ArrowUpRight className="w-3.5 h-3.5" />
-                    </div>
-                  </div>
+                {/* Meta: Category & Year */}
+                <div className="client-codepen-meta flex items-center gap-4 sm:gap-8 text-right">
+                  <span className="hidden sm:inline font-mono text-xs sm:text-[13px] uppercase tracking-widest text-[#f8f5f2]/70">
+                    {client.category}
+                  </span>
+                  <span className="font-mono text-xs sm:text-sm text-[#f8f5f2]/60 tracking-wider">
+                    {client.year}
+                  </span>
                 </div>
               </div>
             );

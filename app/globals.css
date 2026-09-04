@@ -6,42 +6,29 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Base font - TheGoodMonolith */
+/* Primary & Secondary Fonts: Suisseintl Condensed (400) & Suisseintl (500) */
 @font-face {
-  font-family: "TheGoodMonolith";
+  font-family: "Suisseintl Condensed";
+  font-style: normal;
+  src: local("Suisseintl Condensed"), local("SuisseIntl-Condensed"), local("SuisseIntlCondensed");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Suisseintl";
   font-style: normal;
   font-weight: 500;
-  src: local("TheGoodMonolith"),
-    url("https://fonts.cdnfonts.com/s/32398/TheGoodMonolith.woff")
-      format("woff");
+  src: local("Suisseintl"), local("SuisseIntl-Medium"), local("SuisseIntl");
   font-display: swap;
-}
-
-@font-face {
-  font-family: 'Switzer';
-  src: url('/fonts/switzer/Switzer-Variable.woff2') format('woff2'),
-       url('/fonts/switzer/Switzer-Variable.woff') format('woff'),
-       url('/fonts/switzer/Switzer-Variable.ttf') format('truetype');
-  font-weight: 100 900;
-  font-display: swap;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Switzer';
-  src: url('/fonts/switzer/Switzer-VariableItalic.woff2') format('woff2'),
-       url('/fonts/switzer/Switzer-VariableItalic.woff') format('woff'),
-       url('/fonts/switzer/Switzer-VariableItalic.ttf') format('truetype');
-  font-weight: 100 900;
-  font-display: swap;
-  font-style: italic;
 }
 
 :root {
-  --font-thegoodmonolith: 'TheGoodMonolith', monospace;
-  --font-switzer: 'TheGoodMonolith', monospace;
-  --font-dmsans: 'TheGoodMonolith', monospace;
-  --font-mono: 'TheGoodMonolith', monospace;
+  --font-primary: "Suisseintl Condensed", Arial, sans-serif;
+  --font-secondary: Suisseintl, Arial, sans-serif;
+  --font-thegoodmonolith: "Suisseintl Condensed", Arial, sans-serif;
+  --font-switzer: "Suisseintl Condensed", Arial, sans-serif;
+  --font-dmsans: Suisseintl, Arial, sans-serif;
+  --font-mono: Suisseintl, Arial, sans-serif;
   --accent: #E5A93C;
   --bg-dark: #070709;
 }
@@ -50,26 +37,29 @@ html {
   scroll-behavior: auto !important; /* Managed by Lenis */
   background-color: #070709;
   color: #F4F4F6;
-  font-family: 'TheGoodMonolith', monospace;
+  font-family: Suisseintl, Arial, sans-serif;
 }
 
 body {
   background-color: #070709;
   color: #F4F4F6;
   overflow-x: hidden;
-  font-family: 'TheGoodMonolith', monospace;
+  font-family: Suisseintl, Arial, sans-serif;
+  font-weight: 500;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Headings, subheadings, CTA buttons use TheGoodMonolith font */
-h1, h2, h3, h4, h5, h6, .font-heading, .btn-primary {
-  font-family: 'TheGoodMonolith', monospace;
+/* Headings, titles, uppercase film labels use Suisseintl Condensed 400 */
+h1, h2, h3, h4, h5, h6, .font-heading, .font-primary, .condensed-heading {
+  font-family: "Suisseintl Condensed", Arial, sans-serif;
+  font-weight: 400;
 }
 
-/* Links, navlinks, secondary buttons, labels use TheGoodMonolith font */
-a, nav, button, .font-body, .font-nav, .font-link {
-  font-family: 'TheGoodMonolith', monospace;
+/* Body copy, labels, navigation, secondary buttons use Suisseintl 500 */
+a, nav, button, p, span, .font-body, .font-secondary, .font-nav, .font-link {
+  font-family: Suisseintl, Arial, sans-serif;
+  font-weight: 500;
 }
 
 /* Custom Film Selection */
@@ -205,4 +195,44 @@ html.lenis, html.lenis body {
 .clip-closed {
   clip-path: inset(100% 0 0 0);
 }
+
+/* ── CodePen-Inspired Client List & Exclusion Invert Effect ── */
+.client-codepen-item {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid rgba(248, 245, 242, 0.12);
+  cursor: pointer;
+}
+
+.client-codepen-title,
+.client-codepen-meta {
+  position: relative;
+  z-index: 2;
+  mix-blend-mode: exclusion;
+}
+
+.client-codepen-item::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+  background-color: #f8f5f2;
+  z-index: 1;
+  pointer-events: none;
+  transition: height 0.2s cubic-bezier(0.445, 0.05, 0.55, 0.95) 0s;
+}
+
+.client-codepen-item:hover::before {
+  height: 100%;
+}
+
+.client-codepen-item:not(:hover)::before {
+  transition-duration: 0.8s;
+}
+
 

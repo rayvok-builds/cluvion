@@ -3,140 +3,29 @@
 import { useRef, useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useFilm } from "./FilmContext";
 
 export default function Hero() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const headerContentRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const videoContainerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const overlayRef = useRef<HTMLDivElement>(null);
-  const videoOverlayRef = useRef<HTMLDivElement>(null);
-  const overlayContentRef = useRef<HTMLDivElement>(null);
-
-  const { openProjectModal } = useFilm();
+  const heroContentRef = useRef<HTMLDivElement>(null);
+  const backdropOverlayRef = useRef<HTMLDivElement>(null);
+  const statementRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
     const video = videoRef.current;
     if (video) {
-      video.defaultMuted = true;
       video.muted = true;
-      video.volume = 0.8;
       video.play().catch(() => {});
     }
 
-    // ── Slow, Stately Cinematic Entrance Timeline ──
-    let hasAnimated = false;
-    const playEntrance = () => {
-      if (hasAnimated) return;
-      hasAnimated = true;
-
-      const items = headerContentRef.current?.children;
-      if (items && videoContainerRef.current) {
-        const entranceTl = gsap.timeline();
-
-        // 1. Main Headline emerges gracefully after Navbar starts sliding down
-        entranceTl
-          .fromTo(
-            items[0], // H1 Main Headline
-            { y: 60, opacity: 0, filter: "blur(10px)" },
-            {
-              y: 0,
-              opacity: 1,
-              filter: "blur(0px)",
-              duration: 1.4,
-              ease: "power2.out",
-            },
-            0.6
-          )
-          // 2. Subheading floats up smoothly
-          .fromTo(
-            items[1], // Subtitle Paragraph
-            { y: 40, opacity: 0 },
-            {
-              y: 0,
-              opacity: 1,
-              duration: 1.2,
-              ease: "power2.out",
-            },
-            1.4
-          )
-          // 3. CTA Button appears
-          .fromTo(
-            items[2], // CTA Button Container
-            { y: 30, opacity: 0, scale: 0.95 },
-            {
-              y: 0,
-              opacity: 1,
-              scale: 1,
-              duration: 1.0,
-              ease: "power2.out",
-            },
-            2.1
-          )
-          // 4. Video Box smoothly emerges
-          .fromTo(
-            videoContainerRef.current, // Video Box
-            { opacity: 0, scale: 0.92 },
-            {
-              opacity: 1,
-              scale: 1,
-              duration: 1.3,
-              ease: "power2.out",
-            },
-            2.7
-          );
-      }
-    };
-
-    window.addEventListener("preloaderComplete", playEntrance);
-    const fallbackTimer = setTimeout(playEntrance, 4000);
-
     const ctx = gsap.context(() => {
-      // 1. 3D Film Roll Flip-Away on Hero Text
-      if (containerRef.current && headerContentRef.current) {
-        const heroTl = gsap.timeline({
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top top",
-            end: "top+=450 top",
-            scrub: 1.2,
-            markers: false,
-          },
-        });
-
-        const elements = gsap.utils.toArray<HTMLElement>(
-          headerContentRef.current.children
-        );
-
-        elements.forEach((element, index) => {
-          heroTl.to(
-            element,
-            {
-              rotationX: 90,
-              y: -30,
-              scale: 0.75,
-              opacity: 0,
-              filter: "blur(4px)",
-              ease: "power3.inOut",
-              transformOrigin: "center top",
-            },
-            index * 0.08
-          );
-        });
-      }
-
-      // 2. Video Expand Timeline (sharp edges, 100vw x 100vh full screen coverage)
       if (
         scrollContainerRef.current &&
-        videoContainerRef.current &&
-        videoRef.current &&
-        overlayRef.current &&
-        videoOverlayRef.current &&
-        overlayContentRef.current
+        heroContentRef.current &&
+        backdropOverlayRef.current &&
+        statementRef.current
       ) {
         const tl = gsap.timeline({
           scrollTrigger: {
@@ -144,207 +33,118 @@ export default function Hero() {
             start: "top top",
             end: "bottom bottom",
             scrub: 1.2,
-            markers: false,
-            onEnter: () => {
-              if (videoRef.current) {
-                videoRef.current.play().catch(() => {});
-              }
-            },
           },
         });
 
+        // 1. Hero text smoothly fades, scales down and blurs away
         tl.to(
-          videoContainerRef.current,
+          heroContentRef.current,
           {
-            y: "0%",
-            width: "100vw",
-            height: "100vh",
-            borderRadius: "0px",
-            ease: "expo.out",
-            duration: 0.5,
+            opacity: 0,
+            scale: 0.88,
+            y: -50,
+            filter: "blur(14px)",
+            ease: "power2.inOut",
+            duration: 0.4,
           },
           0
         )
+          // 2. Darkening & frosted glass backdrop overlay intensifies
           .to(
-            videoRef.current,
+            backdropOverlayRef.current,
             {
-              scale: 1.08,
-              ease: "expo.out",
-              duration: 0.5,
-            },
-            0
-          )
-          .to(
-            overlayRef.current,
-            {
-              backgroundColor: "rgba(0, 0, 0, 0.55)",
-              ease: "power3.inOut",
-              duration: 0.5,
-            },
-            0
-          )
-          .to(
-            videoOverlayRef.current,
-            {
-              clipPath: "inset(0% 0 0 0)",
-              backdropFilter: "blur(6px)",
-              WebkitBackdropFilter: "blur(6px)",
-              ease: "expo.out",
-              duration: 0.35,
-            },
-            0.4
-          )
-          .to(
-            overlayContentRef.current,
-            {
-              filter: "blur(0px)",
-              transform: "scale(1)",
               opacity: 1,
-              ease: "expo.out",
-              duration: 0.4,
+              backdropFilter: "blur(10px)",
+              WebkitBackdropFilter: "blur(10px)",
+              backgroundColor: "rgba(5, 6, 8, 0.78)",
+              ease: "power2.inOut",
+              duration: 0.45,
             },
-            0.45
+            0.05
+          )
+          // 3. "BOLD AGENCY FOR BOLD BRANDS" emerges cleanly with scale and focus
+          .fromTo(
+            statementRef.current,
+            {
+              opacity: 0,
+              scale: 0.9,
+              y: 40,
+              filter: "blur(14px)",
+            },
+            {
+              opacity: 1,
+              scale: 1,
+              y: 0,
+              filter: "blur(0px)",
+              ease: "power2.out",
+              duration: 0.45,
+            },
+            0.35
           );
       }
     });
 
-    return () => {
-      window.removeEventListener("preloaderComplete", playEntrance);
-      clearTimeout(fallbackTimer);
-      ctx.revert();
-    };
+    return () => ctx.revert();
   }, []);
 
   return (
-    <div className="relative w-full bg-[#050608] text-[#F4F4F6]">
-      {/* ──────────────────────────────────────────────────────────
-          PART 1: HERO HEADER (Full Visibility with 3D Perspective)
-      ────────────────────────────────────────────────────────── */}
-      <div
-        ref={containerRef}
-        className="relative min-h-screen w-full flex flex-col justify-start items-center pt-24 sm:pt-32 pb-16 sm:pb-26 px-6 sm:px-8 text-center"
-        style={{ perspective: "800px" }}
-      >
-        <div
-          ref={headerContentRef}
-          className="max-w-4xl mx-auto flex flex-col items-center select-none"
-          style={{ transformStyle: "preserve-3d" }}
+    <div ref={scrollContainerRef} className="relative w-full h-[220vh] bg-[#050608] text-white">
+      {/* ── Sticky 100vh Cinema Viewport ── */}
+      <div className="sticky top-0 left-0 w-full h-screen overflow-hidden select-none">
+        {/* Single Fullscreen Background Video (Loop, No Sound, Autoplay) */}
+        <video
+          ref={videoRef}
+          loop
+          muted
+          autoPlay
+          playsInline
+          preload="auto"
+          poster="https://res.cloudinary.com/dokrpo5fl/video/upload/so_0,q_auto,f_auto,w_1920/v1788261879/HERO1.hevc_kmkwvs.jpg"
+          className="absolute inset-0 w-full h-full object-cover object-center z-0 will-change-transform"
         >
-          {/* Main Headline */}
-          <h1
-            className="opacity-0 font-switzer font-medium uppercase text-4xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight text-white mb-5 leading-[0.95] drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]"
-            style={{
-              transformStyle: "preserve-3d",
-              backfaceVisibility: "hidden",
-              transformOrigin: "center top",
-            }}
-          >
-            The AI Film House
-          </h1>
+          <source
+            src="https://res.cloudinary.com/dokrpo5fl/video/upload/q_auto,f_auto,w_1920,c_limit,ac_none/v1788261879/HERO1.hevc_kmkwvs.mp4"
+            type="video/mp4"
+          />
+        </video>
 
-          {/* Subtitle / Description */}
-          <p
-            className="opacity-0 font-dmsans text-base sm:text-lg md:text-xl text-white/70 max-w-2xl mx-auto leading-relaxed mb-8 drop-shadow-[0_2px_15px_rgba(0,0,0,0.8)]"
-            style={{
-              transformStyle: "preserve-3d",
-              backfaceVisibility: "hidden",
-              transformOrigin: "center top",
-            }}
-          >
-            Cinematic brand films, ad variations, and AI micro-dramas without
-            physical shoots, sets, crews, or flights.
-          </p>
+        {/* Base Ambient Vignettes */}
+        <div className="absolute inset-0 z-10 pointer-events-none bg-gradient-to-b from-black/60 via-transparent to-black/70" />
 
-          {/* CTA Button */}
-          <div
-            className="opacity-0"
-            style={{
-              transformStyle: "preserve-3d",
-              backfaceVisibility: "hidden",
-              transformOrigin: "center top",
-            }}
-          >
-            <button
-              type="button"
-              onClick={() => openProjectModal()}
-              className="px-8 sm:px-10 py-3.5 sm:py-4 bg-white hover:bg-accent text-black font-switzer font-medium text-xs sm:text-sm uppercase tracking-widest rounded-none border border-white transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-[0_4px_25px_rgba(255,255,255,0.15)]"
-            >
-              Book a Strategy Call
-            </button>
+        {/* Dynamic Darkening & Frosted Blur Backdrop (Triggered on Scroll) */}
+        <div
+          ref={backdropOverlayRef}
+          className="absolute inset-0 z-15 pointer-events-none opacity-0 transition-opacity"
+        />
+
+        {/* ── STAGE 1: HERO INITIAL CONTENT ── */}
+        <div
+          ref={heroContentRef}
+          className="absolute inset-0 z-20 flex flex-col justify-center items-center px-6 sm:px-12 text-center will-change-transform"
+        >
+          <div className="max-w-5xl mx-auto flex flex-col items-center">
+            <h1 className="font-primary font-extrabold text-5xl sm:text-7xl md:text-6xl lg:text-7xl tracking-tight text-white leading-none drop-shadow-[0_4px_35px_rgba(0,0,0,0.95)]">
+              THE AI FILM HOUSE
+            </h1>
+
+            <p className="font-secondary text-sm sm:text-base md:text-lg text-white/85 font-medium tracking-wide drop-shadow-[0_2px_15px_rgba(0,0,0,0.95)] mt-3 sm:mt-4 max-w-2xl">
+              Cinematic brand films, ad variations, and AI micro-dramas
+            </p>
           </div>
         </div>
-      </div>
 
-      {/* ──────────────────────────────────────────────────────────
-          PART 2: STICKY SCROLL CONTAINER (Video Expand 100vw x 100vh)
-      ────────────────────────────────────────────────────────── */}
-      <div
-        ref={scrollContainerRef}
-        className="relative w-full h-[300vh] -mt-[100vh] pointer-events-none z-20"
-      >
-        <div className="sticky top-0 left-0 w-full h-screen flex justify-center items-center pointer-events-auto overflow-hidden">
-          {/* Video Container Box */}
-          <div
-            id="video-container"
-            ref={videoContainerRef}
-            className="opacity-0 relative w-[220px] h-[210px] sm:w-[420px] sm:h-[260px] md:w-[280px] md:h-[290px] overflow-hidden bg-[#070709] rounded-none shadow-[0_25px_70px_rgba(0,0,0,0.95)] will-change-transform translate-y-[10vh] sm:translate-y-[32vh]"
-            style={{
-              borderRadius: "0px",
-              clipPath: "inset(0 0 0 0)",
-            }}
-          >
-            {/* Background Video */}
-            <video
-              id="video"
-              ref={videoRef}
-              loop
-              muted
-              playsInline
-              autoPlay
-              preload="auto"
-              poster="https://res.cloudinary.com/dokrpo5fl/video/upload/so_0,q_auto,f_auto,w_1920/v1788261879/HERO1.hevc_kmkwvs.jpg"
-              className="absolute inset-0 w-full h-full object-cover object-center z-0 will-change-transform"
-            >
-              <source
-                src="https://res.cloudinary.com/dokrpo5fl/video/upload/q_auto,f_auto,w_1920,c_limit,ac_none/v1788261879/HERO1.hevc_kmkwvs.mp4"
-                type="video/mp4"
-              />
-              <source
-                src="https://res.cloudinary.com/dokrpo5fl/video/upload/v1788261879/HERO1.hevc_kmkwvs.mp4"
-                type="video/mp4"
-              />
-            </video>
-
-            {/* Darkening Overlay */}
-            <div
-              ref={overlayRef}
-              className="absolute inset-0 z-10 pointer-events-none bg-black/0 transition-colors duration-300"
-            />
-
-            {/* Video Frosted Glass Overlay with Reveal Animation */}
-            <div
-              ref={videoOverlayRef}
-              className="absolute inset-0 z-20 flex flex-col justify-center items-center text-center p-6 sm:p-12 text-white bg-black/40"
-              style={{
-                clipPath: "inset(100% 0 0 0)",
-                backdropFilter: "blur(6px)",
-                WebkitBackdropFilter: "blur(6px)",
-              }}
-            >
-              <div
-                ref={overlayContentRef}
-                className="content flex flex-col justify-center items-center max-w-4xl mx-auto px-6"
-                style={{ filter: "blur(10px)", transform: "scale(1.08)" }}
-              >
-                <h2 className="font-switzer font-semibold uppercase text-3xl sm:text-5xl  lg:text-8xl tracking-tight text-white leading-tight select-none">
-                  Bold agency for bold{" "}
-                  <span className="text-accent  font-semibold underline decoration-accent/40 underline-offset-8 drop-shadow-[0_0_35px_rgba(229,169,60,0.6)]">
-                    brands
-                  </span>
-                  
-                </h2>
-              </div>
-            </div>
+        {/* ── STAGE 2: "BOLD AGENCY FOR BOLD BRANDS" (Reveals on Scroll) ── */}
+        <div
+          ref={statementRef}
+          className="absolute inset-0 z-30 flex flex-col justify-center items-center text-center px-6 sm:px-12 pointer-events-none opacity-0 will-change-transform"
+        >
+          <div className="max-w-5xl mx-auto flex flex-col items-center">
+            <h2 className="font-primary uppercase text-5xl sm:text-7xl md:text-8xl lg:text-7xl tracking-tight text-white leading-tight drop-shadow-[0_4px_35px_rgba(0,0,0,0.95)]">
+              Bold agency for{" "}
+              <span className="text-accent underline decoration-accent/40 underline-offset-8 drop-shadow-[0_0_35px_rgba(229,169,60,0.6)]">
+                bold brands
+              </span>
+            </h2>
           </div>
         </div>
       </div>
