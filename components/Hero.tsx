@@ -3,6 +3,7 @@
 import { useRef, useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import WarpText from "./WarpText";
 
 export default function Hero() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -136,16 +137,24 @@ export default function Hero() {
         {/* ── STAGE 2: "BOLD AGENCY FOR BOLD BRANDS" (Reveals on Scroll) ── */}
         <div
           ref={statementRef}
-          className="absolute inset-0 z-30 flex flex-col justify-center items-center text-center px-6 sm:px-12 pointer-events-none opacity-0 will-change-transform"
+          className="absolute inset-0 z-30 flex flex-col justify-center items-center text-center px-6 sm:px-12 opacity-0 will-change-transform"
         >
-          <div className="max-w-5xl mx-auto flex flex-col items-center">
-            <h2 className="font-primary uppercase text-5xl sm:text-7xl md:text-8xl lg:text-7xl tracking-tight text-white leading-tight drop-shadow-[0_4px_35px_rgba(0,0,0,0.95)]">
-              Bold agency for{" "}
-              <span className="text-accent underline decoration-accent/40 underline-offset-8 drop-shadow-[0_0_35px_rgba(229,169,60,0.6)]">
-                bold brands
-              </span>
-            </h2>
-          </div>
+          <WarpText
+            text={"Bold agency for\nbold brands"}
+            color="#ffffff"
+            warpStrength={0.08}
+            warpScale={1.7}
+            speed={0.55}
+            pointerInfluence={0.42}
+            pointerStrength={0.38}
+            refraction={0.018}
+            ripple
+            fontSize="clamp(2.8rem, 8vw, 7.5rem)"
+            fontWeight={800}
+            lineHeight={1.05}
+            letterSpacing="-0.04em"
+            style={{ width: '100%', height: '340px' }}
+          />
         </div>
       </div>
     </div>
