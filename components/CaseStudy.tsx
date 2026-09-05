@@ -17,19 +17,16 @@ export default function CaseStudy() {
   };
 
   return (
-    <section id="work" className="relative w-full py-24 sm:py-32 bg-[#050608] border-b border-white/[0.08] select-none">
+    <section id="case-study" className="relative w-full py-24 sm:py-32 bg-[#050608] border-b border-white/[0.08] select-none">
       <div className="max-w-7xl mx-auto px-5 sm:px-8">
-        {/* Section Header */}
-        <div className="flex flex-col sm:flex-row sm:items-baseline justify-between pb-8 border-b border-white/[0.12] mb-12">
-          <div className="flex items-center gap-3">
-            <span className="text-xs font-mono text-accent tracking-widest font-semibold">05</span>
-            <span className="text-xs font-mono uppercase tracking-[0.25em] text-white/50">
-              // SELECTED WORK · PRODUCTION DOSSIER
-            </span>
-          </div>
-          <span className="text-[11px] font-mono text-white/30 uppercase tracking-widest mt-2 sm:mt-0">
-            CASE STUDY // WISH U
+        {/* Section Header: Centered single word, no numbers, no slashes */}
+        <div className="flex flex-col items-center text-center pb-8 border-b border-white/[0.12] mb-12">
+          <span className="font-mono text-xs uppercase tracking-[0.35em] text-accent font-semibold mb-2">
+            CASE STUDY
           </span>
+          <h2 className="font-switzer font-medium uppercase text-2xl sm:text-4xl text-white tracking-tight">
+            Featured Dossier<span className="text-accent">:</span> Wish U
+          </h2>
         </div>
 
         {/* Main Production Dossier Container */}

@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Plus, Minus } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 interface FAQItem {
   q: string;
@@ -37,34 +39,60 @@ const FAQ_LIST: FAQItem[] = [
 
 export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const containerRef = useRef<HTMLElement>(null);
+  const itemsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+
+    const container = containerRef.current;
+    const items = itemsRef.current;
+    if (!container || !items) return;
+
+    const ctx = gsap.context(() => {
+      gsap.from(items.children, {
+        scrollTrigger: {
+          trigger: items,
+          start: "top 80%",
+          toggleActions: "play none none reverse",
+        },
+        opacity: 0,
+        y: 24,
+        stagger: 0.1,
+        duration: 0.8,
+        ease: "power2.out",
+      });
+    }, container);
+
+    return () => ctx.revert();
+  }, []);
 
   const toggle = (idx: number) => {
     setOpenIndex(openIndex === idx ? null : idx);
   };
 
   return (
-    <section id="faq" className="relative w-full py-24 sm:py-32 bg-[#050608] border-b border-white/[0.08] select-none">
+    <section
+      id="faq"
+      ref={containerRef}
+      className="relative w-full py-24 sm:py-32 bg-[#050608] border-b border-white/[0.08] select-none"
+    >
       <div className="max-w-5xl mx-auto px-6 sm:px-10">
-        {/* Section Header */}
-        <div className="flex flex-col sm:flex-row sm:items-baseline justify-between pb-8 border-b border-white/[0.12] mb-12">
-          <div className="flex items-center gap-3">
-            <span className="text-xs font-mono text-accent tracking-widest font-semibold">11</span>
-            <span className="text-xs font-mono uppercase tracking-[0.25em] text-white/50">
-              // FREQUENTLY ANSWERED · STUDIO POLICIES
-            </span>
-          </div>
-          <span className="text-[11px] font-mono text-white/30 uppercase tracking-widest mt-2 sm:mt-0">
-            06 VERIFIED PROTOCOLS
+        {/* Section Header: Centered single word, no numbers, no slashes */}
+        <div className="flex flex-col items-center text-center pb-8 border-b border-white/[0.12] mb-12">
+          <span className="font-mono text-xs uppercase tracking-[0.35em] text-accent font-semibold mb-2">
+            FAQ
           </span>
+          <h2 className="font-switzer font-medium text-3xl sm:text-5xl md:text-6xl uppercase text-white tracking-tight leading-tight">
+            Clear-Cut <span className="text-accent">Answers.</span>
+          </h2>
         </div>
 
-        {/* Big Minimal Headline */}
-        <h2 className="font-switzer font-medium text-3xl sm:text-5xl md:text-6xl uppercase text-white tracking-tight leading-tight mb-12 sm:mb-16">
-          Clear-Cut <span className="text-accent">Answers.</span>
-        </h2>
-
-        {/* Minimalist Editorial Accordion */}
-        <div className="divide-y divide-white/[0.08] border-y border-white/[0.08]">
+        {/* Minimalist Editorial Accordion with Scroll Reveal */}
+        <div
+          ref={itemsRef}
+          className="divide-y divide-white/[0.08] border-y border-white/[0.08]"
+        >
           {FAQ_LIST.map((faq, idx) => {
             const isOpen = openIndex === idx;
             return (
@@ -75,6 +103,7 @@ export default function FAQ() {
                 }`}
               >
                 <button
+                  type="button"
                   onClick={() => toggle(idx)}
                   className="w-full flex items-center justify-between gap-6 text-left focus:outline-none"
                   aria-expanded={isOpen}
@@ -103,7 +132,11 @@ export default function FAQ() {
                         : "border-white/10 text-white/40 group-hover:border-white/30"
                     }`}
                   >
-                    {isOpen ? <Minus className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
+                    {isOpen ? (
+                      <Minus className="w-3.5 h-3.5" />
+                    ) : (
+                      <Plus className="w-3.5 h-3.5" />
+                    )}
                   </div>
                 </button>
 

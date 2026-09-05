@@ -1,16 +1,11 @@
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
 import ClientGrid from "../components/ClientGrid";
+import WorkGrid from "../components/WorkGrid";
 import Statement from "../components/Statement";
 import WhatWeDo from "../components/WhatWeDo";
 import HowWeWork from "../components/HowWeWork";
 import CaseStudy from "../components/CaseStudy";
-import WorkGrid from "../components/WorkGrid";
-import ImpossibleShot from "../components/ImpossibleShot";
-import QualityControl from "../components/QualityControl";
-import WhyItWorks from "../components/WhyItWorks";
-import TasteManifesto from "../components/TasteManifesto";
-import Numbers from "../components/Numbers";
 import FAQ from "../components/FAQ";
 import FinalCTA from "../components/FinalCTA";
 import Footer from "../components/Footer";
@@ -22,49 +17,34 @@ export default function Home() {
       {/* 00 · Top Film-House Navbar */}
       <Navbar />
 
-      {/* 01 · Hero Section: Minimal Fullscreen Cinema & Pixel Typography */}
+      {/* 01 · Hero Section: Minimal Fullscreen Cinema & Pixel Typography (Untouched) */}
       <Hero />
 
-      {/* 02 · Selected Clients: Editorial Credits Wall with Hover Previews */}
+      {/* 02 · Selected Clients: Editorial Credits Wall (Untouched) */}
       <ClientGrid />
 
-      {/* 03 · The Statement: Brutalist Typographic Manifesto */}
-      <Statement />
-
-      {/* 04 · Services: Interactive Production Console (5 Visual Modes) */}
-      <WhatWeDo />
-
-      {/* 05 · The Process: From Idea to Frame Production Timeline */}
-      <HowWeWork />
-
-      {/* 06 · Selected Work: Featured Client Production Dossier */}
-      <CaseStudy />
-
-      {/* 06.2 · 2-Column Film Showcase Archive */}
+      {/* 03 · Projects: 2-Column Film Showcase Archive (Directly after Clients) */}
       <WorkGrid />
 
-      {/* 07 · The Impossible Shot: Layer Deconstruction Reveal */}
-      <ImpossibleShot />
+      {/* 04 · The Statement: Scroll-Driven Production System Convergence */}
+      <Statement />
 
-      {/* 08 · Quality Control: Studio Inspection HUD */}
-      <QualityControl />
+      {/* 05 · Services: Scroll-Triggered Cinematic Chapters */}
+      <WhatWeDo />
 
-      {/* 09 · Why Cluvion: "The Signal" Connected Intelligence System */}
-      <WhyItWorks />
+      {/* 06 · The Process: Pinned Horizontal Timeline Experience */}
+      <HowWeWork />
 
-      {/* 10 · The Taste Manifesto: Huge Typographic Statement */}
-      <TasteManifesto />
+      {/* 07 · Featured Case Study: Production Dossier (Untouched Composition) */}
+      <CaseStudy />
 
-      {/* 11 · Investments: Transparent Minute-Based Cost Model */}
-      <Numbers />
-
-      {/* 12 · FAQ: Minimal Editorial Policy List */}
+      {/* 08 · FAQ: Progressive Scroll-Driven Editorial Protocols */}
       <FAQ />
 
-      {/* 13 · Final CTA: "The Frame" Brief Convergence Experience */}
+      {/* 09 · Final CTA: Brief Convergence Experience */}
       <FinalCTA />
 
-      {/* 14 · Footer: Film Studio Directory with Live IST Clock */}
+      {/* 10 · Footer: Film Studio Directory */}
       <Footer />
 
       {/* Gradual Blur at the bottom of the viewport */}

@@ -11,7 +11,7 @@ export default function WorkGrid() {
   const [mobileView, setMobileView] = useState<"single" | "grid">("single");
 
   return (
-    <section id="work" className="relative w-full py-12 sm:py-16 bg-[#050608] border-b border-white/[0.08] overflow-hidden">
+    <section id="work" className="relative w-full py-12 sm:py-16 bg-[#050608] overflow-hidden">
       {/* Section Header */}
       <div className="w-full px-6 sm:px-10 mb-6 sm:mb-10 flex flex-col sm:flex-row sm:items-baseline justify-between gap-4 pb-4 border-b border-white/[0.06]">
         <div className="flex items-baseline gap-4">
@@ -88,17 +88,6 @@ export default function WorkGrid() {
             <WorkTile key={item.id} item={item} index={idx + 3} />
           ))}
         </div>
-      </div>
-
-      {/* Bottom CTA Button */}
-      <div className="mt-12 sm:mt-16 flex justify-center px-6">
-        <button
-          onClick={openArchive}
-          className="group px-8 py-3.5 text-xs sm:text-sm font-semibold uppercase tracking-[0.2em] text-white bg-[#12131A] hover:bg-accent hover:text-black border border-white/15 hover:border-accent transition-all duration-300 rounded-full font-secondary flex items-center gap-3 shadow-lg"
-        >
-          <span>SEE MORE WORK</span>
-          <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-        </button>
       </div>
     </section>
   );
