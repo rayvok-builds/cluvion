@@ -6,6 +6,7 @@ import Statement from "../components/Statement";
 import WhatWeDo from "../components/WhatWeDo";
 import HowWeWork from "../components/HowWeWork";
 import CaseStudy from "../components/CaseStudy";
+import Numbers from "../components/Numbers";
 import FAQ from "../components/FAQ";
 import FinalCTA from "../components/FinalCTA";
 import Footer from "../components/Footer";
@@ -38,7 +39,10 @@ export default function Home() {
       {/* 07 · Featured Case Study: Production Dossier (Untouched Composition) */}
       <CaseStudy />
 
-      {/* 08 · FAQ: Progressive Scroll-Driven Editorial Protocols */}
+      {/* 08 · Pricing / Investments: Transparent Minute-Based Cost Model */}
+      <Numbers />
+
+      {/* 09 · FAQ: Progressive Scroll-Driven Editorial Protocols */}
       <FAQ />
 
       {/* 09 · Final CTA: Brief Convergence Experience */}

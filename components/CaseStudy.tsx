@@ -24,9 +24,7 @@ export default function CaseStudy() {
           <span className="font-mono text-xs uppercase tracking-[0.35em] text-accent font-semibold mb-2">
             CASE STUDY
           </span>
-          <h2 className="font-switzer font-medium uppercase text-2xl sm:text-4xl text-white tracking-tight">
-            Featured Dossier<span className="text-accent">:</span> Wish U
-          </h2>
+        
         </div>
 
         {/* Main Production Dossier Container */}
