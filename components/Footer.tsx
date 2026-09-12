@@ -63,36 +63,39 @@ export default function Footer() {
             </p>
           </div>
 
-          {/* Col 2: Navigation Links (Exact Copy: Work · Services · About · Contact) */}
+          {/* Col 2: Navigation Links */}
           <div className="lg:col-span-3">
             <span className="text-[11px] font-mono uppercase tracking-widest text-cinema-dim block mb-4">
               INDEX
             </span>
             <ul className="space-y-2.5 font-secondary text-xs sm:text-sm text-cinema-muted">
-              <li>
-                <a href="#work" className="hover:text-white transition-colors">
-                  01 Work
-                </a>
-              </li>
-              <li>
-                <a href="#services" className="hover:text-white transition-colors">
-                  02 Services
-                </a>
-              </li>
-              <li>
-                <a href="#process" className="hover:text-white transition-colors">
-                  03 Process
-                </a>
-              </li>
-              <li>
-                <a href="#about" className="hover:text-white transition-colors">
-                  04 About
-                </a>
-              </li>
+              {[
+                { label: "Clients", href: "#clients" },
+                { label: "Projects", href: "#work" },
+                { label: "Services", href: "#services" },
+                { label: "Process", href: "#process" },
+                { label: "Case Studies", href: "/case-studies" },
+                { label: "Contact", href: "#contact" },
+              ].map(({ label, href }) => (
+                <li key={label}>
+                  <a
+                    href={href}
+                    onMouseEnter={(e) => e.currentTarget.classList.remove("is-leaving")}
+                    onMouseLeave={(e) => {
+                      const target = e.currentTarget;
+                      target.classList.add("is-leaving");
+                      setTimeout(() => target.classList.remove("is-leaving"), 400);
+                    }}
+                    className="c-animatedLink js-animatedLink hover:text-white transition-colors pb-0.5"
+                  >
+                    {label}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Col 3: Channels & Live Location (Exact Copy: Jodhpur, IST [live clock] → Worldwide) */}
+          {/* Col 3: Channels & Live Location */}
           <div className="lg:col-span-4">
             <span className="text-[11px] font-mono uppercase tracking-widest text-cinema-dim block mb-4">
               CHANNELS &amp; HUB
@@ -105,47 +108,42 @@ export default function Footer() {
                 </span>
               </div>
               <div className="flex flex-wrap gap-4 text-xs text-cinema-muted pt-2">
-                <a
-                  href="https://instagram.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-accent transition-colors"
-                >
-                  Instagram
-                </a>
-                <span>·</span>
-                <a
-                  href="https://youtube.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-accent transition-colors"
-                >
-                  YouTube
-                </a>
-                <span>·</span>
-                <a
-                  href="https://wa.me/919999999999"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-accent transition-colors"
-                >
-                  WhatsApp
-                </a>
-                <span>·</span>
-                <a
-                  href="https://linkedin.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-accent transition-colors"
-                >
-                  LinkedIn
-                </a>
+                {[
+                  { label: "Instagram", href: "https://instagram.com" },
+                  { label: "YouTube", href: "https://youtube.com" },
+                  { label: "WhatsApp", href: "https://wa.me/919999999999" },
+                  { label: "LinkedIn", href: "https://linkedin.com" },
+                ].map((item, i, arr) => (
+                  <span key={item.label} className="inline-flex items-center gap-4">
+                    <a
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onMouseEnter={(e) => e.currentTarget.classList.remove("is-leaving")}
+                      onMouseLeave={(e) => {
+                        const target = e.currentTarget;
+                        target.classList.add("is-leaving");
+                        setTimeout(() => target.classList.remove("is-leaving"), 400);
+                      }}
+                      className="c-animatedLink js-animatedLink hover:text-white transition-colors pb-0.5"
+                    >
+                      {item.label}
+                    </a>
+                    {i < arr.length - 1 && <span className="text-cinema-dim">·</span>}
+                  </span>
+                ))}
               </div>
             </div>
 
             <button
               onClick={scrollToTop}
-              className="inline-flex items-center gap-2 text-xs font-mono text-cinema-dim hover:text-white transition-colors"
+              onMouseEnter={(e) => e.currentTarget.classList.remove("is-leaving")}
+              onMouseLeave={(e) => {
+                const target = e.currentTarget;
+                target.classList.add("is-leaving");
+                setTimeout(() => target.classList.remove("is-leaving"), 400);
+              }}
+              className="c-animatedLink js-animatedLink inline-flex items-center gap-2 text-xs font-mono text-cinema-dim hover:text-white transition-colors pb-0.5"
             >
               <span>BACK TO TOP</span>
               <ArrowUp className="w-3.5 h-3.5" />

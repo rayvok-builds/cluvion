@@ -3,27 +3,28 @@
 import { useState } from "react";
 import { FEATURED_VIDEOS, REEL_GRID_1, REEL_GRID_2 } from "../lib/data";
 import WorkTile from "./WorkTile";
+import ExpandingWorkVideo from "./ExpandingWorkVideo";
 import { useFilm } from "./FilmContext";
 import { ArrowRight, LayoutGrid, Square } from "lucide-react";
+
+import Link from "next/link";
 
 export default function WorkGrid() {
   const { openArchive } = useFilm();
   const [mobileView, setMobileView] = useState<"single" | "grid">("single");
 
   return (
-    <section id="work" className="relative w-full py-12 sm:py-16 bg-[#050608] overflow-hidden">
+    <section id="work" className="relative w-full py-12 sm:py-16 bg-[#050608] overflow-visible">
       {/* Section Header */}
-      <div className="w-full px-6 sm:px-10 mb-6 sm:mb-10 flex flex-col sm:flex-row sm:items-baseline justify-between gap-4 pb-4 border-b border-white/[0.06]">
-        <div className="flex items-baseline gap-4">
-          <h2 className="font-primary font-bold text-4xl sm:text-6xl text-white tracking-tight leading-none uppercase">
-            Projects<span className="text-accent">.</span>
-          </h2>
-        </div>
+      <div className="w-full pb-8 sm:pb-12 border-b border-white/[0.08] text-center px-4 mb-8 sm:mb-12 flex flex-col items-center justify-center gap-4">
+        <h2 className="font-primary font-bold uppercase text-4xl sm:text-5xl md:text-6xl text-white tracking-tight leading-none">
+          PROJECTS
+        </h2>
 
         {/* Mobile View Toggle Options (Visible on Mobile Screens Only) */}
-        <div className="flex sm:hidden items-center justify-between gap-2 pt-2">
+        <div className="flex sm:hidden items-center justify-center gap-2 pt-1">
           <span className="font-mono text-[10px] text-white/50 uppercase tracking-widest">
-            VIEW MODE:
+            VIEW:
           </span>
           <div className="flex items-center p-1 bg-black/60 border border-white/15 rounded-md backdrop-blur-md">
             <button
@@ -49,18 +50,18 @@ export default function WorkGrid() {
               }`}
             >
               <LayoutGrid className="w-3 h-3" />
-              <span>Desktop Layout</span>
+              <span>Grid</span>
             </button>
           </div>
         </div>
       </div>
 
-      {/* Main Alternating Gallery Layout (Older Version) */}
+      {/* Main Alternating Gallery Layout: 2 Landscape Videos with 3 Small Videos in Center */}
       <div className="w-full flex flex-col gap-1 sm:gap-1.5 md:gap-2 px-0">
-        {/* 1. First Full-Width Cinematic Feature Video */}
-        <WorkTile item={FEATURED_VIDEOS.heroLarge1} isFullWidth />
+        {/* 1. First Full-Width Landscape Cinematic Feature Video with Scroll-Triggered Expansion */}
+        <ExpandingWorkVideo item={FEATURED_VIDEOS.heroLarge1} />
 
-        {/* 2. First 3-Reels Grid Row */}
+        {/* 2. Center 3-Reels Grid Row (3 Small Videos) */}
         <div
           className={`w-full grid ${
             mobileView === "single"
@@ -73,21 +74,20 @@ export default function WorkGrid() {
           ))}
         </div>
 
-        {/* 3. Second Full-Width Cinematic Feature Video */}
+        {/* 3. Second Full-Width Landscape Cinematic Feature Video */}
         <WorkTile item={FEATURED_VIDEOS.heroLarge2} isFullWidth />
+      </div>
 
-        {/* 4. Second 3-Reels Grid Row */}
-        <div
-          className={`w-full grid ${
-            mobileView === "single"
-              ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
-              : "grid-cols-3"
-          } gap-1 sm:gap-1.5 md:gap-2 px-0`}
+      {/* Bottom Action: Redirect to Case Studies Page */}
+      <div className="w-full pt-12 sm:pt-16 flex flex-col items-center justify-center px-4">
+        <Link
+          href="/case-studies"
+          className="c-cta-button group relative inline-flex items-center justify-center gap-3 px-8 sm:px-12 py-4 sm:py-5 bg-white text-black font-primary font-bold text-sm sm:text-base uppercase tracking-[0.2em] border border-white transition-all duration-300 shadow-[0_4px_30px_rgba(255,255,255,0.15)] hover:shadow-[0_4px_35px_rgba(229,169,60,0.35)] hover:text-black"
         >
-          {REEL_GRID_2.map((item, idx) => (
-            <WorkTile key={item.id} item={item} index={idx + 3} />
-          ))}
-        </div>
+          <span>VIEW MORE</span>
+          <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1.5" />
+        </Link>
+        
       </div>
     </section>
   );

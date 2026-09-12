@@ -2,12 +2,8 @@ import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
 import ClientGrid from "../components/ClientGrid";
 import WorkGrid from "../components/WorkGrid";
-import Statement from "../components/Statement";
 import WhatWeDo from "../components/WhatWeDo";
 import HowWeWork from "../components/HowWeWork";
-import CaseStudy from "../components/CaseStudy";
-import Numbers from "../components/Numbers";
-import FAQ from "../components/FAQ";
 import FinalCTA from "../components/FinalCTA";
 import Footer from "../components/Footer";
 import GradualBlur from "../components/GradualBlur";
@@ -18,47 +14,43 @@ export default function Home() {
       {/* 00 · Top Film-House Navbar */}
       <Navbar />
 
-      {/* 01 · Hero Section: Minimal Fullscreen Cinema & Pixel Typography (Untouched) */}
-      <Hero />
+      {/* 01 · Hero Section: Fixed/Pinned Fullscreen Cinema */}
+      <div className="fixed top-0 left-0 w-full h-screen z-0">
+        <Hero />
+      </div>
 
-      {/* 02 · Selected Clients: Editorial Credits Wall (Untouched) */}
-      <ClientGrid />
+      {/* Spacer that occupies the hero's height in document flow */}
+      <div className="h-screen w-full" aria-hidden="true" />
 
-      {/* 03 · Projects: 2-Column Film Showcase Archive (Directly after Clients) */}
-      <WorkGrid />
+      {/* Scrollable content — sits above the fixed hero */}
+      <div className="relative z-10 bg-[#050608]">
+        {/* 02 · Selected Clients: Editorial Credits Wall */}
+        <ClientGrid />
 
-      {/* 04 · The Statement: Scroll-Driven Production System Convergence */}
-      <Statement />
+        {/* 03 · Projects: Film Showcase Archive */}
+        <WorkGrid />
 
-      {/* 05 · Services: Scroll-Triggered Cinematic Chapters */}
-      <WhatWeDo />
+        {/* 04 · Services: Cinematic Chapters */}
+        <WhatWeDo />
 
-      {/* 06 · The Process: Pinned Horizontal Timeline Experience */}
-      <HowWeWork />
+        {/* 05 · The Process: Interactive Horizontal Pinned Experience */}
+        <HowWeWork />
 
-      {/* 07 · Featured Case Study: Production Dossier (Untouched Composition) */}
-      <CaseStudy />
+        {/* 06 · Final CTA: Convergence Experience */}
+        <FinalCTA />
 
-      {/* 08 · Pricing / Investments: Transparent Minute-Based Cost Model */}
-      <Numbers />
+        {/* 07 · Footer: Film Studio Directory */}
+        <Footer />
 
-      {/* 09 · FAQ: Progressive Scroll-Driven Editorial Protocols */}
-      <FAQ />
-
-      {/* 09 · Final CTA: Brief Convergence Experience */}
-      <FinalCTA />
-
-      {/* 10 · Footer: Film Studio Directory */}
-      <Footer />
-
-      {/* Gradual Blur at the bottom of the viewport */}
-      <GradualBlur
-        preset="page-footer"
-        height="6rem"
-        strength={2}
-        curve="bezier"
-        divCount={5}
-      />
+        {/* Gradual Blur at the bottom of the viewport */}
+        <GradualBlur
+          preset="page-footer"
+          height="6rem"
+          strength={2}
+          curve="bezier"
+          divCount={5}
+        />
+      </div>
     </main>
   );
 }

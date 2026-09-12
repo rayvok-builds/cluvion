@@ -2,6 +2,8 @@
 
 import { useRef, useEffect } from "react";
 
+import Link from "next/link";
+
 interface ClientCredit {
   id: string;
   name: string;
@@ -10,7 +12,7 @@ interface ClientCredit {
   image: string;
 }
 
-const CLIENT_CREDITS: ClientCredit[] = [
+const MAIN_CLIENTS: ClientCredit[] = [
   {
     id: "wish-u",
     name: "WISH U",
@@ -51,39 +53,26 @@ const CLIENT_CREDITS: ClientCredit[] = [
     image:
       "https://images.unsplash.com/photo-1616469829941-c7200edec809?q=80&w=1600&auto=format&fit=crop",
   },
-  {
-    id: "okapi",
-    name: "OKAPI SWIM",
-    category: "Coastal Apparel",
-    year: "2026",
-    image:
-      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1600&auto=format&fit=crop",
-  },
-  {
-    id: "monochrome",
-    name: "MONOCHROME LABS",
-    category: "Spatial Audio",
-    year: "2026",
-    image:
-      "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1600&auto=format&fit=crop",
-  },
-  {
-    id: "elysian",
-    name: "ELYSIAN HOROLOGY",
-    category: "Swiss Watchmaking",
-    year: "2026",
-    image:
-      "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=1600&auto=format&fit=crop",
-  },
+];
+
+const MARQUEE_CLIENTS = [
+  "OKAPI SWIM",
+  "MONOCHROME LABS",
+  "ELYSIAN HOROLOGY",
+  "VOLT NUTRITION",
+  "NOVA DYNAMICS",
+  "SERENE WELLNESS",
+  "AETHER AUDIO",
+  "VALOIS PARFUMS",
 ];
 
 export default function ClientGrid() {
   const bgImageRef = useRef<HTMLImageElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Preload all client images for instantaneous response
+  // Preload main client images for instantaneous response
   useEffect(() => {
-    CLIENT_CREDITS.forEach((client) => {
+    MAIN_CLIENTS.forEach((client) => {
       const img = new Image();
       img.src = client.image;
     });
@@ -118,7 +107,7 @@ export default function ClientGrid() {
   };
 
   return (
-    <section className="relative w-full min-h-[90vh] flex flex-col justify-center bg-[#070709] border-b border-white/[0.08] overflow-hidden select-none py-20 sm:py-28">
+    <section id="clients" className="relative w-full min-h-[90vh] flex flex-col justify-center bg-[#070709] border-b border-white/[0.08] overflow-hidden select-none py-20 sm:py-28">
       {/* ── Background Zoom Image Container (CodePen Style) ── */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <img
@@ -142,29 +131,22 @@ export default function ClientGrid() {
         className="w-full max-w-[1050px] mx-auto px-6 sm:px-10 relative z-10"
       >
         {/* Section Header */}
-        <div className="flex flex-col sm:flex-row sm:items-baseline justify-between pb-6 border-b border-white/[0.12] mb-4">
-          <div className="flex items-center gap-3">
-            <span className="text-xs font-mono text-accent tracking-widest font-semibold">
-              02
-            </span>
-            <span className="text-xs font-mono uppercase tracking-[0.25em] text-white/50">
-              // SELECTED CLIENTS · PRODUCTION ARCHIVE
-            </span>
-          </div>
-          <span className="text-[11px] font-mono text-white/30 uppercase tracking-widest mt-2 sm:mt-0">
-            NAME → PORTFOLIO
-          </span>
+        <div className="w-full pb-8 sm:pb-12 border-b border-white/[0.08] text-center px-4 mb-8 sm:mb-12">
+          <h2 className="font-primary font-bold uppercase text-4xl sm:text-5xl md:text-6xl text-white tracking-tight leading-none">
+            CLIENTS
+          </h2>
         </div>
 
-        {/* ── Projects List with Exclusion Invert Hover Wipe ── */}
+        {/* ── 5 Main Client Rows with Exclusion Invert Hover Wipe (Clickable to Case Studies) ── */}
         <div className="w-full">
-          {CLIENT_CREDITS.map((client, idx) => {
+          {MAIN_CLIENTS.map((client, idx) => {
             const indexFormatted = String(idx + 1).padStart(2, "0");
             return (
-              <div
+              <Link
                 key={client.id}
+                href={`/case-studies/${client.id}`}
                 onMouseEnter={() => handleMouseEnter(client.image)}
-                className="client-codepen-item group"
+                className="client-codepen-item group block text-inherit no-underline"
               >
                 {/* Title */}
                 <div className="client-codepen-title flex items-baseline gap-4 sm:gap-6">
@@ -185,15 +167,32 @@ export default function ClientGrid() {
                     {client.year}
                   </span>
                 </div>
-              </div>
+              </Link>
             );
           })}
         </div>
 
-        {/* Bottom Editorial Note */}
-        <div className="pt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between text-[11px] font-mono text-white/30 tracking-widest uppercase">
-          <span>ALL CLIENT PRODUCTIONS EXECUTED WITHOUT PHYSICAL SHOOTS</span>
-          <span className="mt-2 sm:mt-0">[ CONFIDENTIAL MANDATES SEALED ]</span>
+        
+      </div>
+
+      {/* ── Horizontal Marquee for Remaining Clients (Continuous ticker with NO links) ── */}
+      <div className="w-full mt-4 pt-6 border-t border-white/[0.08] relative z-10 overflow-hidden bg-black/30 backdrop-blur-sm py-4 select-none">
+        {/* Subtle Edge Fade Gradients */}
+        <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-[#070709] to-transparent z-20 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-[#070709] to-transparent z-20 pointer-events-none" />
+
+        <div className="flex w-max animate-marquee pointer-events-none">
+          {MARQUEE_CLIENTS.concat(MARQUEE_CLIENTS).concat(MARQUEE_CLIENTS).map((clientName, idx) => (
+            <div
+              key={idx}
+              className="flex items-center gap-8 mx-6 shrink-0 select-none"
+            >
+              <span className="font-primary font-bold text-sm sm:text-base tracking-[0.25em] text-white/40 uppercase">
+                {clientName}
+              </span>
+              <span className="text-accent/50 text-xs select-none">·</span>
+            </div>
+          ))}
         </div>
       </div>
     </section>

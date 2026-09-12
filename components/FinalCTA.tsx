@@ -41,7 +41,7 @@ export default function FinalCTA() {
   const convergenceElements = ["IDEA", "STORY", "CHARACTER", "LOCATION", "CAMERA", "LIGHT"];
 
   return (
-    <section className="relative w-full min-h-screen py-24 sm:py-32 bg-[#050608] border-b border-white/[0.08] flex flex-col justify-center select-none overflow-hidden">
+    <section id="contact" className="relative w-full min-h-screen py-24 sm:py-32 bg-[#050608] border-b border-white/[0.08] flex flex-col justify-center select-none overflow-hidden">
       {/* Background Cinematic Atmosphere */}
       <div className="absolute inset-0 z-0">
         <video
@@ -57,11 +57,10 @@ export default function FinalCTA() {
 
       <div className="max-w-6xl mx-auto px-6 sm:px-10 relative z-10 w-full">
         {/* Section Header */}
-        <div className="flex items-center gap-3 mb-12">
-          <span className="text-xs font-mono text-accent tracking-widest font-semibold">12</span>
-          <span className="text-xs font-mono uppercase tracking-[0.25em] text-white/50">
-            // THE FRAME · PROJECT CONVERGENCE
-          </span>
+        <div className="w-full pb-8 sm:pb-12 border-b border-white/[0.08] text-center px-4 mb-8 sm:mb-12">
+          <h2 className="font-primary font-bold uppercase text-4xl sm:text-5xl md:text-6xl text-white tracking-tight leading-none">
+            CONTACT
+          </h2>
         </div>
 
         {/* ── "THE FRAME" CONVERGENCE HUD ── */}
@@ -98,7 +97,7 @@ export default function FinalCTA() {
               <button
                 type="button"
                 onClick={() => openProjectModal()}
-                className="px-8 sm:px-10 py-4 bg-white hover:bg-accent text-black font-switzer font-medium text-xs sm:text-sm uppercase tracking-widest rounded-none border border-white hover:border-accent transition-all duration-200 flex items-center gap-2 group shadow-[0_4px_25px_rgba(255,255,255,0.15)]"
+                className="c-cta-button px-8 sm:px-10 py-4 bg-white text-black font-switzer font-medium text-xs sm:text-sm uppercase tracking-widest rounded-none border border-white hover:text-black hover:border-accent transition-all duration-200 flex items-center gap-2 group shadow-[0_4px_25px_rgba(255,255,255,0.15)]"
               >
                 <span>Start A Project</span>
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />

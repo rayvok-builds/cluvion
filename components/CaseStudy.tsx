@@ -19,12 +19,11 @@ export default function CaseStudy() {
   return (
     <section id="case-study" className="relative w-full py-24 sm:py-32 bg-[#050608] border-b border-white/[0.08] select-none">
       <div className="max-w-7xl mx-auto px-5 sm:px-8">
-        {/* Section Header: Centered single word, no numbers, no slashes */}
-        <div className="flex flex-col items-center text-center pb-8 border-b border-white/[0.12] mb-12">
-          <span className="font-mono text-xs uppercase tracking-[0.35em] text-accent font-semibold mb-2">
+        {/* Section Header */}
+        <div className="w-full pb-8 sm:pb-12 border-b border-white/[0.08] text-center px-4 mb-8 sm:mb-12">
+          <h2 className="font-primary font-bold uppercase text-4xl sm:text-5xl md:text-6xl text-white tracking-tight leading-none">
             CASE STUDY
-          </span>
-        
+          </h2>
         </div>
 
         {/* Main Production Dossier Container */}

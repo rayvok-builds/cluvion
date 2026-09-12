@@ -587,7 +587,7 @@ function ServicePanel({ service }: { service: ServiceItem }) {
         <button
           type="button"
           onClick={() => openProjectModal(service.title)}
-          className="group inline-flex items-center gap-3 px-6 py-3.5 border border-white/30 bg-white/[0.04] text-white font-mono text-xs uppercase tracking-[0.15em] hover:bg-white hover:text-black hover:border-white transition-all duration-300 self-start"
+          className="c-cta-button group inline-flex items-center gap-3 px-6 py-3.5 border border-white/30 bg-white/[0.04] text-white font-mono text-xs uppercase tracking-[0.15em] hover:text-black hover:border-accent transition-all duration-300 self-start"
         >
           <span>Brief {service.title}</span>
           <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -646,9 +646,9 @@ export default function WhatWeDo() {
   return (
     <section id="services" className="relative w-full bg-[#050608] select-none">
       {/* Section Heading */}
-      <div className="w-full py-14 sm:py-20 border-b border-white/[0.08] text-center px-4">
-        <h2 className="font-switzer font-bold uppercase text-3xl sm:text-5xl md:text-6xl text-white tracking-tight leading-none">
-          Our Services<span className="text-accent">.</span>
+      <div className="w-full pb-8 sm:pb-12 pt-10 sm:pt-14 border-b border-white/[0.08] text-center px-4">
+        <h2 className="font-primary font-bold uppercase text-4xl sm:text-5xl md:text-6xl text-white tracking-tight leading-none">
+          SERVICES
         </h2>
       </div>
 

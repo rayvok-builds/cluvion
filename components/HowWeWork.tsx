@@ -174,10 +174,17 @@ export default function HowWeWork() {
       {/* ── PINNED VIEWPORT (Positioned safely above bottom 6rem gradient blur) ── */}
       <div
         ref={stickyRef}
-        className="w-full h-screen sticky top-0 flex flex-col justify-center pt-14 sm:pt-16 lg:pt-16 pb-28 sm:pb-32 lg:pb-32 overflow-hidden"
+        className="w-full h-screen sticky top-0 flex flex-col justify-center pt-8 sm:pt-10 lg:pt-12 pb-24 sm:pb-28 lg:pb-28 overflow-hidden"
       >
+        {/* Section Header */}
+        <div className="w-full pb-4 sm:pb-6 text-center px-4 mb-2">
+          <h2 className="font-primary font-bold uppercase text-4xl sm:text-5xl md:text-6xl text-white tracking-tight leading-none">
+            PROCESS
+          </h2>
+        </div>
+
         {/* Top Header / Progress Info Bar (Responsive on Mobile & Desktop) */}
-        <div className="flex items-center justify-between w-full px-4 sm:px-8 lg:px-10 xl:px-14 mb-2.5 sm:mb-3 lg:mb-4 text-[11px] sm:text-xs font-mono text-white/40">
+        <div className="flex items-center justify-between w-full px-4 sm:px-8 lg:px-10 xl:px-14 mb-2 sm:mb-3 text-[11px] sm:text-xs font-mono text-white/40">
           <div className="flex items-center gap-2 sm:gap-3">
             <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#FF4438] animate-pulse" />
             <span className="tracking-widest uppercase text-white/60 text-[10px] sm:text-xs">

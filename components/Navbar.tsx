@@ -5,18 +5,21 @@ import Image from "next/image";
 import { useFilm } from "./FilmContext";
 
 const DESKTOP_LINKS = [
-  { label: "WORK", href: "#work" },
+  { label: "CLIENTS", href: "#clients" },
+  { label: "PROJECTS", href: "#work" },
   { label: "SERVICES", href: "#services" },
-  { label: "ABOUT", href: "#about" },
-  { label: "BTS", href: "#process" },
+  { label: "PROCESS", href: "#process" },
+  { label: "CASE STUDIES", href: "/case-studies" },
+  { label: "CONTACT", href: "#contact" },
 ];
 
 const DRAWER_LINKS = [
   { label: "HOME", href: "#" },
-  { label: "WORK", href: "#work" },
+  { label: "CLIENTS", href: "#clients" },
+  { label: "PROJECTS", href: "#work" },
   { label: "SERVICES", href: "#services" },
-  { label: "ABOUT", href: "#about" },
-  { label: "BTS", href: "#process" },
+  { label: "PROCESS", href: "#process" },
+  { label: "CASE STUDIES", href: "/case-studies" },
   { label: "CONTACT", href: "#contact" },
 ];
 
@@ -60,8 +63,8 @@ export default function Navbar() {
 
   const handleNavClick = (href: string) => {
     setOpen(false);
-    if (href === "#contact") {
-      openProjectModal();
+    if (href.startsWith("/")) {
+      window.location.href = href;
       return;
     }
     if (href === "#") {
@@ -71,19 +74,21 @@ export default function Navbar() {
     const elem = document.querySelector(href);
     if (elem) {
       elem.scrollIntoView({ behavior: "smooth" });
+    } else {
+      window.location.href = `/${href}`;
     }
   };
 
   return (
     <>
-      {/* ── Fixed Floating Top Bar (Matching Screenshots 1 & 3) ── */}
+      {/* ── Fixed Floating Top Bar ── */}
       <header
         className={`fixed top-0 left-0 right-0 z-40 transition-all duration-700 pointer-events-none ${
           visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"
         }`}
       >
         <div className="w-full px-6 sm:px-10 pt-6 sm:pt-8 flex items-start justify-between">
-          {/* Top Left: Desktop Vertical Stacked Links (Screenshot 1) */}
+          {/* Top Left: Desktop Vertical Stacked Links */}
           <div className="hidden md:flex flex-col gap-1 pointer-events-auto">
             {DESKTOP_LINKS.map(({ label, href }) => (
               <a
@@ -93,7 +98,13 @@ export default function Navbar() {
                   e.preventDefault();
                   handleNavClick(href);
                 }}
-                className="font-secondary font-semibold text-[11px] lg:text-[12px] tracking-[0.18em] text-white/80 hover:text-white transition-colors uppercase leading-tight select-none"
+                onMouseEnter={(e) => e.currentTarget.classList.remove("is-leaving")}
+                onMouseLeave={(e) => {
+                  const target = e.currentTarget;
+                  target.classList.add("is-leaving");
+                  setTimeout(() => target.classList.remove("is-leaving"), 400);
+                }}
+                className="c-animatedLink js-animatedLink w-fit font-secondary font-semibold text-[11px] lg:text-[14px] font-bold hover:text-white transition-colors uppercase leading-tight select-none pb-0.5 text-white "
               >
                 {label}
               </a>
@@ -124,25 +135,15 @@ export default function Navbar() {
             </a>
           </div>
 
-          {/* Top Right: Buttons [LET'S TALK] and [MENU] */}
+          {/* Top Right: CTA Button only (No menu button) */}
           <div className="flex items-center gap-2 sm:gap-3 pointer-events-auto ml-auto md:ml-0">
             {/* LET'S TALK Button */}
             <button
               type="button"
               onClick={() => openProjectModal()}
-              className="px-3.5 sm:px-4 py-1.5 rounded-[3px] bg-black/45 hover:bg-white/15 border border-white/30 hover:border-white/60 text-white font-secondary font-medium text-[11px] sm:text-xs uppercase tracking-wider backdrop-blur-md transition-all duration-200"
+              className="c-cta-button px-5 sm:px-7 py-2 sm:py-2.5  bg-white border border-white text-black font-secondary font-bold text-xs sm:text-sm uppercase tracking-wider backdrop-blur-md transition-all duration-300 hover:text-black hover:border-accent "
             >
               LET&apos;S TALK
-            </button>
-
-            {/* MENU Button */}
-            <button
-              type="button"
-              onClick={() => setOpen(true)}
-              className="px-3.5 sm:px-4 py-1.5 rounded-[3px] bg-black/45 hover:bg-white/15 border border-white/30 hover:border-white/60 text-white font-secondary font-medium text-[11px] sm:text-xs uppercase tracking-wider backdrop-blur-md transition-all duration-200"
-              aria-label="Open menu"
-            >
-              MENU
             </button>
           </div>
         </div>
@@ -176,7 +177,7 @@ export default function Navbar() {
                 setOpen(false);
                 openProjectModal();
               }}
-              className="px-3.5 sm:px-4 py-1.5 rounded-[3px] bg-black/45 hover:bg-white/15 border border-white/30 hover:border-white/60 text-white font-secondary font-medium text-[11px] sm:text-xs uppercase tracking-wider backdrop-blur-md transition-all duration-200"
+              className="c-cta-button px-5 sm:px-7 py-2 sm:py-2.5  bg-white border border-white text-black font-secondary font-semibold text-xs sm:text-sm uppercase tracking-wider backdrop-blur-md transition-all duration-300 hover:text-black bg-white hover:border-accent"
             >
               LET&apos;S TALK
             </button>
