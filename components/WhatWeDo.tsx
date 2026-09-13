@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowUpRight, Volume2, VolumeX } from "lucide-react";
 import { useFilm } from "./FilmContext";
 
@@ -100,13 +102,10 @@ function UGCPhonePanel({ videoUrl, isPlaying }: { videoUrl: string; isPlaying?: 
     return () => observer.disconnect();
   }, [isMuted]);
 
+  // On desktop the card is sticky and always intersecting — just ensure it plays when isPlaying flips to true
   useEffect(() => {
-    if (videoRef.current && isPlaying !== undefined) {
-      if (isPlaying) {
-        videoRef.current.play().catch(() => {});
-      } else {
-        videoRef.current.pause();
-      }
+    if (videoRef.current && isPlaying) {
+      videoRef.current.play().catch(() => {});
     }
   }, [isPlaying]);
 
@@ -483,7 +482,15 @@ function MobileVideoPlayer({ service }: { service: ServiceItem }) {
   );
 }
 
-function ServicePanel({ service }: { service: ServiceItem }) {
+function ServicePanel({
+  service,
+  index,
+  isLast,
+}: {
+  service: ServiceItem;
+  index: number;
+  isLast: boolean;
+}) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const [isMuted, setIsMuted] = useState(true);
@@ -497,27 +504,68 @@ function ServicePanel({ service }: { service: ServiceItem }) {
 
     if (video) {
       video.muted = isMuted;
-      video.play().catch(() => {});
     }
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && entry.intersectionRatio > 0.25) {
-            if (video) video.play().catch(() => {});
-            setIsPlaying(true);
-          } else {
+    gsap.registerPlugin(ScrollTrigger);
+    const mm = gsap.matchMedia();
+
+    // Desktop (>= 1024px): Stacked cards play/pause orchestration
+    mm.add("(min-width: 1024px)", () => {
+      const st = ScrollTrigger.create({
+        trigger: panel,
+        start: "top top",
+        end: isLast ? "bottom bottom" : () => `+=${window.innerHeight}`,
+        onEnter: () => {
+          if (video) video.play().catch(() => {});
+          setIsPlaying(true);
+        },
+        onLeave: () => {
+          if (!isLast) {
             if (video) video.pause();
             setIsPlaying(false);
           }
-        });
-      },
-      { threshold: [0.1, 0.25, 0.6] }
-    );
+        },
+        onEnterBack: () => {
+          if (video) video.play().catch(() => {});
+          setIsPlaying(true);
+        },
+        onLeaveBack: () => {
+          if (video) video.pause();
+          setIsPlaying(false);
+        },
+      });
 
-    observer.observe(panel);
-    return () => observer.disconnect();
-  }, [isMuted]);
+      if (st.isActive) {
+        if (video) video.play().catch(() => {});
+        setIsPlaying(true);
+      }
+
+      return () => st.kill();
+    });
+
+    // Mobile (< 1024px): Standard IntersectionObserver for non-sticky normal scroll
+    mm.add("(max-width: 1023px)", () => {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting && entry.intersectionRatio > 0.25) {
+              if (video) video.play().catch(() => {});
+              setIsPlaying(true);
+            } else {
+              if (video) video.pause();
+              setIsPlaying(false);
+            }
+          });
+        },
+        { threshold: [0.1, 0.25, 0.6] }
+      );
+
+      observer.observe(panel);
+      return () => observer.disconnect();
+    });
+
+    return () => mm.revert();
+  }, [isMuted, isLast]);
 
   const toggleMute = () => {
     if (!videoRef.current) return;
@@ -529,7 +577,10 @@ function ServicePanel({ service }: { service: ServiceItem }) {
   return (
     <div
       ref={panelRef}
-      className="relative w-full min-h-screen lg:h-screen flex flex-col lg:flex-row border-b border-white/[0.07] overflow-hidden"
+      style={{ zIndex: index + 1 }}
+      className={`relative lg:sticky lg:top-0 w-full min-h-screen lg:h-screen flex flex-col lg:flex-row bg-[#050608] border-b border-white/[0.07] overflow-hidden ${
+        index > 0 ? "lg:border-t lg:border-white/10 lg:shadow-[0_-30px_60px_rgba(0,0,0,0.95)]" : ""
+      }`}
     >
       {/* ── LEFT: Content Panel ── */}
       <div className="relative z-10 flex flex-col justify-center w-full lg:w-[48%] h-auto lg:h-full px-6 sm:px-14 lg:px-16 py-12 sm:py-16 bg-[#050608] shrink-0">
@@ -652,10 +703,15 @@ export default function WhatWeDo() {
         </h2>
       </div>
 
-      {/* Service Panels — each full viewport height */}
-      <div className="w-full">
-        {SERVICES.map((service) => (
-          <ServicePanel key={service.id} service={service} />
+      {/* Service Panels — each full viewport height, stacked on desktop */}
+      <div className="w-full relative">
+        {SERVICES.map((service, index) => (
+          <ServicePanel
+            key={service.id}
+            service={service}
+            index={index}
+            isLast={index === SERVICES.length - 1}
+          />
         ))}
       </div>
     </section>

@@ -18,11 +18,11 @@ export default function ClientMarquee() {
               className="flex items-center gap-8 mx-6 shrink-0 select-none group"
             >
               {isPlaceholder ? (
-                <span className="px-3 py-1 text-xs tracking-widest font-secondary uppercase text-cinema-dim border border-dashed border-white/20 rounded bg-white/[0.02] group-hover:border-accent/40 group-hover:text-cinema-muted transition-colors">
+                <span className="px-3 py-1 text-xs tracking-widest font-secondary uppercase text-cinema-dim border border-dashed border-white/20 rounded bg-white/[0.02] group-hover:border-accent/40 group-hover:text-cinema-muted text-white transition-colors">
                   [CLIENT]
                 </span>
               ) : (
-                <span className="font-primary font-bold text-sm md:text-base tracking-[0.25em] text-white/70 uppercase group-hover:text-accent transition-colors">
+                <span className="font-primary font-bold text-sm md:text-base tracking-[0.25em] text-white uppercase group-hover:text-accent transition-colors">
                   {client}
                 </span>
               )}

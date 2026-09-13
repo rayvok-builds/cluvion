@@ -52,13 +52,14 @@ export default function ExpandingWorkVideo({ item }: { item: WorkItem }) {
     observer.observe(scrollContainer);
 
     const ctx = gsap.context(() => {
-      // Timeline pinned by sticky wrapper, scrubbed along the 240vh scroll-container
+      // Timeline triggers as the video enters the viewport and finishes expanding
+      // exactly when it reaches the center of the screen (top top / sticky lock)
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: scrollContainer,
-          start: "top top",
-          end: "bottom bottom",
-          scrub: 1.2,
+          start: "top 75%",
+          end: "top top",
+          scrub: 1,
           markers: false,
           onEnter: () => {
             video.play().catch(() => {});
@@ -66,24 +67,23 @@ export default function ExpandingWorkVideo({ item }: { item: WorkItem }) {
         },
       });
 
-      // Expand the video container to full screen 100% width and 100% height,
-      // flattening border radius and scaling video subtly
+      // Expand the video container to full screen 100% width and 100% height as it scrolls toward center
       tl.to(
         videoContainer,
         {
           width: "100%",
           height: "100%",
           borderRadius: "0px",
-          ease: "expo.out",
-          duration: 0.6,
+          borderColor: "rgba(255, 255, 255, 0)",
+          boxShadow: "0 0 0 rgba(0,0,0,0)",
+          ease: "power2.out",
         },
         0
       ).to(
         video,
         {
-          scale: 1.08,
-          ease: "expo.out",
-          duration: 0.6,
+          scale: 1.06,
+          ease: "power2.out",
         },
         0
       );
@@ -107,7 +107,7 @@ export default function ExpandingWorkVideo({ item }: { item: WorkItem }) {
   return (
     <div
       ref={scrollContainerRef}
-      className="relative w-full h-[240vh] select-none"
+      className="relative w-full h-[180vh] select-none"
     >
       {/* Sticky Fullscreen Viewport Wrapper */}
       <div className="sticky top-0 left-0 w-full h-screen flex items-center justify-center overflow-hidden z-20">

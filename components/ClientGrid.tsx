@@ -187,7 +187,7 @@ export default function ClientGrid() {
               key={idx}
               className="flex items-center gap-8 mx-6 shrink-0 select-none"
             >
-              <span className="font-primary font-bold text-sm sm:text-base tracking-[0.25em] text-white/40 uppercase">
+              <span className="font-primary  text-sm sm:text-base  text-white uppercase">
                 {clientName}
               </span>
               <span className="text-accent/50 text-xs select-none">·</span>
