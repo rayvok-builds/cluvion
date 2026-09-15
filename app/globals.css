@@ -318,3 +318,12 @@ html.lenis, html.lenis body {
 .c-cta-button-inv::after {
   background-color: #121316;
 }
+
+/* Hide fixed bottom gradual blur overlay specifically in the process section */
+body.in-process-section .gradual-blur-page {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
+}
+
