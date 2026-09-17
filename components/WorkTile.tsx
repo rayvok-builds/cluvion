@@ -19,11 +19,14 @@ function getCloudinaryMedia(url: string, fallbackPoster: string, isFullWidth?: b
 
 export default function WorkTile({ 
   item, 
-  isFullWidth = false 
+  index,
+  isFullWidth = false,
+  mobileView = "grid",
 }: { 
   item: WorkItem; 
   index?: number; 
   isFullWidth?: boolean; 
+  mobileView?: "single" | "grid";
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -110,8 +113,12 @@ export default function WorkTile({
       ref={containerRef}
       className={`group relative w-full overflow-hidden bg-[#0A0B0E] border border-white/[0.06] select-none [transform:translateZ(0)] ${
         isFullWidth 
-          ? "w-full h-screen" 
-          : "aspect-[4/5] sm:aspect-[3/4]"
+          ? mobileView === "grid"
+            ? "w-full aspect-[16/9] md:h-screen"
+            : "w-full h-screen"
+          : mobileView === "grid"
+            ? "aspect-[9/16] sm:aspect-[3/4]"
+            : "aspect-[4/5] sm:aspect-[3/4]"
       }`}
     >
       {/* Skeleton Loading Indicator */}

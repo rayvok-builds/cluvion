@@ -1,99 +1,103 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import Image from "next/image";
+import gsap from "gsap";
 
 export default function Preloader() {
-  const [count, setCount] = useState(0);
-  const [isDone, setIsDone] = useState(false);
+  const [percent, setPercent] = useState(0);
   const [isRemoved, setIsRemoved] = useState(false);
 
-  const topCurtainRef = useRef<HTMLDivElement>(null);
-  const bottomCurtainRef = useRef<HTMLDivElement>(null);
+  const preloaderWrapRef = useRef<HTMLDivElement>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
-  const progressLineRef = useRef<HTMLDivElement>(null);
+  const centerLogoRef = useRef<HTMLDivElement>(null);
+  const percentageIntroRef = useRef<HTMLDivElement>(null);
+  const percentageValRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Lock scroll during preloader
+    // Lock body scroll during preloading
     document.body.style.overflow = "hidden";
 
-    const topCurtain = topCurtainRef.current;
-    const bottomCurtain = bottomCurtainRef.current;
+    const wrap = preloaderWrapRef.current;
     const bar = progressBarRef.current;
-    const line = progressLineRef.current;
+    const logo = centerLogoRef.current;
+    const intro = percentageIntroRef.current;
+    const valElem = percentageValRef.current;
 
-    if (!bar || !line || !topCurtain || !bottomCurtain) return;
+    if (!wrap || !bar || !logo || !intro || !valElem) return;
 
-    // Counter animation helper with smooth easing
-    const animateCount = (start: number, end: number, durationMs: number) => {
-      const startTime = performance.now();
-      const step = (currentTime: number) => {
-        const elapsed = currentTime - startTime;
-        const progress = Math.min(elapsed / durationMs, 1);
-        // easeOutQuad for smooth counter speed
-        const eased = 1 - (1 - progress) * (1 - progress);
-        const currentVal = Math.floor(start + (end - start) * eased);
-        setCount(currentVal);
-        if (progress < 1) {
-          requestAnimationFrame(step);
+    const progressObj = { value: 0 };
+
+    // GSAP master progress animation from 0 to 100%
+    const tween = gsap.to(progressObj, {
+      value: 100,
+      duration: 1.8,
+      ease: "power2.inOut",
+      onUpdate: () => {
+        const current = Math.round(progressObj.value);
+        setPercent(current);
+        if (bar) {
+          bar.style.width = `${current}%`;
         }
-      };
-      requestAnimationFrame(step);
-    };
-
-    // Stage 1: Progress line moves to 25% and counter to ~25 (after 250ms)
-    const t1 = setTimeout(() => {
-      line.style.transition = "width 1.1s cubic-bezier(.87,0,.13,1)";
-      line.style.width = "25%";
-      animateCount(0, 25, 1100);
-
-      // Stage 2: Progress line and bar expand to 100% across screen, counter reaches 100 (after 1200ms)
-      const t2 = setTimeout(() => {
-        bar.style.transition = "width 1.4s cubic-bezier(.87,0,.13,1)";
-        line.style.transition = "width 1.4s cubic-bezier(.87,0,.13,1)";
-
-        bar.style.width = "100vw";
-        line.style.width = "100%";
-        animateCount(25, 100, 1400);
-
-        // Stage 3: Split curtain opening & reveal hero (after 1500ms)
-        const t3 = setTimeout(() => {
-          // Fade out the progress text and line
-          bar.style.transition = "opacity 0.3s ease";
-          line.style.transition = "opacity 0.3s ease";
-          bar.style.opacity = "0";
-          line.style.opacity = "0";
-
-          // Split open top and bottom solid curtains
-          topCurtain.style.transition = "transform 1.1s cubic-bezier(.87,0,.13,1)";
-          bottomCurtain.style.transition = "transform 1.1s cubic-bezier(.87,0,.13,1)";
-
-          topCurtain.style.transform = "translateY(-100%)";
-          bottomCurtain.style.transform = "translateY(100%)";
-
-          // Notify hero section to animate text sequentially
-          window.dispatchEvent(new CustomEvent("preloaderComplete"));
-
-          const t4 = setTimeout(() => {
-            setIsDone(true);
+      },
+      onComplete: () => {
+        const exitTl = gsap.timeline({
+          onComplete: () => {
+            setIsRemoved(true);
             document.body.style.overflow = "";
+          },
+        });
 
-            const t5 = setTimeout(() => {
-              setIsRemoved(true);
-            }, 500);
-            return () => clearTimeout(t5);
-          }, 1100);
+        // 1. Bottom loading text and percentage fade out with slight upward shift
+        exitTl.to([intro, valElem], {
+          duration: 0.3,
+          opacity: 0,
+          y: -10,
+          ease: "power2.inOut",
+        });
 
-          return () => clearTimeout(t4);
-        }, 1500);
+        // 2. Center logo glides up and fades out
+        exitTl.to(
+          logo,
+          {
+            duration: 0.5,
+            opacity: 0,
+            y: -40,
+            ease: "power2.inOut",
+          },
+          "-=0.15"
+        );
 
-        return () => clearTimeout(t3);
-      }, 1200);
+        // 3. Top progress bar fades out
+        exitTl.to(
+          bar,
+          {
+            duration: 0.25,
+            opacity: 0,
+            ease: "power2.inOut",
+          },
+          "-=0.3"
+        );
 
-      return () => clearTimeout(t2);
-    }, 250);
+        // 4. Whole preloader wrap slides UP off the screen (yPercent: -101)
+        exitTl.to(
+          wrap,
+          {
+            duration: 0.75,
+            yPercent: -101,
+            ease: "power2.inOut",
+            onStart: () => {
+              // Notify Navbar and Hero sections right as curtain lifts
+              window.dispatchEvent(new CustomEvent("preloaderComplete"));
+            },
+          },
+          "-=0.2"
+        );
+      },
+    });
 
     return () => {
-      clearTimeout(t1);
+      tween.kill();
       document.body.style.overflow = "";
     };
   }, []);
@@ -102,46 +106,52 @@ export default function Preloader() {
 
   return (
     <div
-      className={`fixed inset-0 z-[10000] pointer-events-none ${
-        isDone ? "opacity-0 transition-opacity duration-300" : "opacity-100"
-      }`}
+      ref={preloaderWrapRef}
+      className="preloader-wrap fixed inset-0 w-full h-full bg-[#000000] z-[1800] text-center will-change-transform select-none overflow-hidden"
     >
-      {/* Solid Top Curtain Panel */}
-      <div
-        ref={topCurtainRef}
-        className="absolute top-0 left-0 w-full h-[50.5vh] bg-[#050608] pointer-events-auto will-change-transform z-10"
-        style={{ transform: "translateY(0%)" }}
-      />
-
-      {/* Solid Bottom Curtain Panel */}
-      <div
-        ref={bottomCurtainRef}
-        className="absolute bottom-0 left-0 w-full h-[50.5vh] bg-[#050608] pointer-events-auto will-change-transform z-10"
-        style={{ transform: "translateY(0%)" }}
-      />
-
-      {/* Center Loader Track & UI */}
-      <div className="absolute inset-0 flex items-center justify-start pointer-events-none z-20">
-        {/* Progress Bar Widget */}
+      {/* ── Top Edge Progress Bar (Matches User Screenshot) ── */}
+      <div className="absolute top-0 left-0 right-0 w-full h-[2.5px] bg-transparent overflow-hidden pointer-events-none z-30">
         <div
           ref={progressBarRef}
-          className="absolute left-0 flex justify-between items-center px-6 sm:px-12 py-3.5 bg-[#050608] border-y border-white/[0.08] text-accent will-change-transform"
-          style={{ width: "25vw" }}
-        >
-          <p className="font-mono text-[11px] sm:text-xs uppercase tracking-[0.25em] text-accent select-none">
-            loading
-          </p>
-          <p className="font-mono text-[11px] sm:text-xs tracking-wider text-accent select-none">
-            [<span id="counter" className="inline-block min-w-[24px] text-right">{count}</span>]
-          </p>
-        </div>
-
-        {/* Progress Line */}
-        <div
-          ref={progressLineRef}
-          className="absolute left-0 h-[2px] bg-accent shadow-[0_0_15px_rgba(229,169,60,0.9)] will-change-transform"
+          className="h-full bg-white will-change-[width] transition-none"
           style={{ width: "0%" }}
         />
+      </div>
+
+      {/* ── Outer / Inner Vertical Centering Container ── */}
+      <div className="outer table w-full h-full">
+        <div className="inner table-cell align-middle box-border">
+          {/* ── Center: Cluvion Logo ── */}
+          <div
+            ref={centerLogoRef}
+            className="flex items-center justify-center pointer-events-none z-20 will-change-transform"
+          >
+            <Image
+              src="/logo.webp"
+              alt="Cluvion"
+              width={56}
+              height={56}
+              className="w-12 h-12 sm:w-14 sm:h-14 object-contain brightness-100 drop-shadow-[0_0_25px_rgba(255,255,255,0.18)]"
+              priority
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* ── Bottom Meta Row: [LOADING] on Left, [PERCENTAGE %] on Right ── */}
+      <div className="absolute bottom-6 sm:bottom-10 left-6 sm:left-14 right-6 sm:right-14 flex items-center justify-between pointer-events-none z-20">
+        <div
+          ref={percentageIntroRef}
+          className="percentage-intro font-secondary text-[11px] sm:text-xs font-medium uppercase tracking-[0.25em] text-white/60 will-change-transform"
+        >
+          Loading
+        </div>
+        <div
+          ref={percentageValRef}
+          className="percentage-wrapper font-secondary text-[11px] sm:text-xs font-medium tracking-wider text-white/60 min-w-[40px] text-right will-change-transform"
+        >
+          {percent}%
+        </div>
       </div>
     </div>
   );

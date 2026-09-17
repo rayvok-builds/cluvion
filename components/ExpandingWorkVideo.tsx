@@ -18,7 +18,13 @@ function getCloudinaryMedia(url: string, fallbackPoster: string) {
   return { videoUrl: url, posterUrl: fallbackPoster };
 }
 
-export default function ExpandingWorkVideo({ item }: { item: WorkItem }) {
+export default function ExpandingWorkVideo({
+  item,
+  mobileView = "grid",
+}: {
+  item: WorkItem;
+  mobileView?: "single" | "grid";
+}) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const videoContainerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -52,46 +58,50 @@ export default function ExpandingWorkVideo({ item }: { item: WorkItem }) {
     );
     observer.observe(scrollContainer);
 
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: scrollContainer,
-          start: "top 75%",
-          end: "top top",
-          scrub: 1,
-          markers: false,
-          onEnter: () => {
-            if (isPlaying) video.play().catch(() => {});
-          },
-        },
-      });
+    const isMobileGrid = window.innerWidth < 768 && mobileView === "grid";
 
-      tl.to(
-        videoContainer,
-        {
-          width: "100%",
-          height: "100%",
-          borderRadius: "0px",
-          borderColor: "rgba(255, 255, 255, 0)",
-          boxShadow: "0 0 0 rgba(0,0,0,0)",
-          ease: "power2.out",
-        },
-        0
-      ).to(
-        video,
-        {
-          scale: 1.06,
-          ease: "power2.out",
-        },
-        0
-      );
+    const ctx = gsap.context(() => {
+      if (!isMobileGrid) {
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: scrollContainer,
+            start: "top 75%",
+            end: "top top",
+            scrub: 1,
+            markers: false,
+            onEnter: () => {
+              if (isPlaying) video.play().catch(() => {});
+            },
+          },
+        });
+
+        tl.to(
+          videoContainer,
+          {
+            width: "100%",
+            height: "100%",
+            borderRadius: "0px",
+            borderColor: "rgba(255, 255, 255, 0)",
+            boxShadow: "0 0 0 rgba(0,0,0,0)",
+            ease: "power2.out",
+          },
+          0
+        ).to(
+          video,
+          {
+            scale: 1.06,
+            ease: "power2.out",
+          },
+          0
+        );
+      }
     }, scrollContainer);
 
     return () => {
       observer.disconnect();
       ctx.revert();
     };
-  }, [isPlaying]);
+  }, [isPlaying, mobileView]);
 
   const toggleMute = (e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
@@ -100,6 +110,7 @@ export default function ExpandingWorkVideo({ item }: { item: WorkItem }) {
     const nextMuted = !video.muted;
     video.muted = nextMuted;
     setIsMuted(nextMuted);
+
     if (video.paused && isPlaying) {
       video.play().catch(() => {});
     }
@@ -111,9 +122,12 @@ export default function ExpandingWorkVideo({ item }: { item: WorkItem }) {
     if (!video) return;
 
     if (video.paused) {
-      video.play().then(() => {
-        setIsPlaying(true);
-      }).catch(() => {});
+      video
+        .play()
+        .then(() => {
+          setIsPlaying(true);
+        })
+        .catch(() => {});
     } else {
       video.pause();
       setIsPlaying(false);
@@ -125,14 +139,26 @@ export default function ExpandingWorkVideo({ item }: { item: WorkItem }) {
   return (
     <div
       ref={scrollContainerRef}
-      className="relative w-full h-[180vh] select-none"
+      className={`relative w-full select-none ${
+        mobileView === "grid" ? "h-auto md:h-[180vh]" : "h-[180vh]"
+      }`}
     >
-      {/* Sticky Fullscreen Viewport Wrapper */}
-      <div className="sticky top-0 left-0 w-full h-screen flex items-center justify-center overflow-hidden z-20">
+      {/* Sticky Fullscreen Viewport Wrapper on desktop/single; in mobile grid it's direct landscape */}
+      <div
+        className={`w-full flex items-center justify-center overflow-hidden z-20 ${
+          mobileView === "grid"
+            ? "relative h-auto aspect-[16/9] md:aspect-auto md:sticky md:top-0 md:h-screen"
+            : "sticky top-0 left-0 h-screen"
+        }`}
+      >
         {/* Expanding Video Container */}
         <div
           ref={videoContainerRef}
-          className="group relative w-[300px] h-[300px] sm:w-[380px] sm:h-[380px] md:w-[440px] md:h-[440px] overflow-hidden rounded-2xl bg-[#0A0B0E] border border-white/15 shadow-[0_25px_80px_rgba(0,0,0,0.95)] [transform:translateZ(0)] will-change-[width,height,border-radius]"
+          className={`group relative overflow-hidden bg-[#0A0B0E] border border-white/15 shadow-[0_25px_80px_rgba(0,0,0,0.95)] [transform:translateZ(0)] ${
+            mobileView === "grid"
+              ? "w-full h-full rounded-none md:w-[440px] md:h-[440px] md:rounded-2xl md:will-change-[width,height,border-radius]"
+              : "w-[300px] h-[300px] sm:w-[380px] sm:h-[380px] md:w-[440px] md:h-[440px] rounded-2xl will-change-[width,height,border-radius]"
+          }`}
         >
           {/* Skeleton shimmer while loading */}
           {!isLoaded && (

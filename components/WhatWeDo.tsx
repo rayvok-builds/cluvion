@@ -507,64 +507,38 @@ function ServicePanel({
     }
 
     gsap.registerPlugin(ScrollTrigger);
-    const mm = gsap.matchMedia();
 
-    // Desktop (>= 1024px): Stacked cards play/pause orchestration
-    mm.add("(min-width: 1024px)", () => {
-      const st = ScrollTrigger.create({
-        trigger: panel,
-        start: "top top",
-        end: isLast ? "bottom bottom" : () => `+=${window.innerHeight}`,
-        onEnter: () => {
-          if (video) video.play().catch(() => { });
-          setIsPlaying(true);
-        },
-        onLeave: () => {
-          if (!isLast) {
-            if (video) video.pause();
-            setIsPlaying(false);
-          }
-        },
-        onEnterBack: () => {
-          if (video) video.play().catch(() => { });
-          setIsPlaying(true);
-        },
-        onLeaveBack: () => {
+    // Card scroll stacking & play/pause orchestration for both mobile and desktop
+    const st = ScrollTrigger.create({
+      trigger: panel,
+      start: "top top",
+      end: isLast ? "bottom bottom" : () => `+=${window.innerHeight}`,
+      onEnter: () => {
+        if (video) video.play().catch(() => {});
+        setIsPlaying(true);
+      },
+      onLeave: () => {
+        if (!isLast) {
           if (video) video.pause();
           setIsPlaying(false);
-        },
-      });
-
-      if (st.isActive) {
-        if (video) video.play().catch(() => { });
+        }
+      },
+      onEnterBack: () => {
+        if (video) video.play().catch(() => {});
         setIsPlaying(true);
-      }
-
-      return () => st.kill();
+      },
+      onLeaveBack: () => {
+        if (video) video.pause();
+        setIsPlaying(false);
+      },
     });
 
-    // Mobile (< 1024px): Standard IntersectionObserver for non-sticky normal scroll
-    mm.add("(max-width: 1023px)", () => {
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting && entry.intersectionRatio > 0.25) {
-              if (video) video.play().catch(() => { });
-              setIsPlaying(true);
-            } else {
-              if (video) video.pause();
-              setIsPlaying(false);
-            }
-          });
-        },
-        { threshold: [0.1, 0.25, 0.6] }
-      );
+    if (st.isActive) {
+      if (video) video.play().catch(() => {});
+      setIsPlaying(true);
+    }
 
-      observer.observe(panel);
-      return () => observer.disconnect();
-    });
-
-    return () => mm.revert();
+    return () => st.kill();
   }, [isMuted, isLast]);
 
   const toggleMute = () => {
@@ -578,11 +552,12 @@ function ServicePanel({
     <div
       ref={panelRef}
       style={{ zIndex: index + 1 }}
-      className={`relative lg:sticky lg:top-0 w-full min-h-screen lg:h-screen flex flex-col lg:flex-row bg-[#050608] border-b border-white/[0.07] overflow-hidden ${index > 0 ? "lg:border-t lg:border-white/10 lg:shadow-[0_-30px_60px_rgba(0,0,0,0.95)]" : ""
-        }`}
+      className={`sticky top-0 w-full min-h-[100dvh] lg:h-screen flex flex-col lg:flex-row bg-[#050608] border-b border-white/[0.07] overflow-hidden ${
+        index > 0 ? "border-t border-white/10 shadow-[0_-30px_60px_rgba(0,0,0,0.95)]" : ""
+      }`}
     >
       {/* ── LEFT: Content Panel ── */}
-      <div className="relative z-10 flex flex-col justify-center w-full lg:w-[48%] h-auto lg:h-full px-6 sm:px-14 lg:px-16 py-12 sm:py-16 bg-[#050608] shrink-0">
+      <div className="relative z-10 flex flex-col justify-center w-full lg:w-[48%] h-auto lg:h-full px-6 sm:px-14 lg:px-16 py-8 sm:py-12 lg:py-16 bg-[#050608] shrink-0">
         {/* Service index label */}
         <div className="flex items-center gap-2 mb-4 sm:mb-7 font-mono text-[11px] text-white/40 uppercase tracking-widest">
           <span className="text-accent font-semibold">

@@ -61,7 +61,7 @@ export default function WorkGrid() {
       {/* Main Alternating Gallery Layout: Matching Screenshot 2 Structure */}
       <div className="w-full flex flex-col gap-1 sm:gap-1.5 md:gap-2 px-0">
         {/* 1. First Full-Width Landscape Cinematic Feature Video with Scroll-Triggered Expansion */}
-        <ExpandingWorkVideo item={FEATURED_VIDEOS.heroLarge1} />
+        <ExpandingWorkVideo item={FEATURED_VIDEOS.heroLarge1} mobileView={mobileView} />
 
         {/* 2. First 3-Reels Grid Row (Matching 3 vertical videos side-by-side in screenshot 2) */}
         <div
@@ -71,12 +71,12 @@ export default function WorkGrid() {
             } gap-1 sm:gap-1.5 md:gap-2 px-0`}
         >
           {REEL_GRID_1.map((item, idx) => (
-            <WorkTile key={item.id} item={item} index={idx} />
+            <WorkTile key={item.id} item={item} index={idx} mobileView={mobileView} />
           ))}
         </div>
 
         {/* 3. Second Full-Width Landscape Cinematic Feature Video */}
-        <WorkTile item={FEATURED_VIDEOS.heroLarge2} isFullWidth />
+        <WorkTile item={FEATURED_VIDEOS.heroLarge2} isFullWidth mobileView={mobileView} />
 
         {/* 4. Second 3-Reels Grid Row */}
         <div
@@ -86,7 +86,7 @@ export default function WorkGrid() {
             } gap-1 sm:gap-1.5 md:gap-2 px-0`}
         >
           {REEL_GRID_2.map((item, idx) => (
-            <WorkTile key={item.id} item={item} index={idx} />
+            <WorkTile key={item.id} item={item} index={idx} mobileView={mobileView} />
           ))}
         </div>
       </div>
