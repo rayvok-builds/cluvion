@@ -111,7 +111,7 @@ export default function Footer() {
                 <Link
                   key={label}
                   href={href}
-                  className="font-secondary text-xl sm:text-2xl text-[#EDEDED] hover:text-white transition-colors duration-200 inline-block font-medium tracking-tight"
+                  className="font-secondary c-animatedLink js-animatedLink w-fit  text-xl sm:text-2xl text-[#EDEDED] hover:text-white transition-colors duration-200 inline-block font-medium tracking-tight"
                 >
                   {label}
                 </Link>
@@ -204,10 +204,9 @@ export default function Footer() {
               className="inline-flex items-center gap-1.5 text-[#8E8E98] hover:text-white transition-colors duration-200 group"
             >
               <span>Website by</span>
-              <span className="font-semibold text-[#EDEDED] group-hover:text-accent transition-colors">
+              <span className="font-semibold c-animatedLink js-animatedLink w-fit text-[#EDEDED] group-hover:text-[#C9FE34]  decoration-white/30 hover:decoration-white transition-colors">
                 RAYVOK
               </span>
-              <ArrowUpRight className="w-4 h-4 text-[#8E8E98] group-hover:text-accent transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </a>
           </div>
         </div>
