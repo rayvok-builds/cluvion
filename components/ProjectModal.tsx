@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useFilm } from "./FilmContext";
 import { X, Check, Send, Sparkles, Clock, ShieldCheck, ArrowRight } from "lucide-react";
 import confetti from "canvas-confetti";
+import GlassSurface from "./GlassSurface";
 
 export default function ProjectModal() {
   const { isProjectModalOpen, closeProjectModal, selectedCategory } = useFilm();
@@ -124,7 +125,7 @@ export default function ProjectModal() {
                       onClick={() => setCategory(cat)}
                       className={`px-3 py-2 text-xs font-secondary text-left rounded border transition-all ${
                         category === cat
-                          ? "bg-accent text-black font-semibold border-accent shadow-sm"
+                          ? "bg-white text-black font-semibold border-white shadow-sm"
                           : "bg-white/[0.03] text-cinema-muted hover:text-white border-white/10"
                       }`}
                     >
@@ -212,22 +213,32 @@ export default function ProjectModal() {
                 />
               </div>
 
-              {/* Submit CTA (Primary font: Switzer) */}
+              {/* Submit CTA */}
               <div className="pt-2">
-                <button
+                <GlassSurface
+                  as="button"
                   type="submit"
                   disabled={isSubmitting}
-                  className="btn-primary w-full py-4 text-center text-sm font-bold tracking-[0.2em] uppercase text-black bg-accent hover:bg-white transition-all duration-300 rounded-sm shadow-[0_0_30px_rgba(229,169,60,0.3)] font-primary flex items-center justify-center gap-2"
+                  borderRadius={4}
+                  height={52}
+                  width="100%"
+                  brightness={60}
+                  backgroundOpacity={0.12}
+                  saturation={1.5}
+                  distortionScale={-140}
+                  className="w-full py-4 border border-white/30 text-white font-primary font-bold text-sm uppercase tracking-[0.2em] transition-all duration-300 hover:border-white hover:shadow-[0_0_30px_rgba(255,255,255,0.35)] cursor-pointer"
                 >
-                  {isSubmitting ? (
-                    <span>TRANSMITTING BRIEF...</span>
-                  ) : (
-                    <>
-                      <span>SUBMIT BRIEF FOR 48H QUOTE</span>
-                      <Send className="w-4 h-4" />
-                    </>
-                  )}
-                </button>
+                  <div className="flex items-center justify-center gap-2">
+                    {isSubmitting ? (
+                      <span>TRANSMITTING BRIEF...</span>
+                    ) : (
+                      <>
+                        <span>SUBMIT BRIEF FOR 48H QUOTE</span>
+                        <Send className="w-4 h-4" />
+                      </>
+                    )}
+                  </div>
+                </GlassSurface>
               </div>
             </form>
           </div>

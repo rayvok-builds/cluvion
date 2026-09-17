@@ -23,6 +23,7 @@ export interface CaseStudyData {
   }[];
   deliverables: string[];
   results: string[];
+  timeline?: string;
 }
 
 export const CASE_STUDIES: CaseStudyData[] = [
@@ -277,7 +278,95 @@ export const CASE_STUDIES: CaseStudyData[] = [
     results: [
       "All 10 timepieces allocated to private collectors before public press release",
       "Zero physical wear or transport hazard to the master prototype"
-    ]
+    ],
+    timeline: "5 Days"
+  },
+  {
+    id: "stately",
+    client: "Stately",
+    title: "Pre launch Video",
+    subtitle: "A pre-launch film for Stately.",
+    category: "Tech",
+    year: "2026",
+    duration: "0:45",
+    aspectRatio: "9:16",
+    videoUrl: "https://res.cloudinary.com/dokrpo5fl/video/upload/v1788349391/6.hevc_q4albe.mp4",
+    posterUrl: "/case-studies/stately.png",
+    mandate: "Pre-Launch Problem/Solution Cinema Film",
+    stats: [
+      { label: "TURNAROUND", value: "07", note: "DAYS TO DELIVERY" },
+      { label: "DELIVERABLES", value: "01", note: "AI PRODUCT VIDEO" }
+    ],
+    overview: "A pre-launch film for Stately. The brief was the problem itself- the sheer number of documents a person has to sign before a registration is actually complete. That's the thing Stately removes, so the film had to make you feel the weight of it first. We stayed with the paperwork longer than felt comfortable, the same signature and the same details, one page after another, and let the audience arrive at the relief on their own. Restraint did more here than any amount of explaining.",
+    challenge: "Restraint did more here than any amount of explaining.",
+    pipeline: [
+      { title: "Paperwork Weight Empathy", detail: "Synthesized tactile document textures, bureaucratic atmosphere, and emotional fatigue." },
+      { title: "Relief Transition", detail: "Seamless lighting and camera tempo shift from claustrophobic paper stacks to open modern living space." }
+    ],
+    deliverables: [
+      "AI Product Video"
+    ],
+    results: [
+      "High virality and pre-order registration velocity across tech communities",
+      "Delivered in 1 week without live-action camera crew"
+    ],
+    timeline: "1 Week"
+  },
+  {
+    id: "district",
+    client: "district",
+    title: "Mobile FinTech Product Film",
+    subtitle: "Delivering Instant Consumer Delight",
+    category: "FinTech",
+    year: "2026",
+    duration: "0:30",
+    aspectRatio: "9:16",
+    videoUrl: "https://res.cloudinary.com/dokrpo5fl/video/upload/v1788349395/7.hevc_fltmal.mp4",
+    posterUrl: "/case-studies/district.png",
+    mandate: "High-Energy Mobile Banking Launch Campaign",
+    stats: [
+      { label: "DELIVERY", value: "5 DAYS", note: "BRIEF TO CUT" }
+    ],
+    overview: "District needed an exuberant, fast-paced commercial showcasing the seamless delight of their mobile financial platform in real-world retail and commuter environments.",
+    challenge: "Capturing authentic joyful human emotion and high-fidelity screen graphics without extensive casting and location permits.",
+    pipeline: [
+      { title: "Dynamic Persona Generation", detail: "Synthesized charismatic urban talent with expressive micro-facial cues." }
+    ],
+    deliverables: [
+      "AI Video"
+    ],
+    results: [
+      "2.4x uplift in app install conversion rate"
+    ],
+    timeline: "1 Week"
+  },
+  {
+    id: "ci-plus",
+    client: "ci-plus",
+    title: "Cinematic Tactical Narrative",
+    subtitle: "Undercover Tech Noir Drama",
+    category: "Security Tech",
+    year: "2026",
+    duration: "0:50",
+    aspectRatio: "16:9",
+    videoUrl: "https://res.cloudinary.com/dokrpo5fl/video/upload/v1788358969/Copy-of-mercedece.hevc_hhojlb.mp4",
+    posterUrl: "/case-studies/ci-plus.png",
+    mandate: "Narrative Hardware Showcase in Gritty Urban Backdrops",
+    stats: [
+      { label: "SCENES", value: "18", note: "ALLEYWAY SYNTHESIS" }
+    ],
+    overview: "CI-PLUS required a cinematic spy-thriller visual narrative demonstrating their covert telecommunications and frequency scanner hardware in action.",
+    challenge: "Creating dense neon-drenched atmospheric back-alleys with intricate rain drizzle, steam, and raw analog equipment textures.",
+    pipeline: [
+      { title: "Atmospheric Lighting Simulation", detail: "Emulated anamorphic lens distortion, chromatic aberration, and gritty shadows." }
+    ],
+    deliverables: [
+      "AI Video"
+    ],
+    results: [
+      "Featured across international design and film festivals"
+    ],
+    timeline: "1 Week"
   }
 ];
 

@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useFilm } from "./FilmContext";
 import { X, ArrowUpRight, CheckCircle2, TrendingUp, DollarSign, Layers } from "lucide-react";
+import GlassSurface from "./GlassSurface";
 
 export default function CaseStudyModal() {
   const { isCaseStudyOpen, closeCaseStudy, openProjectModal } = useFilm();
@@ -98,15 +99,22 @@ export default function CaseStudyModal() {
             Ready to execute a similar campaign for your brand?
           </span>
 
-          <button
+          <GlassSurface
+            as="button"
             onClick={() => {
               closeCaseStudy();
               openProjectModal("Growth Mandate");
             }}
-            className="btn-primary w-full sm:w-auto px-6 py-3 text-xs font-bold uppercase tracking-wider text-black bg-white hover:bg-accent transition-colors rounded-sm font-primary"
+            borderRadius={4}
+            height={42}
+            width="auto"
+            backgroundOpacity={0.1}
+            saturation={1.4}
+            distortionScale={-140}
+            className="w-full sm:w-auto px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white border border-white/30 hover:border-white hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all font-primary cursor-pointer"
           >
             Brief Mandate Like This
-          </button>
+          </GlassSurface>
         </div>
       </div>
     </div>

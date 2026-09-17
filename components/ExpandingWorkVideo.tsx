@@ -3,7 +3,7 @@
 import { useRef, useEffect, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Volume2, VolumeX } from "lucide-react";
+import { Volume2, VolumeX, Play, Pause } from "lucide-react";
 import { WorkItem } from "../lib/data";
 
 // Helper to optimize Cloudinary video stream & poster thumbnails
@@ -24,6 +24,7 @@ export default function ExpandingWorkVideo({ item }: { item: WorkItem }) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const [isMuted, setIsMuted] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(true);
   const [isLoaded, setIsLoaded] = useState(false);
 
   const { videoUrl, posterUrl } = getCloudinaryMedia(item.videoUrl, item.posterUrl);
@@ -42,7 +43,7 @@ export default function ExpandingWorkVideo({ item }: { item: WorkItem }) {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          video.play().catch(() => {});
+          if (isPlaying) video.play().catch(() => {});
         } else {
           video.pause();
         }
@@ -52,8 +53,6 @@ export default function ExpandingWorkVideo({ item }: { item: WorkItem }) {
     observer.observe(scrollContainer);
 
     const ctx = gsap.context(() => {
-      // Timeline triggers as the video enters the viewport and finishes expanding
-      // exactly when it reaches the center of the screen (top top / sticky lock)
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: scrollContainer,
@@ -62,12 +61,11 @@ export default function ExpandingWorkVideo({ item }: { item: WorkItem }) {
           scrub: 1,
           markers: false,
           onEnter: () => {
-            video.play().catch(() => {});
+            if (isPlaying) video.play().catch(() => {});
           },
         },
       });
 
-      // Expand the video container to full screen 100% width and 100% height as it scrolls toward center
       tl.to(
         videoContainer,
         {
@@ -93,16 +91,36 @@ export default function ExpandingWorkVideo({ item }: { item: WorkItem }) {
       observer.disconnect();
       ctx.revert();
     };
-  }, []);
+  }, [isPlaying]);
 
-  const toggleMute = () => {
+  const toggleMute = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
     const video = videoRef.current;
     if (!video) return;
     const nextMuted = !video.muted;
     video.muted = nextMuted;
     setIsMuted(nextMuted);
-    video.play().catch(() => {});
+    if (video.paused && isPlaying) {
+      video.play().catch(() => {});
+    }
   };
+
+  const togglePlayPause = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (video.paused) {
+      video.play().then(() => {
+        setIsPlaying(true);
+      }).catch(() => {});
+    } else {
+      video.pause();
+      setIsPlaying(false);
+    }
+  };
+
+  const shortDesc = item.shortDescription || `${item.category.toUpperCase()} — "${item.tagline.toUpperCase()}"`;
 
   return (
     <div
@@ -114,8 +132,7 @@ export default function ExpandingWorkVideo({ item }: { item: WorkItem }) {
         {/* Expanding Video Container */}
         <div
           ref={videoContainerRef}
-          onClick={toggleMute}
-          className="relative w-[300px] h-[300px] sm:w-[380px] sm:h-[380px] md:w-[440px] md:h-[440px] overflow-hidden rounded-2xl bg-[#0A0B0E] border border-white/15 shadow-[0_25px_80px_rgba(0,0,0,0.95)] cursor-pointer [transform:translateZ(0)] will-change-[width,height,border-radius]"
+          className="group relative w-[300px] h-[300px] sm:w-[380px] sm:h-[380px] md:w-[440px] md:h-[440px] overflow-hidden rounded-2xl bg-[#0A0B0E] border border-white/15 shadow-[0_25px_80px_rgba(0,0,0,0.95)] [transform:translateZ(0)] will-change-[width,height,border-radius]"
         >
           {/* Skeleton shimmer while loading */}
           {!isLoaded && (
@@ -154,25 +171,52 @@ export default function ExpandingWorkVideo({ item }: { item: WorkItem }) {
             }`}
           />
 
-          {/* Sound Toggle Control Button (Discreet, bottom right) */}
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleMute();
-            }}
-            className="absolute bottom-6 right-6 z-30 flex items-center gap-2 px-3.5 py-2 rounded-full bg-black/60 hover:bg-black/85 backdrop-blur-md border border-white/20 text-white font-mono text-[11px] uppercase tracking-wider transition-all duration-300 shadow-xl"
-            title={isMuted ? "Unmute sound" : "Mute sound"}
-          >
-            {isMuted ? (
-              <VolumeX className="w-3.5 h-3.5 text-white/70" />
-            ) : (
-              <Volume2 className="w-3.5 h-3.5 text-accent" />
-            )}
-            <span className="hidden sm:inline">
-              {isMuted ? "Sound Off" : "Sound On"}
-            </span>
-          </button>
+          {/* Bottom Gradient Scrim Overlay */}
+          <div className="absolute inset-x-0 bottom-0 h-32 sm:h-44 bg-gradient-to-t from-black/90 via-black/40 to-transparent pointer-events-none z-10" />
+
+          {/* Bottom Info & Controls Bar (Matching Screenshot Layout) */}
+          <div className="absolute inset-x-0 bottom-0 p-4 sm:p-6 md:p-8 flex items-end justify-between gap-4 z-30">
+            {/* Bottom Left: Title & One-line Short Description */}
+            <div className="flex-1 min-w-0 pr-2">
+              <h3 className="font-primary font-bold text-xl sm:text-3xl md:text-5xl text-white tracking-tight leading-tight truncate">
+                {item.client}
+              </h3>
+              <p className="font-mono text-xs sm:text-sm md:text-base text-white/70 uppercase tracking-wider truncate mt-0.5 sm:mt-1">
+                {shortDesc}
+              </p>
+            </div>
+
+            {/* Bottom Right: Circular Mute/Unmute and Play/Pause Controls */}
+            <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+              {/* Mute / Unmute Button */}
+              <button
+                type="button"
+                onClick={toggleMute}
+                aria-label={isMuted ? "Unmute sound" : "Mute sound"}
+                className="w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-black/60 hover:bg-black/85 backdrop-blur-md border border-white/20 hover:border-white/40 text-white flex items-center justify-center transition-all duration-200 active:scale-95 shadow-xl"
+              >
+                {isMuted ? (
+                  <VolumeX className="w-3.5 h-3.5 sm:w-5 sm:h-5 text-white/80" />
+                ) : (
+                  <Volume2 className="w-3.5 h-3.5 sm:w-5 sm:h-5 text-white" />
+                )}
+              </button>
+
+              {/* Play / Pause Button */}
+              <button
+                type="button"
+                onClick={togglePlayPause}
+                aria-label={isPlaying ? "Pause video" : "Play video"}
+                className="w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-black/60 hover:bg-black/85 backdrop-blur-md border border-white/20 hover:border-white/40 text-white flex items-center justify-center transition-all duration-200 active:scale-95 shadow-xl"
+              >
+                {isPlaying ? (
+                  <Pause className="w-3.5 h-3.5 sm:w-5 sm:h-5 text-white" />
+                ) : (
+                  <Play className="w-3.5 h-3.5 sm:w-5 sm:h-5 text-white ml-0.5" />
+                )}
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

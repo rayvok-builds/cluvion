@@ -81,7 +81,7 @@ function UGCPhonePanel({ videoUrl, isPlaying }: { videoUrl: string; isPlaying?: 
     if (!video) return;
 
     video.muted = isMuted;
-    video.play().catch(() => {});
+    video.play().catch(() => { });
 
     const panel = panelRef.current;
     if (!panel) return;
@@ -90,7 +90,7 @@ function UGCPhonePanel({ videoUrl, isPlaying }: { videoUrl: string; isPlaying?: 
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            video.play().catch(() => {});
+            video.play().catch(() => { });
           } else {
             video.pause();
           }
@@ -105,7 +105,7 @@ function UGCPhonePanel({ videoUrl, isPlaying }: { videoUrl: string; isPlaying?: 
   // On desktop the card is sticky and always intersecting — just ensure it plays when isPlaying flips to true
   useEffect(() => {
     if (videoRef.current && isPlaying) {
-      videoRef.current.play().catch(() => {});
+      videoRef.current.play().catch(() => { });
     }
   }, [isPlaying]);
 
@@ -114,7 +114,7 @@ function UGCPhonePanel({ videoUrl, isPlaying }: { videoUrl: string; isPlaying?: 
     const next = !videoRef.current.muted;
     videoRef.current.muted = next;
     setIsMuted(next);
-    videoRef.current.play().catch(() => {});
+    videoRef.current.play().catch(() => { });
   };
 
   return (
@@ -341,7 +341,7 @@ function MobileVideoPlayer({ service }: { service: ServiceItem }) {
     if (!video) return;
 
     video.muted = isMuted;
-    video.play().catch(() => {});
+    video.play().catch(() => { });
 
     const container = containerRef.current;
     if (!container) return;
@@ -350,7 +350,7 @@ function MobileVideoPlayer({ service }: { service: ServiceItem }) {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            video.play().catch(() => {});
+            video.play().catch(() => { });
           } else {
             video.pause();
           }
@@ -367,7 +367,7 @@ function MobileVideoPlayer({ service }: { service: ServiceItem }) {
     const next = !videoRef.current.muted;
     videoRef.current.muted = next;
     setIsMuted(next);
-    videoRef.current.play().catch(() => {});
+    videoRef.current.play().catch(() => { });
   };
 
   if (service.id === "performance-ugc") {
@@ -516,7 +516,7 @@ function ServicePanel({
         start: "top top",
         end: isLast ? "bottom bottom" : () => `+=${window.innerHeight}`,
         onEnter: () => {
-          if (video) video.play().catch(() => {});
+          if (video) video.play().catch(() => { });
           setIsPlaying(true);
         },
         onLeave: () => {
@@ -526,7 +526,7 @@ function ServicePanel({
           }
         },
         onEnterBack: () => {
-          if (video) video.play().catch(() => {});
+          if (video) video.play().catch(() => { });
           setIsPlaying(true);
         },
         onLeaveBack: () => {
@@ -536,7 +536,7 @@ function ServicePanel({
       });
 
       if (st.isActive) {
-        if (video) video.play().catch(() => {});
+        if (video) video.play().catch(() => { });
         setIsPlaying(true);
       }
 
@@ -549,7 +549,7 @@ function ServicePanel({
         (entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting && entry.intersectionRatio > 0.25) {
-              if (video) video.play().catch(() => {});
+              if (video) video.play().catch(() => { });
               setIsPlaying(true);
             } else {
               if (video) video.pause();
@@ -578,9 +578,8 @@ function ServicePanel({
     <div
       ref={panelRef}
       style={{ zIndex: index + 1 }}
-      className={`relative lg:sticky lg:top-0 w-full min-h-screen lg:h-screen flex flex-col lg:flex-row bg-[#050608] border-b border-white/[0.07] overflow-hidden ${
-        index > 0 ? "lg:border-t lg:border-white/10 lg:shadow-[0_-30px_60px_rgba(0,0,0,0.95)]" : ""
-      }`}
+      className={`relative lg:sticky lg:top-0 w-full min-h-screen lg:h-screen flex flex-col lg:flex-row bg-[#050608] border-b border-white/[0.07] overflow-hidden ${index > 0 ? "lg:border-t lg:border-white/10 lg:shadow-[0_-30px_60px_rgba(0,0,0,0.95)]" : ""
+        }`}
     >
       {/* ── LEFT: Content Panel ── */}
       <div className="relative z-10 flex flex-col justify-center w-full lg:w-[48%] h-auto lg:h-full px-6 sm:px-14 lg:px-16 py-12 sm:py-16 bg-[#050608] shrink-0">
@@ -638,7 +637,7 @@ function ServicePanel({
         <button
           type="button"
           onClick={() => openProjectModal(service.title)}
-          className="c-cta-button group inline-flex items-center gap-3 px-6 py-3.5 border border-white/30 bg-white/[0.04] text-white font-mono text-xs uppercase tracking-[0.15em] hover:text-black hover:border-accent transition-all duration-300 self-start"
+          className="group inline-flex items-center gap-3 px-6 py-3.5 bg-white hover:bg-black text-black hover:text-white border border-white font-mono text-xs uppercase tracking-[0.15em] transition-all duration-300 self-start cursor-pointer rounded-none shadow-sm"
         >
           <span>Brief {service.title}</span>
           <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />

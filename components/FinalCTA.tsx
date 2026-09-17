@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Cal, { getCalApi } from "@calcom/embed-react";
+import GlassSurface from "./GlassSurface";
 
 export default function FinalCTA() {
   const calContainerRef = useRef<HTMLDivElement>(null);
@@ -33,7 +34,7 @@ export default function FinalCTA() {
   return (
     <section
       id="contact"
-      className="relative w-full py-20 sm:py-28 lg:py-32 flex flex-col items-center justify-center select-none overflow-hidden bg-[#0A0A0C]"
+      className="relative w-full py-20 sm:py-28 lg:py-32 flex flex-col items-center justify-center select-none overflow-hidden "
     >
       {/* Background Subtle Ambience (Clean dark gradient, no distracting objects) */}
       <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_80%_60%_at_50%_0%,rgba(255,255,255,0.03),transparent)]" />
@@ -54,33 +55,38 @@ export default function FinalCTA() {
           </p>
         </div>
 
-        {/* Glossy Dark Pill Button (Matches the reference image pill design) */}
+        {/* Glass Surface CTA Button — outer dark glass bezel, inner white fill on hover */}
         <div className="mb-12 sm:mb-16">
-          <button
-            type="button"
+          <GlassSurface
+            as="div"
+            borderRadius={9999}
+            height="auto"
+            width="auto"
+            brightness={25}
+            backgroundOpacity={0.10}
+            saturation={1.2}
+            distortionScale={-120}
+            className="group p-[5px] border border-white/20 hover:border-white/40 cursor-pointer transition-colors duration-300"
             onClick={scrollToCal}
-            className="group relative inline-flex items-center justify-center px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-secondary text-white font-medium text-base sm:text-lg tracking-tight transition-all duration-300 cursor-pointer overflow-hidden"
-            style={{
-              background:
-                "radial-gradient(120% 120% at 50% 0%, rgba(255, 255, 255, 0.18) 0%, rgba(30, 30, 36, 0.95) 45%, rgba(10, 10, 14, 0.98) 100%)",
-              border: "1px solid rgba(255, 255, 255, 0.22)",
-              boxShadow:
-                "0 8px 32px -4px rgba(0, 0, 0, 0.8), inset 0 1px 1px 0 rgba(255, 255, 255, 0.4), inset 0 -1px 1px 0 rgba(0, 0, 0, 0.6)",
-            }}
+            style={{ display: "inline-flex" }}
           >
-            {/* Top specular highlight streak */}
-            <span
-              className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-[1px] bg-gradient-to-r from-transparent via-white/60 to-transparent pointer-events-none"
-              aria-hidden="true"
-            />
-
-            {/* Hover light wash - pure monochrome/white, NO gold */}
-            <span className="absolute inset-0 bg-white/0 group-hover:bg-white/[0.08] transition-colors duration-300 rounded-full pointer-events-none" />
-
-            <span className="relative z-10 transition-transform duration-200 group-hover:scale-[1.02]">
+            <button
+              type="button"
+              onClick={scrollToCal}
+              className="
+                relative rounded-full
+                px-8 sm:px-11 py-3.5 sm:py-4
+                bg-transparent hover:bg-white
+                text-white hover:text-black
+                font-secondary font-medium text-base sm:text-lg tracking-tight
+                transition-all duration-300
+                cursor-pointer select-none
+                whitespace-nowrap
+              "
+            >
               Book A 15-Min Call
-            </span>
-          </button>
+            </button>
+          </GlassSurface>
         </div>
 
         {/* Embedded Cal.com Widget Card Container */}

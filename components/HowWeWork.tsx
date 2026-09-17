@@ -5,25 +5,19 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Volume2, VolumeX } from "lucide-react";
 
-/* ─── Assets ─────────────────────────────────────────────────────────────── */
+/* ─── Storyboard Items (Single Full Widescreen Image) ─────────────────────── */
 const STORYBOARD_ITEMS = [
   {
     id: "01",
     tag: "01",
     label: "CHARACTER GENESIS",
     desc: "Facial geometry & styling pass",
-    src: "https://res.cloudinary.com/dokrpo5fl/image/upload/v1789402399/ChatGPT_Image_Sep_13_2026_04_33_49_PM_wcyeov.png",
+    cam: "ESTABLISHING SHOT",
+    src: "https://res.cloudinary.com/dokrpo5fl/image/upload/v1789457491/Untitled_Design_sxy9hn.png",
   },
-  {
-    id: "02",
-    tag: "02",
-    label: "IDENTITY LOCK",
-    desc: "Consistency across angles",
-    src: "https://res.cloudinary.com/dokrpo5fl/image/upload/v1789402399/ChatGPT_Image_Sep_13_2026_04_33_45_PM_lyyiib.png",
-  },
-  
 ];
 
+/* ─── Production Render Frames ───────────────────────────────────────────── */
 const PRODUCTION_FRAMES = [
   {
     id: "01",
@@ -60,7 +54,7 @@ const PRODUCTION_FRAMES = [
 const DELIVERY_VIDEO =
   "https://res.cloudinary.com/dokrpo5fl/video/upload/v1788358969/Copy-of-mercedece.hevc_hhojlb.mp4";
 
-/* ─── Static data ─────────────────────────────────────────────────────────── */
+/* ─── Static Data ─────────────────────────────────────────────────────────── */
 const BRIEF_FIELDS = [
   { label: "PROJECT", value: "WISH U" },
   { label: "OBJECTIVE", value: "CAMPAIGN FILM" },
@@ -69,12 +63,10 @@ const BRIEF_FIELDS = [
   { label: "DELIVERABLE", value: "MASTER + CUTDOWNS" },
 ];
 
-const PLATFORMS = ["META", "INSTAGRAM", "TIKTOK", "YOUTUBE"];
-const DURATIONS = ["6 SEC", "15 SEC", "30 SEC"];
 const STEP_LABELS = ["BRIEF", "STORYBOARD", "PRODUCTION", "DELIVERY"];
 
-/* ─── Step threshold helpers ─────────────────────────────────────────────── */
-const T = [0, 0.1, 0.33, 0.56, 0.78, 1.0];
+/* ─── Step Threshold Helpers ─────────────────────────────────────────────── */
+const T = [0, 0.18, 0.42, 0.68, 0.90, 1.0];
 
 function getStep(p: number): [number, number] {
   if (p < T[1]) return [-1, p / T[1]];
@@ -84,46 +76,7 @@ function getStep(p: number): [number, number] {
   return [3, (p - T[4]) / (T[5] - T[4])];
 }
 
-/* ─── Shared card header ─────────────────────────────────────────────────── */
-function CardHeader({
-  code,
-  title,
-  active,
-  status,
-}: {
-  code: string;
-  title: string;
-  active: boolean;
-  status: string;
-}) {
-  return (
-    <div className="flex items-center justify-between px-4 sm:px-6 lg:px-10 py-3 sm:py-3.5 border-b border-white/[0.06] shrink-0">
-      <div className="flex items-center gap-2.5 sm:gap-3">
-        <span className="font-mono text-[9px] sm:text-[10px] text-accent uppercase tracking-widest font-semibold">
-          {code}
-        </span>
-        <span className="w-px h-3 bg-white/15" />
-        <span className="font-mono text-[9px] sm:text-[10px] text-white/40 uppercase tracking-widest">
-          {title}
-        </span>
-      </div>
-      <div
-        className={`flex items-center gap-1.5 sm:gap-2 font-mono text-[9px] sm:text-[10px] uppercase tracking-widest transition-colors duration-500 ${
-          active ? "text-accent" : "text-white/20"
-        }`}
-      >
-        <span
-          className={`w-1.5 h-1.5 rounded-full transition-all duration-500 ${
-            active ? "bg-accent animate-pulse" : "bg-white/20"
-          }`}
-        />
-        <span>{status}</span>
-      </div>
-    </div>
-  );
-}
-
-/* ─── Main export ─────────────────────────────────────────────────────────── */
+/* ─── Main Component ─────────────────────────────────────────────────────── */
 export default function HowWeWork() {
   const containerRef = useRef<HTMLDivElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
@@ -134,27 +87,33 @@ export default function HowWeWork() {
   const [activeStep, setActiveStep] = useState(-1);
   const [stepProgress, setStepProgress] = useState(0);
 
+  const [autoFrameCounter, setAutoFrameCounter] = useState(0);
   const [manualFrame, setManualFrame] = useState<number | null>(null);
-  const [selectedStoryboard, setSelectedStoryboard] = useState(0);
   const [isVideoMuted, setIsVideoMuted] = useState(true);
 
   const isActive = (step: number) => activeStep >= step;
 
-  // Auto frame index based on scroll progress in step 2
-  const autoFrameIndex = Math.min(
-    PRODUCTION_FRAMES.length - 1,
-    Math.max(0, Math.floor(stepProgress * PRODUCTION_FRAMES.length))
-  );
-  const currentFrameIndex = manualFrame !== null ? manualFrame : autoFrameIndex;
+  const currentFrameIndex =
+    manualFrame !== null
+      ? manualFrame
+      : autoFrameCounter % PRODUCTION_FRAMES.length;
 
-  // Reset manual frame if user scrolls away from production
+  /* ── Auto-advance production frames every 2 seconds ─────────────────── */
   useEffect(() => {
     if (activeStep !== 2) {
+      setAutoFrameCounter(0);
       setManualFrame(null);
+      return;
     }
-  }, [activeStep]);
+    const interval = setInterval(() => {
+      if (manualFrame === null) {
+        setAutoFrameCounter((c) => (c + 1) % PRODUCTION_FRAMES.length);
+      }
+    }, 2000);
+    return () => clearInterval(interval);
+  }, [activeStep, manualFrame]);
 
-  /* ── GSAP horizontal pin & process-section class toggle ───────────────── */
+  /* ── GSAP Horizontal Pinning & Process Section Class Toggle ─────────── */
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
@@ -171,11 +130,10 @@ export default function HowWeWork() {
         start: "top top",
         end: "bottom bottom",
         pin: sticky,
-        scrub: 1.4,
+        scrub: 0.8,
         anticipatePin: 1,
         invalidateOnRefresh: true,
         onToggle: (self) => {
-          // Hide fixed bottom gradual blur specifically in the process section
           if (self.isActive) {
             document.body.classList.add("in-process-section");
           } else {
@@ -200,7 +158,7 @@ export default function HowWeWork() {
     };
   }, []);
 
-  /* ── Touch scrub ─────────────────────────────────────────────────────── */
+  /* ── Touch scrub support for mobile devices ──────────────────────────── */
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
@@ -237,7 +195,6 @@ export default function HowWeWork() {
     }
   }, [activeStep]);
 
-  /* ─────────────────────────────────────────────────────────────────────── */
   return (
     <section
       id="process"
@@ -245,19 +202,18 @@ export default function HowWeWork() {
     >
       <div
         ref={containerRef}
-        className="relative w-full h-[300vh] lg:h-[520vh] overflow-x-clip"
+        className="relative w-full h-[400vh] overflow-x-clip"
       >
-        {/* ── PINNED VIEWPORT ── */}
+        {/* ── PINNED VIEWPORT (100vh Full Screen) ── */}
         <div
           ref={stickyRef}
-          className="w-full h-screen sticky top-0 flex flex-col overflow-hidden"
+          className="w-full h-screen sticky top-0 flex flex-col overflow-hidden bg-[#060708]"
         >
-          {/* ── TOP BAR ── */}
-          <div className="flex items-center justify-between px-4 sm:px-8 lg:px-14 pt-3.5 sm:pt-4 pb-2.5 sm:pb-3 border-b border-white/[0.06] shrink-0">
-            {/* Section label */}
+          {/* ── TOP BAR (Minimal Header & Step Counter) ── */}
+          <div className="flex items-center justify-between px-4 sm:px-8 lg:px-12 pt-3 sm:pt-4 pb-2.5 sm:pb-3 border-b border-white/[0.06] shrink-0 bg-[#060708] z-30">
             <div className="flex items-center gap-2 sm:gap-3">
               <span className="font-mono text-[9px] sm:text-[10px] text-white/50 uppercase tracking-widest">
-                THE PROCESS
+                HOW WE WORK
               </span>
             </div>
 
@@ -267,23 +223,23 @@ export default function HowWeWork() {
                 <div key={i} className="flex items-center gap-1 sm:gap-1.5">
                   <span
                     className={`transition-colors duration-500 ${
-                      isActive(i) ? "text-accent" : "text-white/18"
+                      isActive(i) ? "text-accent font-semibold" : "text-white/20"
                     }`}
                   >
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <span
                     className={`hidden md:inline transition-colors duration-500 ${
-                      isActive(i) ? "text-white/50" : "text-white/15"
+                      isActive(i) ? "text-white/60" : "text-white/20"
                     }`}
                   >
                     {label}
                   </span>
                   {i < 3 && (
-                    <div className="w-3 sm:w-5 lg:w-6 h-px mx-1 relative overflow-hidden">
-                      <div className="absolute inset-0 bg-white/8" />
+                    <div className="w-3 sm:w-5 lg:w-6 h-px mx-1 sm:mx-1.5 relative overflow-hidden">
+                      <div className="absolute inset-0 bg-white/10" />
                       <div
-                        className="absolute left-0 top-0 h-full bg-accent/50 transition-all duration-700"
+                        className="absolute left-0 top-0 h-full bg-accent/70 transition-all duration-700"
                         style={{
                           width:
                             activeStep > i
@@ -299,309 +255,201 @@ export default function HowWeWork() {
               ))}
             </div>
 
-            {/* Current step label */}
-            <div className="font-mono text-[8px] sm:text-[9px] text-white/25 uppercase tracking-widest">
+            <div className="font-mono text-[8px] sm:text-[9px] text-white/30 uppercase tracking-widest">
               {activeStep < 0
                 ? "INTRO"
                 : `${String(activeStep + 1).padStart(2, "0")} / 04`}
             </div>
           </div>
 
-          {/* ── HORIZONTAL TRACK ── */}
+          {/* ── HORIZONTAL TRACK: Each Card is 100vw with Centered Proper Viewing View ── */}
           <div className="flex-1 overflow-visible">
             <div
               ref={trackRef}
               className="flex flex-row items-stretch h-full w-max will-change-transform"
             >
-              {/* ══ INTRO PANEL ════════════════════════════════════════ */}
-              <div className="w-[85vw] lg:w-[32vw] shrink-0 flex flex-col justify-between px-5 sm:px-10 lg:px-14 py-6 sm:py-10 border-r border-white/[0.06]">
-                <div>
-                  <h2 className="font-primary font-bold uppercase text-[clamp(2.4rem,7vw,4.5rem)] lg:text-[clamp(3rem,4vw,4.8rem)] text-white tracking-tight leading-[0.9]">
-                    THE<br />PROCESS
-                  </h2>
-                </div>
-                <div>
-                  <p className="font-mono text-[10px] sm:text-xs text-white/40 leading-relaxed mb-5 max-w-[240px]">
-                    Four stages. One continuous production. Scroll to move through the sequence.
-                  </p>
-                  <div className="flex items-center gap-2 font-mono text-[9px] sm:text-[10px] text-white/30 uppercase tracking-widest">
-                    <span>SCROLL TO EXPLORE</span>
-                    <span className="text-accent">→</span>
+              {/* ═══════════════════════════════════════════════════════════════
+                  CARD 00: HOW WE WORK (PROPER VIEWING VIEW)
+              ═══════════════════════════════════════════════════════════════ */}
+              <div className="w-[100vw] h-full shrink-0 flex flex-col justify-between p-4 sm:p-7 lg:p-10 border-r border-white/[0.06] bg-[#060708] relative overflow-hidden">
+                <div className="w-full max-w-5xl xl:max-w-6xl mx-auto flex-1 flex flex-col justify-between">
+                
+
+                  {/* Main Body: Cinematic center statement */}
+                  <div className="flex-1 flex flex-col items-center justify-center text-center my-auto py-6">
+                    <h1
+                      className="font-primary font-bold uppercase text-white tracking-tight leading-[0.88] select-none"
+                      style={{ fontSize: "clamp(3.5rem, 8vw, 6rem)" }}
+                    >
+                      HOW<br />WE WORK
+                    </h1>
+                    <p className="font-mono text-xs sm:text-sm text-white/45 max-w-md mx-auto mt-4 sm:mt-6 leading-relaxed">
+                      Four synchronized phases engineered to convert raw creative ambition into cinema-grade production.
+                    </p>
+                  </div>
+
+                  {/* Bottom Row: Steps & Scroll prompt */}
+                  <div className="flex items-center justify-between pt-3 border-t border-white/[0.06] font-mono text-[8px] sm:text-[10px] text-white/30 uppercase tracking-widest shrink-0">
+                    <div className="flex items-center gap-3 sm:gap-6">
+                      {STEP_LABELS.map((l, i) => (
+                        <span key={i} className="flex items-center gap-1">
+                          <span className="text-white/50">{String(i + 1).padStart(2, "0")}</span>
+                          <span className="hidden sm:inline">{l}</span>
+                        </span>
+                      ))}
+                    </div>
+                    <div className="flex items-center gap-2 text-white/50">
+                      <span>SCROLL TO EXPLORE</span>
+                      <span className="text-accent font-bold">→</span>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* ══ CARD 01 — BRIEF ════════════════════════════════════ */}
-              <div className="w-[90vw] lg:w-[75vw] shrink-0 border-r border-white/[0.06] bg-[#060708] flex flex-col overflow-hidden">
-                <CardHeader
-                  code="01"
-                  title="BRIEF"
-                  active={isActive(0)}
-                  status={
-                    activeStep === 0 && stepProgress > 0.88
-                      ? "LOCKED"
-                      : isActive(0)
-                      ? "ACTIVE"
-                      : "STANDBY"
-                  }
-                />
-
-                <div className="flex-1 flex flex-col lg:flex-row items-stretch overflow-hidden">
-                  {/* Title col - Multi-row on mobile */}
-                  <div className="lg:w-[28%] flex flex-col justify-between items-start px-4 sm:px-6 lg:px-10 py-4 sm:py-6 lg:py-8 border-b lg:border-b-0 lg:border-r border-white/[0.06] shrink-0 gap-3">
+              {/* ═══════════════════════════════════════════════════════════════
+                  CARD 01: BRIEF (ALL DATA VISIBLE)
+              ═══════════════════════════════════════════════════════════════ */}
+              <div className="w-[100vw] h-full shrink-0 flex flex-col justify-between p-4 sm:p-7 lg:p-10 border-r border-white/[0.06] bg-[#060708] overflow-hidden">
+                <div className="w-full max-w-5xl xl:max-w-6xl mx-auto flex-1 flex flex-col justify-between">
+                  {/* Top Header Row */}
+                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 sm:gap-4 shrink-0 mb-4 sm:mb-6">
                     <div>
-                      <h3 className="font-primary font-bold uppercase text-[clamp(1.8rem,5vw,3.2rem)] lg:text-[clamp(2.6rem,3.5vw,4.5rem)] text-white tracking-tight leading-[0.9]">
-                        BRIEF
-                      </h3>
-                      <p className="font-mono text-[10px] sm:text-xs text-white/40 leading-relaxed mt-1.5 max-w-[200px]">
+                      <h2 className="font-primary font-bold uppercase text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white tracking-tight leading-none">
+                        1. Brief
+                      </h2>
+                      <p className="font-mono text-xs sm:text-sm text-white/50 mt-1 sm:mt-1.5">
                         Brand direction, audience, and creative objectives.
                       </p>
                     </div>
-                    <div className="pt-2 lg:pt-5 lg:border-t lg:border-white/[0.06] w-full">
-                      <span className="font-mono text-[8px] sm:text-[9px] text-white/30 uppercase tracking-widest block">
-                        TURNAROUND
-                      </span>
-                      <span className="font-mono text-xs sm:text-sm text-accent font-semibold block mt-0.5">
-                        48 HOURS
-                      </span>
+                    <div className="font-mono text-[9px] sm:text-xs text-white/40 uppercase tracking-widest sm:text-right">
+                      <span className="text-white/30">TURNAROUND: </span>
+                      <span className="text-accent font-semibold">48 HOURS</span>
+                      <span className="mx-2 text-white/20">·</span>
+                      <span>STATUS: LOCKED</span>
                     </div>
                   </div>
 
-                  {/* Content col */}
-                  <div className="flex-1 px-4 sm:px-6 lg:px-10 py-4 sm:py-6 lg:py-8 flex flex-col justify-center overflow-hidden">
-                    <div className="border border-white/10 overflow-hidden">
-                      <div className="flex items-center justify-between px-3.5 sm:px-5 py-2 bg-white/[0.03] border-b border-white/[0.06]">
-                        <span className="font-mono text-[8px] sm:text-[9px] text-white/30 uppercase tracking-widest">
-                          FIELD
+                  {/* Main Content Area: All fields triggered & fully visible */}
+                  <div className="flex-1 w-full flex flex-col justify-center overflow-hidden py-2">
+                    <div className="w-full border border-white/10 overflow-hidden bg-black/40">
+                      <div className="flex items-center justify-between px-4 sm:px-6 py-3 bg-white/[0.03] border-b border-white/[0.08]">
+                        <span className="font-mono text-[9px] sm:text-xs text-white/35 uppercase tracking-widest">
+                          DIRECTIVE FIELD
                         </span>
-                        <span className="font-mono text-[8px] sm:text-[9px] text-white/30 uppercase tracking-widest">
-                          VALUE
+                        <span className="font-mono text-[9px] sm:text-xs text-white/35 uppercase tracking-widest">
+                          SPECIFICATION VALUE
                         </span>
                       </div>
-                      {BRIEF_FIELDS.map((field, i) => (
+
+                      {BRIEF_FIELDS.map((field) => (
                         <div
                           key={field.label}
-                          className={`flex items-center justify-between px-3.5 sm:px-5 py-2 sm:py-3 border-b border-white/[0.05] last:border-0 transition-all duration-500 ${
-                            isActive(0) && stepProgress > i * 0.16
-                              ? "opacity-100 translate-x-0"
-                              : "opacity-0 -translate-x-2"
-                          }`}
-                          style={{ transitionDelay: `${i * 50}ms` }}
+                          className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-white/[0.05] last:border-0 font-mono text-xs sm:text-sm"
                         >
-                          <span className="font-mono text-[8px] sm:text-[10px] text-white/40 uppercase tracking-widest">
+                          <span className="text-white/50 uppercase tracking-wider">
                             {field.label}
                           </span>
-                          <span className="font-mono text-[9px] sm:text-[11px] text-white font-semibold uppercase tracking-wide">
+                          <span className="text-white font-semibold uppercase tracking-wide">
                             {field.value}
                           </span>
                         </div>
                       ))}
                     </div>
 
-                    <div
-                      className={`flex items-center gap-2 mt-3 font-mono text-[9px] sm:text-[10px] uppercase tracking-widest transition-opacity duration-500 ${
-                        activeStep === 0 && stepProgress > 0.88
-                          ? "opacity-100"
-                          : "opacity-0"
-                      }`}
-                    >
-                      <span className="w-1.5 h-1.5 rounded-full bg-accent" />
-                      <span className="text-accent font-semibold">BRIEF LOCKED</span>
+                    <div className="flex items-center gap-2 mt-4 font-mono text-[9px] sm:text-xs uppercase tracking-widest">
+                      <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+                      <span className="text-accent font-semibold">BRIEF PARAMETERS LOCKED</span>
                     </div>
+                  </div>
+
+                  {/* Bottom Card Footer */}
+                  <div className="flex items-center justify-between pt-3 border-t border-white/[0.06] font-mono text-[8px] sm:text-[9px] text-white/30 uppercase tracking-widest shrink-0">
+                    <span>STAGE 01 // FOUNDATION</span>
+                    <span>48H CONCEPT &amp; SCOPE APPROVAL</span>
                   </div>
                 </div>
               </div>
 
-              {/* ══ CARD 02 — STORYBOARD (MASONRY LAYOUT) ═════════════ */}
-              <div className="w-[92vw] lg:w-[82vw] shrink-0 border-r border-white/[0.06] bg-[#060708] flex flex-col overflow-hidden">
-                <CardHeader
-                  code="02"
-                  title="STORYBOARD"
-                  active={isActive(1)}
-                  status={
-                    activeStep === 1 && stepProgress > 0.88
-                      ? "LOCKED"
-                      : isActive(1)
-                      ? "ACTIVE"
-                      : "PENDING"
-                  }
-                />
-
-                <div className="flex-1 flex flex-col lg:flex-row items-stretch overflow-hidden">
-                  {/* Title col - Multi-row on mobile */}
-                  <div className="lg:w-[25%] flex flex-col justify-between items-start px-4 sm:px-6 lg:px-8 py-3.5 sm:py-5 lg:py-8 border-b lg:border-b-0 lg:border-r border-white/[0.06] shrink-0 gap-2 sm:gap-3">
+              {/* ═══════════════════════════════════════════════════════════════
+                  CARD 02: STORYBOARD (SINGLE IMAGE FULLY VISIBLE)
+              ═══════════════════════════════════════════════════════════════ */}
+              <div className="w-[100vw] h-full shrink-0 flex flex-col justify-between p-4 sm:p-7 lg:p-10 border-r border-white/[0.06] bg-[#060708] overflow-hidden">
+                <div className="w-full max-w-5xl xl:max-w-6xl mx-auto flex-1 flex flex-col justify-between">
+                  {/* Top Header Row */}
+                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 sm:gap-4 shrink-0  ">
                     <div>
-                      <h3 className="font-primary font-bold uppercase text-[clamp(1.8rem,5vw,3.2rem)] lg:text-[clamp(2.6rem,3.5vw,4.5rem)] text-white tracking-tight leading-[0.9]">
-                        STORY<br className="hidden lg:block" />BOARD
-                      </h3>
-                      <p className="font-mono text-[10px] text-white/40 leading-relaxed mt-1.5 max-w-[190px]">
+                      <h2 className="font-primary font-bold uppercase text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white tracking-tight leading-none">
+                        2. Storyboard
+                      </h2>
+                      <p className="font-mono text-xs sm:text-sm text-white/50 mt-1 sm:mt-1.5">
                         Character stills and cinematic framing.
                       </p>
                     </div>
-                    <div className="pt-2 lg:pt-5 lg:border-t lg:border-white/[0.06] w-full">
-                      <span className="font-mono text-[8px] sm:text-[9px] text-white/30 uppercase tracking-widest block">
-                        SCHEDULE
-                      </span>
-                      <span className="font-mono text-xs sm:text-sm text-accent font-semibold block mt-0.5">
-                        DAY 3–4
-                      </span>
+                    <div className="font-mono text-[9px] sm:text-xs text-white/40 uppercase tracking-widest sm:text-right">
+                      <span className="text-white/30">SCHEDULE: </span>
+                      <span className="text-accent font-semibold">DAY 3–4</span>
+                      <span className="mx-2 text-white/20">·</span>
+                      <span>PRE-VISUALIZATION</span>
                     </div>
                   </div>
 
-                  {/* Storyboard Masonry Layout (16:9 full visibility) */}
-                  <div className="flex-1 p-3 sm:p-5 lg:p-6 flex flex-col justify-between overflow-y-auto bg-[#07080B]/60">
-                    {/* Top minimal status */}
-                    <div className="flex items-center justify-between font-mono text-[7px] sm:text-[9px] text-white/30 uppercase tracking-widest mb-2 shrink-0">
-                      <span>KEYFRAME FRAMING</span>
-                      <span className="text-accent">
-                        {selectedStoryboard + 1} / {STORYBOARD_ITEMS.length}
-                      </span>
+                  {/* Main Visual: Entire Storyboard Image with border & corner marks snug to the frame */}
+                  <div className="flex-1 w-full flex items-center justify-center py-2 overflow-hidden">
+                    <div className="relative aspect-[3/2] h-full max-h-[45vh] sm:max-h-[58vh] max-w-full border border-white/15 overflow-hidden shadow-2xl bg-black flex items-center justify-center">
+                      <img
+                        src={STORYBOARD_ITEMS[0].src}
+                        alt="Storyboard Pass"
+                        className="w-full h-full object-contain"
+                        loading="eager"
+                      />
+
+                      {/* Corner marks snug to the image frame */}
+                      <span className="absolute top-2 left-2 w-3 h-3 border-t border-l border-white/60 pointer-events-none z-10" />
+                      <span className="absolute top-2 right-2 w-3 h-3 border-t border-r border-white/60 pointer-events-none z-10" />
+                      <span className="absolute bottom-2 left-2 w-3 h-3 border-b border-l border-white/60 pointer-events-none z-10" />
+                      <span className="absolute bottom-2 right-2 w-3 h-3 border-b border-r border-white/60 pointer-events-none z-10" />
                     </div>
+                  </div>
 
-                    {/* Masonry Layout: Desktop 2-column asymmetric, Mobile stacked rows */}
-                    <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-2.5 sm:gap-3 items-center">
-                      {/* Featured Keyframe (16:9 aspect-video, 100% visible) */}
-                      <div className="lg:col-span-7 flex flex-col">
-                        <div className="relative aspect-video w-full rounded-none border border-white/15 overflow-hidden bg-black group">
-                          <img
-                            src={STORYBOARD_ITEMS[selectedStoryboard].src}
-                            alt={STORYBOARD_ITEMS[selectedStoryboard].label}
-                            className="w-full h-full object-contain sm:object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-                            loading="eager"
-                          />
-                          {/* Corner crop marks */}
-                          <span className="absolute top-2 left-2 w-2 h-2 border-t border-l border-white/40 pointer-events-none z-10" />
-                          <span className="absolute top-2 right-2 w-2 h-2 border-t border-r border-white/40 pointer-events-none z-10" />
-                          <span className="absolute bottom-2 left-2 w-2 h-2 border-b border-l border-white/40 pointer-events-none z-10" />
-                          <span className="absolute bottom-2 right-2 w-2 h-2 border-b border-r border-white/40 pointer-events-none z-10" />
-
-                          <div className="absolute top-2 left-2 z-10">
-                            <span className="px-1.5 py-0.5 bg-black/80 font-mono text-[7px] sm:text-[8px] text-accent tracking-widest uppercase">
-                              {STORYBOARD_ITEMS[selectedStoryboard].tag}
-                            </span>
-                          </div>
-                          <div className="absolute bottom-2 left-2 right-2 z-10 bg-black/70 px-2 py-1 flex items-center justify-between">
-                            <span className="font-mono text-[8px] sm:text-[10px] text-white font-semibold uppercase tracking-wider">
-                              {STORYBOARD_ITEMS[selectedStoryboard].label}
-                            </span>
-                            <span className="font-mono text-[7px] sm:text-[8px] text-white/40 hidden sm:inline">
-                              {STORYBOARD_ITEMS[selectedStoryboard].desc}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Secondary Keyframes Stacked (Row 2 on Desktop / Thumbnails on Mobile) */}
-                      <div className="lg:col-span-5 grid grid-cols-2 lg:grid-cols-1 gap-2 sm:gap-2.5">
-                        {STORYBOARD_ITEMS.map((item, idx) => {
-                          if (idx === selectedStoryboard) return null;
-                          return (
-                            <button
-                              key={item.id}
-                              type="button"
-                              onClick={() => setSelectedStoryboard(idx)}
-                              className="relative aspect-video w-full rounded-none border border-white/10 hover:border-accent/60 overflow-hidden bg-black text-left group cursor-pointer transition-all duration-300"
-                            >
-                              <img
-                                src={item.src}
-                                alt={item.label}
-                                className="w-full h-full object-contain sm:object-cover transition-transform duration-300 group-hover:scale-105"
-                                loading="eager"
-                              />
-                              <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors" />
-
-                              <div className="absolute top-1.5 left-1.5 z-10">
-                                <span className="px-1 py-0.5 bg-black/80 font-mono text-[6px] sm:text-[7px] text-accent tracking-widest uppercase">
-                                  {item.tag}
-                                </span>
-                              </div>
-                              <div className="absolute bottom-1 left-1 right-1 z-10 bg-black/70 px-1.5 py-0.5">
-                                <span className="font-mono text-[7px] sm:text-[8px] text-white/80 uppercase tracking-wider block truncate">
-                                  {item.label}
-                                </span>
-                              </div>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-
-                    {/* Bottom selector bar for quick access */}
-                    <div className="mt-2 pt-2 border-t border-white/[0.06] flex items-center justify-between font-mono text-[7px] sm:text-[8px] text-white/30 uppercase tracking-widest shrink-0">
-                      <div className="flex items-center gap-2">
-                        {STORYBOARD_ITEMS.map((it, i) => (
-                          <button
-                            key={it.id}
-                            type="button"
-                            onClick={() => setSelectedStoryboard(i)}
-                            className={`px-2 py-0.5 rounded-none border transition-colors cursor-pointer ${
-                              selectedStoryboard === i
-                                ? "border-accent text-accent bg-accent/[0.05]"
-                                : "border-white/10 text-white/40 hover:text-white"
-                            }`}
-                          >
-                            SHOT {it.tag}
-                          </button>
-                        ))}
-                      </div>
-                      <span className="text-white/40">3 KEYFRAMES</span>
-                    </div>
+                  {/* Bottom Card Footer */}
+                  <div className="flex items-center justify-between pt-3 border-t border-white/[0.06] font-mono text-[8px] sm:text-[9px] text-white/30 uppercase tracking-widest shrink-0">
+                    <span>STAGE 02 // PRE-VISUALIZATION</span>
+                    <span>CAMERA DIRECTION &amp; CHARACTER IDENTITY</span>
                   </div>
                 </div>
               </div>
 
-              {/* ══ CARD 03 — PRODUCTION (MULTI-ROW RESPONSIVE) ═══════ */}
-              <div className="w-[92vw] lg:w-[82vw] shrink-0 border-r border-white/[0.06] bg-[#060708] flex flex-col overflow-hidden">
-                <CardHeader
-                  code="03"
-                  title="PRODUCTION"
-                  active={isActive(2)}
-                  status={isActive(2) ? "ACTIVE" : "PENDING"}
-                />
-
-                <div className="flex-1 flex flex-col lg:flex-row items-stretch overflow-hidden">
-                  {/* Title col - Multi-row on mobile */}
-                  <div className="lg:w-[25%] flex flex-col justify-between items-start px-4 sm:px-6 lg:px-8 py-3.5 sm:py-5 lg:py-8 border-b lg:border-b-0 lg:border-r border-white/[0.06] shrink-0 gap-2 sm:gap-3">
+              {/* ═══════════════════════════════════════════════════════════════
+                  CARD 03: PRODUCTION (FRAME & SMALL THUMBNAILS ALL VISIBLE)
+              ═══════════════════════════════════════════════════════════════ */}
+              <div className="w-[100vw] h-full shrink-0 flex flex-col justify-between p-4 sm:p-7 lg:p-10 border-r border-white/[0.06] bg-[#060708] overflow-hidden">
+                <div className="w-full max-w-5xl xl:max-w-6xl mx-auto flex-1 flex flex-col justify-between">
+                  {/* Top Header Row */}
+                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 sm:gap-4 shrink-0 mb-3 sm:mb-4">
                     <div>
-                      <h3 className="font-primary font-bold uppercase text-[clamp(1.8rem,5vw,3.2rem)] lg:text-[clamp(2.6rem,3.5vw,4.5rem)] text-white tracking-tight leading-[0.9]">
-                        PRO<br className="hidden lg:block" />DUC<br className="hidden lg:block" />TION
-                      </h3>
-                      <p className="font-mono text-[10px] text-white/40 leading-relaxed mt-1.5 max-w-[190px]">
+                      <h2 className="font-primary font-bold uppercase text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white tracking-tight leading-none">
+                        3. Production
+                      </h2>
+                      <p className="font-mono text-xs sm:text-sm text-white/50 mt-1 sm:mt-1.5">
                         Frame-by-frame synthesis and lighting integration.
                       </p>
                     </div>
-
-                    {/* Multi-row progress block */}
-                    <div className="pt-2 lg:pt-5 lg:border-t lg:border-white/[0.06] w-full space-y-1.5">
-                      <div className="flex items-center justify-between font-mono text-[8px] sm:text-[9px] text-white/30 uppercase tracking-widest">
-                        <span>FRAME {String(currentFrameIndex + 1).padStart(2, "0")} / 05</span>
-                        <span className={`transition-colors duration-300 ${isActive(2) ? "text-accent font-semibold" : ""}`}>
-                          {isActive(2)
-                            ? `${Math.round(((currentFrameIndex + 1) / PRODUCTION_FRAMES.length) * 100)}%`
-                            : "0%"}
-                        </span>
-                      </div>
-                      <div className="w-full h-1 bg-white/[0.06] rounded-none overflow-hidden">
-                        <div
-                          className="h-full bg-accent transition-all duration-300"
-                          style={{
-                            width: isActive(2)
-                              ? `${((currentFrameIndex + 1) / PRODUCTION_FRAMES.length) * 100}%`
-                              : "0%",
-                          }}
-                        />
-                      </div>
-                      <div className="font-mono text-[7px] sm:text-[8px] text-white/30 uppercase tracking-widest flex items-center justify-between pt-0.5">
-                        <span>DAY 5–9</span>
-                        <span className="text-white/50">{PRODUCTION_FRAMES[currentFrameIndex].title}</span>
-                      </div>
+                    <div className="font-mono text-[9px] sm:text-xs text-white/40 uppercase tracking-widest sm:text-right">
+                      <span className="text-white/30">TIMELINE: </span>
+                      <span className="text-accent font-semibold">DAY 5–9</span>
+                      <span className="mx-2 text-white/20">·</span>
+                      <span>FRAME {String(currentFrameIndex + 1).padStart(2, "0")} / 05</span>
+                      <span className="mx-2 text-white/20">·</span>
+                      <span className="text-accent">
+                        {manualFrame === null ? "AUTO 2s" : "HOLD"}
+                      </span>
                     </div>
                   </div>
 
-                  {/* Frame Sequencer Main + Multi-row Scrubber */}
-                  <div className="flex-1 p-3 sm:p-5 lg:p-6 flex flex-col justify-between overflow-y-auto bg-[#07080B]">
-                    {/* Main Frame Viewport */}
-                    <div className="relative aspect-video max-h-[50vh] w-full rounded-none border border-white/10 overflow-hidden bg-black flex items-center justify-center">
+                  {/* Main Visual: Main Frame AND Small Thumbnails Fully Visible */}
+                  <div className="flex-1 w-full flex flex-col justify-between py-2 overflow-hidden">
+                    {/* Main Render Frame */}
+                    <div className="relative aspect-video max-h-[44vh] sm:max-h-[48vh] w-full border border-white/15 overflow-hidden bg-black mx-auto shrink">
                       {PRODUCTION_FRAMES.map((f, idx) => (
                         <img
                           key={f.id}
@@ -616,40 +464,50 @@ export default function HowWeWork() {
                         />
                       ))}
 
-                      {/* Corner crop marks */}
-                      <span className="absolute top-2 left-2 w-2.5 h-2.5 border-t border-l border-white/40 pointer-events-none z-20" />
-                      <span className="absolute top-2 right-2 w-2.5 h-2.5 border-t border-r border-white/40 pointer-events-none z-20" />
-                      <span className="absolute bottom-2 left-2 w-2.5 h-2.5 border-b border-l border-white/40 pointer-events-none z-20" />
-                      <span className="absolute bottom-2 right-2 w-2.5 h-2.5 border-b border-r border-white/40 pointer-events-none z-20" />
+                      {/* Corner marks */}
+                      <span className="absolute top-2.5 left-2.5 w-3 h-3 border-t border-l border-white/50 pointer-events-none z-10" />
+                      <span className="absolute top-2.5 right-2.5 w-3 h-3 border-t border-r border-white/50 pointer-events-none z-10" />
+                      <span className="absolute bottom-2.5 left-2.5 w-3 h-3 border-b border-l border-white/50 pointer-events-none z-10" />
+                      <span className="absolute bottom-2.5 right-2.5 w-3 h-3 border-b border-r border-white/50 pointer-events-none z-10" />
 
-                      {/* Minimal Overlay */}
-                      <div className="absolute top-2.5 left-3 right-3 z-20 flex items-center justify-between pointer-events-none">
-                        <div className="px-2 py-0.5 bg-black/80 font-mono text-[7px] sm:text-[8px] text-white/80 uppercase tracking-widest">
-                          {PRODUCTION_FRAMES[currentFrameIndex].label} · {PRODUCTION_FRAMES[currentFrameIndex].title}
+                      {/* Frame title HUD */}
+                      <div className="absolute top-3 left-3 right-3 z-10 flex items-center justify-between pointer-events-none">
+                        <div className="px-2.5 py-1 bg-black/85 border border-white/10 font-mono text-[8px] sm:text-[10px] text-white/90 uppercase tracking-widest flex items-center gap-2">
+                          <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
+                          <span>
+                            {PRODUCTION_FRAMES[currentFrameIndex].label} · {PRODUCTION_FRAMES[currentFrameIndex].title}
+                          </span>
                         </div>
+                        {manualFrame !== null && (
+                          <button
+                            type="button"
+                            onClick={() => setManualFrame(null)}
+                            className="pointer-events-auto px-2 py-0.5 bg-black/80 border border-accent/40 font-mono text-[7px] sm:text-[8px] text-accent uppercase tracking-widest cursor-pointer hover:bg-accent/10"
+                          >
+                            RESUME AUTO
+                          </button>
+                        )}
                       </div>
                     </div>
 
-                    {/* Frame Timeline - Multi-row on Mobile (3 cols on mobile, 5 on desktop) */}
-                    <div className="mt-2.5 pt-2.5 border-t border-white/[0.06] shrink-0">
-                      <div className="flex items-center justify-between mb-1.5 font-mono text-[7px] sm:text-[8px] text-white/35 uppercase tracking-widest">
-                        <span>SELECT FRAME</span>
-                        <span className="text-accent">
-                          {currentFrameIndex + 1} OF {PRODUCTION_FRAMES.length}
-                        </span>
+                    {/* Small Keyframe Thumbnails Strip */}
+                    <div className="mt-2.5 pt-2 border-t border-white/[0.06] shrink-0">
+                      <div className="flex items-center justify-between mb-1.5 font-mono text-[7px] sm:text-[9px] text-white/35 uppercase tracking-widest">
+                        <span>KEYFRAMES · AUTO-CYCLE 2s</span>
+                        <span className="text-accent">{currentFrameIndex + 1} OF {PRODUCTION_FRAMES.length}</span>
                       </div>
-                      <div className="grid grid-cols-3 sm:grid-cols-5 gap-1.5 sm:gap-2">
+                      <div className="grid grid-cols-5 gap-1.5 sm:gap-2">
                         {PRODUCTION_FRAMES.map((frame, idx) => {
                           const isSelected = idx === currentFrameIndex;
                           return (
                             <button
                               key={frame.id}
                               type="button"
-                              onClick={() => setManualFrame(idx)}
-                              className={`group relative rounded-none overflow-hidden border transition-all duration-200 text-left focus:outline-none cursor-pointer ${
+                              onClick={() => setManualFrame(idx === manualFrame ? null : idx)}
+                              className={`group relative  overflow-hidden border transition-all duration-300 text-left focus:outline-none cursor-pointer ${
                                 isSelected
                                   ? "border-accent ring-1 ring-accent/60"
-                                  : "border-white/10 hover:border-white/30 opacity-60 hover:opacity-100"
+                                  : "border-white/10 hover:border-white/30 opacity-55 hover:opacity-100"
                               }`}
                             >
                               <div className="relative aspect-video w-full bg-black">
@@ -662,26 +520,22 @@ export default function HowWeWork() {
                                 <div
                                   className={`absolute inset-0 transition-colors ${
                                     isSelected
-                                      ? "bg-accent/15"
+                                      ? "bg-accent/10"
                                       : "bg-black/25 group-hover:bg-transparent"
                                   }`}
                                 />
                               </div>
                               <div
                                 className={`px-1.5 py-0.5 bg-[#0A0B0E] flex items-center justify-between border-t transition-colors ${
-                                  isSelected
-                                    ? "border-accent/40"
-                                    : "border-white/5"
+                                  isSelected ? "border-accent/40" : "border-white/5"
                                 }`}
                               >
                                 <span
-                                  className={`font-mono text-[6px] sm:text-[7px] uppercase tracking-wider ${
-                                    isSelected
-                                      ? "text-accent font-semibold"
-                                      : "text-white/40"
+                                  className={`font-mono text-[6px] sm:text-[8px] uppercase tracking-wider ${
+                                    isSelected ? "text-accent font-bold" : "text-white/40"
                                   }`}
                                 >
-                                  {frame.label}
+                                  {frame.id}
                                 </span>
                                 <span
                                   className={`w-1 h-1 rounded-full ${
@@ -695,61 +549,41 @@ export default function HowWeWork() {
                       </div>
                     </div>
                   </div>
+
+                  {/* Bottom Card Footer */}
+                  <div className="flex items-center justify-between pt-3 border-t border-white/[0.06] font-mono text-[8px] sm:text-[9px] text-white/30 uppercase tracking-widest shrink-0">
+                    <span>STAGE 03 // SYNTHESIS</span>
+                    <span>NEURAL RENDERING &amp; LIGHTING INTEGRATION</span>
+                  </div>
                 </div>
               </div>
 
-              {/* ══ CARD 04 — DELIVERY ════════════════════════════════ */}
-              <div className="w-[92vw] lg:w-[82vw] shrink-0 bg-[#060708] flex flex-col overflow-hidden">
-                <CardHeader
-                  code="04"
-                  title="DELIVERY"
-                  active={isActive(3)}
-                  status={
-                    isActive(3) && stepProgress > 0.88
-                      ? "READY"
-                      : isActive(3)
-                      ? "PLAYING"
-                      : "PENDING"
-                  }
-                />
-
-                <div className="flex-1 flex flex-col lg:flex-row items-stretch overflow-hidden">
-                  {/* Title col - Multi-row on mobile */}
-                  <div className="lg:w-[25%] flex flex-col justify-between items-start px-4 sm:px-6 lg:px-8 py-3.5 sm:py-5 lg:py-8 border-b lg:border-b-0 lg:border-r border-white/[0.06] shrink-0 gap-2 sm:gap-3">
+              {/* ═══════════════════════════════════════════════════════════════
+                  CARD 04: DELIVERY (FORMATS & CUTS REMOVED, VIDEO FULLY VISIBLE)
+              ═══════════════════════════════════════════════════════════════ */}
+              <div className="w-[100vw] h-full shrink-0 flex flex-col justify-between p-4 sm:p-7 lg:p-10 bg-[#060708] overflow-hidden">
+                <div className="w-full max-w-5xl xl:max-w-6xl mx-auto flex-1 flex flex-col justify-between">
+                  {/* Top Header Row */}
+                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 sm:gap-4 shrink-0 mb-3 sm:mb-4">
                     <div>
-                      <h3 className="font-primary font-bold uppercase text-[clamp(1.8rem,5vw,3.2rem)] lg:text-[clamp(2.6rem,3.5vw,4.5rem)] text-white tracking-tight leading-[0.9]">
-                        DELI<br className="hidden lg:block" />VERY
-                      </h3>
-                      <p className="font-mono text-[10px] text-white/40 leading-relaxed mt-1.5 max-w-[190px]">
+                      <h2 className="font-primary font-bold uppercase text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white tracking-tight leading-none">
+                        4. Delivery
+                      </h2>
+                      <p className="font-mono text-xs sm:text-sm text-white/50 mt-1 sm:mt-1.5">
                         Final master film ready for multi-platform distribution.
                       </p>
                     </div>
-
-                    <div className="pt-2 lg:pt-5 lg:border-t lg:border-white/[0.06] w-full space-y-2">
-                      <span className="font-mono text-[7px] sm:text-[8px] text-white/30 uppercase tracking-widest block">
-                        DISTRIBUTION
-                      </span>
-                      <div className="flex flex-wrap gap-1.5">
-                        {PLATFORMS.map((p) => (
-                          <span
-                            key={p}
-                            className="px-1.5 py-0.5 bg-white/[0.03] border border-white/10 font-mono text-[7px] sm:text-[8px] text-white/60 uppercase tracking-wider"
-                          >
-                            {p}
-                          </span>
-                        ))}
-                      </div>
-                      <div className="font-mono text-[7px] sm:text-[8px] text-accent/80 uppercase tracking-widest pt-1 flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 rounded-full bg-accent" />
-                        <span>DAY 10 · READY TO AIR</span>
-                      </div>
+                    <div className="font-mono text-[9px] sm:text-xs text-white/40 uppercase tracking-widest sm:text-right">
+                      <span className="text-white/30">DELIVERABLE: </span>
+                      <span className="text-accent font-semibold">DAY 10</span>
+                      <span className="mx-2 text-white/20">·</span>
+                      <span>4K MASTER · READY TO AIR</span>
                     </div>
                   </div>
 
-                  {/* Final Video showcase + multi-row deliverable specs */}
-                  <div className="flex-1 p-3 sm:p-5 lg:p-6 flex flex-col justify-between overflow-y-auto bg-[#07080B]">
-                    {/* Master Video Player (16:9 fully visible) */}
-                    <div className="relative aspect-video max-h-[50vh] w-full rounded-none border border-white/10 overflow-hidden bg-black flex items-center justify-center">
+                  {/* Main Video Viewport: Formats & Cuts removed, Video fully prominent */}
+                  <div className="flex-1 w-full flex items-center justify-center py-2 overflow-hidden">
+                    <div className="relative aspect-video w-full max-h-[58vh] sm:max-h-[64vh] border border-white/15 overflow-hidden bg-black mx-auto shadow-2xl">
                       <video
                         ref={videoRef}
                         src={DELIVERY_VIDEO}
@@ -760,79 +594,62 @@ export default function HowWeWork() {
                         className="w-full h-full object-cover"
                       />
 
+                      {/* Corner marks */}
+                      <span className="absolute top-2.5 left-2.5 w-3 h-3 border-t border-l border-white/50 pointer-events-none z-10" />
+                      <span className="absolute top-2.5 right-2.5 w-3 h-3 border-t border-r border-white/50 pointer-events-none z-10" />
+                      <span className="absolute bottom-2.5 left-2.5 w-3 h-3 border-b border-l border-white/50 pointer-events-none z-10" />
+                      <span className="absolute bottom-2.5 right-2.5 w-3 h-3 border-b border-r border-white/50 pointer-events-none z-10" />
+
                       {/* Video Top Controls */}
-                      <div className="absolute top-2.5 left-3 right-3 z-20 flex items-center justify-between">
-                        <span className="px-2 py-0.5 bg-black/80 font-mono text-[7px] sm:text-[8px] text-white/80 uppercase tracking-widest">
-                          FINAL MASTER FILM
-                        </span>
+                      <div className="absolute top-3 left-3 right-3 z-20 flex items-center justify-between">
+                        <div className="flex items-center gap-2 px-2.5 py-1 bg-black/80 backdrop-blur-xs border border-white/10 font-mono text-[8px] sm:text-[9px] text-white/90 uppercase tracking-widest">
+                          <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+                          <span>FINAL MASTER AIR FILM · 4K</span>
+                        </div>
                         <button
                           type="button"
                           onClick={() => setIsVideoMuted(!isVideoMuted)}
-                          className="flex items-center gap-1.5 px-2 py-0.5 bg-black/80 border border-white/15 hover:border-accent text-white/70 hover:text-white font-mono text-[7px] sm:text-[8px] uppercase tracking-wider transition-colors cursor-pointer"
+                          className="flex items-center gap-1.5 px-2.5 py-1 bg-black/80 border border-white/15 hover:border-accent text-white/80 hover:text-white font-mono text-[7px] sm:text-[8px] uppercase tracking-wider transition-colors cursor-pointer"
                         >
                           {isVideoMuted ? (
                             <>
-                              <VolumeX className="w-2.5 h-2.5 text-white/60" />
+                              <VolumeX className="w-3 h-3 text-white/60" />
                               <span>UNMUTE</span>
                             </>
                           ) : (
                             <>
-                              <Volume2 className="w-2.5 h-2.5 text-accent" />
+                              <Volume2 className="w-3 h-3 text-accent" />
                               <span className="text-accent">AUDIO LIVE</span>
                             </>
                           )}
                         </button>
                       </div>
                     </div>
+                  </div>
 
-                    {/* Multi-format packaging bar - Multi-row on Mobile */}
-                    <div className="mt-2.5 pt-2.5 border-t border-white/[0.06] space-y-1.5 shrink-0">
-                      <div className="flex flex-wrap items-center gap-1.5 font-mono text-[7px] sm:text-[8px] uppercase tracking-widest">
-                        <span className="text-white/30">FORMATS:</span>
-                        <span className="px-1.5 py-0.5 border border-accent/40 bg-accent/[0.06] text-accent font-semibold">
-                          16:9 MASTER
-                        </span>
-                        <span className="px-1.5 py-0.5 border border-white/10 text-white/60">
-                          9:16 VERTICAL
-                        </span>
-                        <span className="px-1.5 py-0.5 border border-white/10 text-white/60">
-                          4:5 SOCIAL
-                        </span>
-                        <span className="px-1.5 py-0.5 border border-white/10 text-white/60">
-                          1:1 SQUARE
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-1.5 font-mono text-[7px] sm:text-[8px] uppercase tracking-widest">
-                        <span className="text-white/30">CUTS:</span>
-                        {DURATIONS.map((d) => (
-                          <span
-                            key={d}
-                            className="px-1.5 py-0.5 bg-white/[0.04] text-white/50 border border-white/5"
-                          >
-                            {d}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
+                  {/* Bottom Card Footer */}
+                  <div className="flex items-center justify-between pt-3 border-t border-white/[0.06] font-mono text-[8px] sm:text-[9px] text-white/30 uppercase tracking-widest shrink-0">
+                    <span>STAGE 04 // FINAL DELIVERY</span>
+                    <span>4K CINEMA MASTER BROADCAST READY</span>
                   </div>
                 </div>
               </div>
-              {/* ═══════════════════════════════════════════════════════ */}
+              {/* ═══════════════════════════════════════════════════════════════ */}
             </div>
           </div>
 
-          {/* ── BOTTOM SCROLL PROGRESS ── */}
-          <div className="shrink-0 px-4 sm:px-8 lg:px-14 py-2 sm:py-2.5 border-t border-white/[0.06] flex items-center gap-3">
+          {/* ── BOTTOM OVERALL SCROLL PROGRESS ── */}
+          <div className="shrink-0 px-4 sm:px-8 lg:px-12 py-2 sm:py-2.5 border-t border-white/[0.06] flex items-center gap-3 bg-[#060708] z-30">
             <div className="flex-1 h-px bg-white/[0.05] relative overflow-hidden">
               <div
-                className="absolute left-0 top-0 h-full bg-accent/40"
+                className="absolute left-0 top-0 h-full bg-accent/50"
                 style={{
                   width: `${scrollProgress * 100}%`,
                   transition: "width 0.1s linear",
                 }}
               />
             </div>
-            <span className="font-mono text-[8px] sm:text-[9px] text-white/20 uppercase tracking-widest shrink-0 w-7 sm:w-8 text-right">
+            <span className="font-mono text-[8px] sm:text-[9px] text-white/30 uppercase tracking-widest shrink-0 w-8 text-right">
               {Math.round(scrollProgress * 100)}%
             </span>
           </div>

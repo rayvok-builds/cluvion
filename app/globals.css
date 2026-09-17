@@ -22,6 +22,7 @@
 }
 
 :root {
+  color-scheme: dark;
   --font-primary: "Suisseintl Condensed", Arial, sans-serif;
   --font-secondary: Suisseintl, Arial, sans-serif;
   --font-thegoodmonolith: "Suisseintl Condensed", Arial, sans-serif;
@@ -260,7 +261,7 @@ html.lenis, html.lenis body {
   transform: scaleX(0);
 }
 
-/* ── CTA Button Bubble Hover Animation ── */
+/* ── CTA Button Bubble Hover Animation (Pure White, No Yellow) ── */
 .c-cta-button {
   display: inline-flex;
   align-items: center;
@@ -279,7 +280,7 @@ html.lenis, html.lenis body {
   top: 100%;
   width: 140%;
   height: 180%;
-  background-color: #E5A93C;
+  background-color: #ffffff;
   border-radius: 50%;
   display: block;
   transition: all 0.5s 0.1s cubic-bezier(0.55, 0, 0.1, 1);
@@ -294,7 +295,7 @@ html.lenis, html.lenis body {
   top: 180%;
   width: 160%;
   height: 190%;
-  background-color: #E5A93C;
+  background-color: #ffffff;
   border-radius: 50%;
   display: block;
   transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
@@ -311,6 +312,10 @@ html.lenis, html.lenis body {
   transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
 }
 
+.c-cta-button:hover {
+  border-color: #ffffff;
+}
+
 /* Inverse variant: dark fill bubble (for buttons that are already accent-colored) */
 .c-cta-button-inv::before {
   background-color: #121316;
@@ -319,8 +324,9 @@ html.lenis, html.lenis body {
   background-color: #121316;
 }
 
-/* Hide fixed bottom gradual blur overlay specifically in the process section */
-body.in-process-section .gradual-blur-page {
+/* Hide fixed bottom gradual blur overlay specifically in the process section or footer */
+body.in-process-section .gradual-blur-page,
+body.in-footer-section .gradual-blur-page {
   opacity: 0 !important;
   visibility: hidden !important;
   pointer-events: none !important;

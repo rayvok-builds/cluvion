@@ -10,12 +10,13 @@ export interface WorkItem {
   posterUrl: string;
   metrics?: string;
   year: string;
+  shortDescription?: string;
 }
 
 export const FEATURED_VIDEOS = {
   heroLarge1: {
     id: "large-mercedes",
-    client: "MERCEDES-BENZ",
+    client: "Mercedes-Benz",
     isPlaceholder: false,
     tagline: "Cinematic Luxury",
     category: "Brand Film",
@@ -23,11 +24,12 @@ export const FEATURED_VIDEOS = {
     aspectRatio: "16:9" as const,
     videoUrl: "https://res.cloudinary.com/dokrpo5fl/video/upload/v1788358969/Copy-of-mercedece.hevc_hhojlb.mp4",
     posterUrl: "https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=1200&auto=format&fit=crop",
-    year: "2026"
+    year: "2026",
+    shortDescription: 'BRAND FILM — "CINEMATIC LUXURY"'
   },
   heroLarge2: {
     id: "large-okapiswim",
-    client: "OKAPI SWIM",
+    client: "Okapi Swim",
     isPlaceholder: false,
     tagline: "Coastal Summer Campaign",
     category: "Fashion & Swimwear",
@@ -35,14 +37,15 @@ export const FEATURED_VIDEOS = {
     aspectRatio: "16:9" as const,
     videoUrl: "https://res.cloudinary.com/dokrpo5fl/video/upload/v1788358987/okapiswim.hevc_wgp3od.mp4",
     posterUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop",
-    year: "2026"
+    year: "2026",
+    shortDescription: 'FASHION FILM — "COASTAL SUMMER CAMPAIGN"'
   }
 };
 
 export const REEL_GRID_1: WorkItem[] = [
   {
     id: "wish-u",
-    client: "WISH U",
+    client: "Wish U",
     isPlaceholder: false,
     tagline: "Brand film, shot nowhere.",
     category: "Brand Film",
@@ -51,11 +54,12 @@ export const REEL_GRID_1: WorkItem[] = [
     videoUrl: "https://res.cloudinary.com/dokrpo5fl/video/upload/v1788349391/6.hevc_q4albe.mp4",
     posterUrl: "https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=1200&auto=format&fit=crop",
     metrics: "4.8M Views · 0 Flights",
-    year: "2026"
+    year: "2026",
+    shortDescription: 'BRAND FILM — "SHOT NOWHERE"'
   },
   {
     id: "auraashe",
-    client: "AURAASHÈ",
+    client: "Auraashè",
     isPlaceholder: false,
     tagline: "Paris to Jaipur. Zero flights.",
     category: "Haute Couture & Fine Jewelry",
@@ -64,28 +68,30 @@ export const REEL_GRID_1: WorkItem[] = [
     videoUrl: "https://res.cloudinary.com/dokrpo5fl/video/upload/v1788349406/2.hevc_vmuagc.mp4",
     posterUrl: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1200&auto=format&fit=crop",
     metrics: "78% Lower Cost · Global Campaign",
-    year: "2026"
+    year: "2026",
+    shortDescription: 'HAUTE COUTURE — "PARIS TO JAIPUR"'
   },
   {
-    id: "client-perf",
-    client: "[CLIENT]",
-    isPlaceholder: true,
-    tagline: "14 ad variations. One week.",
-    category: "Performance Variations",
+    id: "matiks",
+    client: "Matiks",
+    isPlaceholder: false,
+    tagline: "Say no to brainrot.",
+    category: "Ad Film",
     duration: "0:30",
     aspectRatio: "9:16",
     videoUrl: "https://res.cloudinary.com/dokrpo5fl/video/upload/v1788349395/7.hevc_fltmal.mp4",
     posterUrl: "https://images.unsplash.com/photo-1616469829941-c7200edec809?q=80&w=1200&auto=format&fit=crop",
     metrics: "14 Iterations · 3.2x ROAS",
-    year: "2026"
+    year: "2026",
+    shortDescription: 'AD FILM — "SAY NO TO BRAINROT"'
   }
 ];
 
 export const REEL_GRID_2: WorkItem[] = [
   {
-    id: "client-prod",
-    client: "[CLIENT]",
-    isPlaceholder: true,
+    id: "lumen-pack",
+    client: "Lumen Pack",
+    isPlaceholder: false,
     tagline: "Product film. No sample shipped.",
     category: "Photoreal Packshot",
     duration: "0:38",
@@ -93,12 +99,13 @@ export const REEL_GRID_2: WorkItem[] = [
     videoUrl: "https://res.cloudinary.com/dokrpo5fl/video/upload/v1788349390/9.hevc_d5gmk6.mp4",
     posterUrl: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=1200&auto=format&fit=crop",
     metrics: "100% Digital Asset · 4K Macro",
-    year: "2026"
+    year: "2026",
+    shortDescription: 'PRODUCT FILM — "NO SAMPLE SHIPPED"'
   },
   {
-    id: "client-drama",
-    client: "[CLIENT]",
-    isPlaceholder: true,
+    id: "noir-chronicles",
+    client: "Noir Chronicles",
+    isPlaceholder: false,
     tagline: "AI micro-drama, Episode 01.",
     category: "Episodic Micro-Drama",
     duration: "1:15",
@@ -106,12 +113,13 @@ export const REEL_GRID_2: WorkItem[] = [
     videoUrl: "https://res.cloudinary.com/dokrpo5fl/video/upload/v1788350306/4-tujvmy.hevc_pg3wkf.mp4",
     posterUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1200&auto=format&fit=crop",
     metrics: "30-Shot Consistency · 1.2M Completions",
-    year: "2026"
+    year: "2026",
+    shortDescription: 'MICRO-DRAMA — "EPISODE 01"'
   },
   {
-    id: "client-ugc",
-    client: "[CLIENT]",
-    isPlaceholder: true,
+    id: "velvet-coffee",
+    client: "Velvet Coffee",
+    isPlaceholder: false,
     tagline: "UGC set, built for performance.",
     category: "Creative Testing Set",
     duration: "0:25",
@@ -119,7 +127,8 @@ export const REEL_GRID_2: WorkItem[] = [
     videoUrl: "https://res.cloudinary.com/dokrpo5fl/video/upload/v1788349388/coffee.hevc_jkd40a.mp4",
     posterUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1200&auto=format&fit=crop",
     metrics: "8 Hook Variations · Direct Response",
-    year: "2026"
+    year: "2026",
+    shortDescription: 'PERFORMANCE UGC — "CREATIVE TESTING"'
   }
 ];
 

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { CheckCircle2, ShieldCheck } from "lucide-react";
 import { useFilm } from "./FilmContext";
+import GlassSurface from "./GlassSurface";
 
 interface PricingTier {
   id: number;
@@ -183,13 +184,20 @@ export default function Numbers() {
           </div>
 
           {/* CTA Button */}
-          <button
-            type="button"
+          <GlassSurface
+            as="button"
             onClick={() => openProjectModal()}
-            className="w-full py-3.5 sm:py-4 bg-white hover:bg-accent text-black font-switzer font-medium text-xs sm:text-sm uppercase tracking-widest rounded-none border border-white hover:border-accent transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-[0_4px_25px_rgba(255,255,255,0.1)]"
+            borderRadius={4}
+            height={52}
+            width="100%"
+            brightness={60}
+            backgroundOpacity={0.12}
+            saturation={1.5}
+            distortionScale={-140}
+            className="w-full py-3.5 sm:py-4 border border-white/30 text-white font-primary font-bold text-xs sm:text-sm uppercase tracking-widest transition-all duration-300 hover:border-white hover:shadow-[0_0_25px_rgba(255,255,255,0.35)] cursor-pointer"
           >
             Book My FREE Film Consultation
-          </button>
+          </GlassSurface>
 
           {/* Guarantee Banner */}
           <div className="mt-6 pt-4 border-t border-white/[0.06] flex items-center justify-center gap-2.5 text-center">

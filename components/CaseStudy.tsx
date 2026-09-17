@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { useFilm } from "./FilmContext";
 import { ArrowRight, Play, Volume2, VolumeX } from "lucide-react";
+import GlassSurface from "./GlassSurface";
 
 export default function CaseStudy() {
   const { openCaseStudy, openVideoLightbox } = useFilm();
@@ -139,14 +140,23 @@ export default function CaseStudy() {
 
             {/* CTAs */}
             <div className="space-y-3 pt-6 border-t border-white/10">
-              <button
-                type="button"
+              <GlassSurface
+                as="button"
                 onClick={openCaseStudy}
-                className="w-full py-4 bg-white hover:bg-accent text-black font-switzer font-medium text-xs sm:text-sm uppercase tracking-widest rounded-none border border-white hover:border-accent transition-all duration-200 flex items-center justify-center gap-2 group shadow-[0_4px_25px_rgba(255,255,255,0.1)]"
+                borderRadius={4}
+                height={52}
+                width="100%"
+                brightness={60}
+                backgroundOpacity={0.12}
+                saturation={1.5}
+                distortionScale={-140}
+                className="w-full py-4 border border-white/30 text-white font-primary font-bold text-xs sm:text-sm uppercase tracking-widest transition-all duration-300 hover:border-white hover:shadow-[0_0_25px_rgba(255,255,255,0.35)] cursor-pointer"
               >
-                <span>Read Full Case Study</span>
-                <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
-              </button>
+                <div className="flex items-center justify-center gap-2 group">
+                  <span>Read Full Case Study</span>
+                  <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
+                </div>
+              </GlassSurface>
             </div>
           </div>
         </div>
