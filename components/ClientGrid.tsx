@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useEffect } from "react";
+import TextReveal from "./TextReveal";
 
 import Link from "next/link";
 
@@ -132,9 +133,11 @@ export default function ClientGrid() {
       >
         {/* Section Header */}
         <div className="w-full pb-8 sm:pb-12 border-b border-white/[0.08] text-center px-4 mb-8 sm:mb-12">
-          <h2 className="font-primary font-bold uppercase text-4xl sm:text-5xl md:text-6xl text-white tracking-tight leading-none">
-            CLIENTS
-          </h2>
+          <TextReveal
+            as="h2"
+            lines={["CLIENTS"]}
+            className="font-primary font-bold uppercase text-4xl sm:text-5xl md:text-6xl text-white tracking-tight leading-none"
+          />
         </div>
 
         {/* ── 5 Main Client Rows with Exclusion Invert Hover Wipe (Clickable to Case Studies) ── */}

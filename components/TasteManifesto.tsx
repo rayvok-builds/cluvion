@@ -13,18 +13,25 @@ export default function TasteManifesto() {
 
     const ctx = gsap.context(() => {
       if (textRef.current && containerRef.current) {
-        gsap.from(textRef.current.children, {
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top 70%",
-            toggleActions: "play none none reverse",
+        gsap.fromTo(
+          textRef.current.children,
+          {
+            opacity: 0,
+            y: 60,
           },
-          opacity: 0,
-          y: 50,
-          stagger: 0.15,
-          duration: 1.2,
-          ease: "power3.out",
-        });
+          {
+            scrollTrigger: {
+              trigger: containerRef.current,
+              start: "top 75%",
+              toggleActions: "restart none none reset",
+            },
+            opacity: 1,
+            y: 0,
+            stagger: 0.15,
+            duration: 1.6,
+            ease: "power4.out",
+          }
+        );
       }
     }, containerRef);
 

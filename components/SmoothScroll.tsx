@@ -11,16 +11,22 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
+    // Configured to match the luxurious, high-inertia feel of GSAP ScrollSmoother (smooth: 2)
     const lenis = new Lenis({
-      duration: 1.1,
+      duration: 1.8,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
-      wheelMultiplier: 0.9,
-      touchMultiplier: 1.5,
+      wheelMultiplier: 0.95,
+      touchMultiplier: 1.2,
+      syncTouch: false,
     });
 
     lenisRef.current = lenis;
 
+    // Attach to window for any component or modal needing scroll lock / control
+    (window as unknown as { lenis?: Lenis }).lenis = lenis;
+
+    // Synchronize Lenis with ScrollTrigger
     lenis.on("scroll", ScrollTrigger.update);
 
     const updateTicker = (time: number) => {
@@ -33,8 +39,10 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     return () => {
       gsap.ticker.remove(updateTicker);
       lenis.destroy();
+      delete (window as unknown as { lenis?: Lenis }).lenis;
     };
   }, []);
 
   return <>{children}</>;
 }
+

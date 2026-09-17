@@ -62,6 +62,16 @@ a, nav, button, p, span, .font-body, .font-secondary, .font-nav, .font-link {
   font-weight: 500;
 }
 
+/* Headings and their child spans must strictly preserve bold heading typography */
+h1 span, h2 span, h3 span, h4 span, h5 span, h6 span,
+.font-primary span, .font-bold span,
+.text-reveal-line, .text-reveal-inner {
+  font-family: inherit !important;
+  font-weight: inherit !important;
+  letter-spacing: inherit !important;
+  text-transform: inherit !important;
+}
+
 /* Custom Film Selection */
 ::selection {
   background-color: rgba(229, 169, 60, 0.25);
@@ -332,4 +342,47 @@ body.in-footer-section .gradual-blur-page {
   pointer-events: none !important;
   transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
 }
+
+/* ==========================================================================
+   Lenis Smooth Scrolling Rules (matching GSAP ScrollSmoother fidelity)
+   ========================================================================== */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   Editorial Masked Text Reveal (CodePen style line-masking)
+   ========================================================================== */
+.text-reveal-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
+  font-family: inherit !important;
+  font-weight: inherit !important;
+}
+
+.text-reveal-inner {
+  display: block;
+  will-change: transform, opacity;
+  font-family: inherit !important;
+  font-weight: inherit !important;
+}
+
 

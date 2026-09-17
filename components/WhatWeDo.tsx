@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowUpRight, Volume2, VolumeX } from "lucide-react";
 import { useFilm } from "./FilmContext";
+import TextReveal from "./TextReveal";
 
 interface ServiceItem {
   id: string;
@@ -511,8 +512,8 @@ function ServicePanel({
     // Card scroll stacking & play/pause orchestration for both mobile and desktop
     const st = ScrollTrigger.create({
       trigger: panel,
-      start: "top top",
-      end: isLast ? "bottom bottom" : () => `+=${window.innerHeight}`,
+      start: "top 60%",
+      end: isLast ? "bottom bottom" : () => `+=${panel.offsetHeight || window.innerHeight}`,
       onEnter: () => {
         if (video) video.play().catch(() => {});
         setIsPlaying(true);
@@ -538,7 +539,35 @@ function ServicePanel({
       setIsPlaying(true);
     }
 
-    return () => st.kill();
+    // Dynamic sticky positioning for mobile:
+    // Stacking only starts AFTER the entire card (all content + button) is 100% visible
+    const updateStickyPosition = () => {
+      if (!panel) return;
+      if (window.innerWidth >= 1024) {
+        panel.style.top = "0px";
+      } else {
+        const vh = window.innerHeight;
+        const cardH = panel.offsetHeight;
+        // If card is taller than screen, stick only when card bottom reaches screen bottom:
+        const offset = Math.min(0, vh - cardH);
+        panel.style.top = `${offset}px`;
+      }
+    };
+
+    updateStickyPosition();
+
+    const ro = new ResizeObserver(() => {
+      updateStickyPosition();
+    });
+    ro.observe(panel);
+
+    window.addEventListener("resize", updateStickyPosition);
+
+    return () => {
+      st.kill();
+      ro.disconnect();
+      window.removeEventListener("resize", updateStickyPosition);
+    };
   }, [isMuted, isLast]);
 
   const toggleMute = () => {
@@ -552,12 +581,12 @@ function ServicePanel({
     <div
       ref={panelRef}
       style={{ zIndex: index + 1 }}
-      className={`sticky top-0 w-full min-h-[100dvh] lg:h-screen flex flex-col lg:flex-row bg-[#050608] border-b border-white/[0.07] overflow-hidden ${
+      className={`sticky w-full min-h-[100dvh] lg:h-screen flex flex-col lg:flex-row bg-[#050608] border-b border-white/[0.07] overflow-visible lg:overflow-hidden ${
         index > 0 ? "border-t border-white/10 shadow-[0_-30px_60px_rgba(0,0,0,0.95)]" : ""
       }`}
     >
       {/* ── LEFT: Content Panel ── */}
-      <div className="relative z-10 flex flex-col justify-center w-full lg:w-[48%] h-auto lg:h-full px-6 sm:px-14 lg:px-16 py-8 sm:py-12 lg:py-16 bg-[#050608] shrink-0">
+      <div className="relative z-10 flex flex-col justify-center w-full lg:w-[48%] h-auto lg:h-full px-6 sm:px-14 lg:px-16 pt-8 sm:pt-12 lg:pt-16 pb-14 sm:pb-16 lg:pb-16 bg-[#050608] shrink-0">
         {/* Service index label */}
         <div className="flex items-center gap-2 mb-4 sm:mb-7 font-mono text-[11px] text-white/40 uppercase tracking-widest">
           <span className="text-accent font-semibold">
@@ -608,11 +637,11 @@ function ServicePanel({
           </div>
         </div>
 
-        {/* CTA Button */}
+        {/* CTA Button — completely accessible, visible, and clickable */}
         <button
           type="button"
           onClick={() => openProjectModal(service.title)}
-          className="group inline-flex items-center gap-3 px-6 py-3.5 bg-white hover:bg-black text-black hover:text-white border border-white font-mono text-xs uppercase tracking-[0.15em] transition-all duration-300 self-start cursor-pointer rounded-none shadow-sm"
+          className="group relative z-20 inline-flex items-center gap-3 px-6 py-3.5 bg-white hover:bg-black text-black hover:text-white border border-white font-mono text-xs uppercase tracking-[0.15em] transition-all duration-300 self-start cursor-pointer rounded-none shadow-md active:scale-95"
         >
           <span>Brief {service.title}</span>
           <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -672,9 +701,11 @@ export default function WhatWeDo() {
     <section id="services" className="relative w-full bg-[#050608] select-none">
       {/* Section Heading */}
       <div className="w-full pb-8 sm:pb-12 pt-10 sm:pt-14 border-b border-white/[0.08] text-center px-4">
-        <h2 className="font-primary font-bold uppercase text-4xl sm:text-5xl md:text-6xl text-white tracking-tight leading-none">
-          SERVICES
-        </h2>
+        <TextReveal
+          as="h2"
+          lines={["SERVICES"]}
+          className="font-primary font-bold uppercase text-4xl sm:text-5xl md:text-6xl text-white tracking-tight leading-none"
+        />
       </div>
 
       {/* Service Panels — each full viewport height, stacked on desktop */}

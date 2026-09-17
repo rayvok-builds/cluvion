@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Volume2, VolumeX } from "lucide-react";
+import TextReveal from "./TextReveal";
 
 /* ─── Storyboard Items (Single Full Widescreen Image) ─────────────────────── */
 const STORYBOARD_ITEMS = [
@@ -277,15 +278,18 @@ export default function HowWeWork() {
 
                   {/* Main Body: Cinematic center statement */}
                   <div className="flex-1 flex flex-col items-center justify-center text-center my-auto py-6">
-                    <h1
-                      className="font-primary font-bold uppercase text-white tracking-tight leading-[0.88] select-none"
+                    <TextReveal
+                      as="h1"
+                      lines={["HOW", "WE WORK"]}
                       style={{ fontSize: "clamp(3.5rem, 8vw, 6rem)" }}
-                    >
-                      HOW<br />WE WORK
-                    </h1>
-                    <p className="font-mono text-xs sm:text-sm text-white/45 max-w-md mx-auto mt-4 sm:mt-6 leading-relaxed">
-                      Four synchronized phases engineered to convert raw creative ambition into cinema-grade production.
-                    </p>
+                      className="font-primary font-bold uppercase text-white tracking-tight leading-[0.88] select-none text-center"
+                      innerClassName="text-center"
+                      paragraph={
+                        <p className="font-mono text-xs sm:text-sm text-white/45 max-w-md mx-auto mt-4 sm:mt-6 leading-relaxed text-center">
+                          Four synchronized phases engineered to convert raw creative ambition into cinema-grade production.
+                        </p>
+                      }
+                    />
                   </div>
 
                   {/* Bottom Row: Steps & Scroll prompt */}

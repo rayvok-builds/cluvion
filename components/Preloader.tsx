@@ -87,6 +87,7 @@ export default function Preloader() {
             yPercent: -101,
             ease: "power2.inOut",
             onStart: () => {
+              (window as unknown as { __preloaderDone?: boolean }).__preloaderDone = true;
               // Notify Navbar and Hero sections right as curtain lifts
               window.dispatchEvent(new CustomEvent("preloaderComplete"));
             },

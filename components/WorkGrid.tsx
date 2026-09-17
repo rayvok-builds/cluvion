@@ -4,6 +4,7 @@ import { useState } from "react";
 import { FEATURED_VIDEOS, REEL_GRID_1, REEL_GRID_2 } from "../lib/data";
 import WorkTile from "./WorkTile";
 import ExpandingWorkVideo from "./ExpandingWorkVideo";
+import TextReveal from "./TextReveal";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
@@ -14,9 +15,11 @@ export default function WorkGrid() {
     <section id="work" className="relative w-full py-12 sm:py-16 bg-[#050608] overflow-visible">
       {/* Section Header */}
       <div className="w-full pb-8 sm:pb-12 border-b border-white/[0.08] text-center px-4 mb-8 sm:mb-12 flex flex-col items-center justify-center gap-4">
-        <h2 className="font-primary font-bold uppercase text-4xl sm:text-5xl md:text-6xl text-white tracking-tight leading-none">
-          PROJECTS
-        </h2>
+        <TextReveal
+          as="h2"
+          lines={["PROJECTS"]}
+          className="font-primary font-bold uppercase text-4xl sm:text-5xl md:text-6xl text-white tracking-tight leading-none"
+        />
 
         {/* Minimal Mobile View Switcher (3 lines vs Grid icon) */}
         <div className="flex sm:hidden items-center justify-center pt-1">

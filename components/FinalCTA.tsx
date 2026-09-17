@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import Cal, { getCalApi } from "@calcom/embed-react";
 import GlassSurface from "./GlassSurface";
+import TextReveal from "./TextReveal";
 
 export default function FinalCTA() {
   const calContainerRef = useRef<HTMLDivElement>(null);
@@ -40,19 +41,25 @@ export default function FinalCTA() {
       <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_80%_60%_at_50%_0%,rgba(255,255,255,0.03),transparent)]" />
 
       <div className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
-        {/* Heading Stack: Matches user image typography */}
-        <div className="space-y-3 sm:space-y-4 mb-8 sm:mb-10">
-          <p className="font-secondary text-2xl sm:text-3xl md:text-4xl lg:text-[42px] text-white font-normal tracking-tight">
-            Got a brief?
-          </p>
+        {/* Heading Stack: Matches user image typography with smooth masked text reveal */}
+        <div className="w-full max-w-3xl mx-auto mb-8 sm:mb-10 text-center">
+          <TextReveal
+            as="p"
+            lines={["Got a brief?"]}
+            className="font-secondary text-2xl sm:text-3xl md:text-4xl lg:text-[42px] text-white font-normal tracking-tight mb-2"
+          />
 
-          <h2 className="font-primary font-bold uppercase tracking-tight text-white text-3xl sm:text-5xl md:text-6xl lg:text-7xl leading-none">
-            WE&apos;VE GOT THE FRAMES
-          </h2>
-
-          <p className="font-secondary text-white/70 text-sm sm:text-base md:text-lg font-normal max-w-xl mx-auto pt-1">
-            Tell us what you&apos;re building. We&apos;ll take it from there.
-          </p>
+          <TextReveal
+            as="h2"
+            lines={["WE'VE GOT THE FRAMES"]}
+            className="font-primary font-bold uppercase tracking-tight text-white text-3xl sm:text-5xl md:text-6xl lg:text-7xl leading-none"
+            delay={0.1}
+            paragraph={
+              <p className="font-secondary text-white/70 text-sm sm:text-base md:text-lg font-normal max-w-xl mx-auto pt-3 text-center">
+                Tell us what you&apos;re building. We&apos;ll take it from there.
+              </p>
+            }
+          />
         </div>
 
         {/* Glass Surface CTA Button — outer dark glass bezel, inner white fill on hover */}
