@@ -14,6 +14,16 @@ export default function Home() {
       {/* 00 · Top Film-House Navbar */}
       <Navbar />
 
+      {/* Gradual Blur at the top of the viewport (exact mirror of bottom, facing downwards) */}
+      <GradualBlur
+        preset="page-header"
+        height="6rem"
+        strength={2}
+        curve="bezier"
+        divCount={5}
+        style={{ zIndex: 35 }}
+      />
+
       {/* 01 · Hero Section: Fixed/Pinned Fullscreen Cinema */}
       <div className="fixed top-0 left-0 w-full h-screen z-0">
         <Hero />

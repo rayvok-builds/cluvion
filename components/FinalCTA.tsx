@@ -2,8 +2,8 @@
 
 import { useEffect, useRef } from "react";
 import Cal, { getCalApi } from "@calcom/embed-react";
-import GlassSurface from "./GlassSurface";
 import TextReveal from "./TextReveal";
+import { Button } from "./ui/Button";
 
 export default function FinalCTA() {
   const calContainerRef = useRef<HTMLDivElement>(null);
@@ -62,38 +62,14 @@ export default function FinalCTA() {
           />
         </div>
 
-        {/* Glass Surface CTA Button — outer dark glass bezel, inner white fill on hover */}
+        {/* CTA Button — glass variant */}
         <div className="mb-12 sm:mb-16">
-          <GlassSurface
-            as="div"
-            borderRadius={9999}
-            height="auto"
-            width="auto"
-            brightness={25}
-            backgroundOpacity={0.10}
-            saturation={1.2}
-            distortionScale={-120}
-            className="group p-[5px] border border-white/20 hover:border-white/40 cursor-pointer transition-colors duration-300"
+          <Button
+            variant="glass"
+            text="Book A 15-Min Call"
             onClick={scrollToCal}
-            style={{ display: "inline-flex" }}
-          >
-            <button
-              type="button"
-              onClick={scrollToCal}
-              className="
-                relative rounded-full
-                px-8 sm:px-11 py-3.5 sm:py-4
-                bg-transparent hover:bg-white
-                text-white hover:text-black
-                font-secondary font-medium text-base sm:text-lg tracking-tight
-                transition-all duration-300
-                cursor-pointer select-none
-                whitespace-nowrap
-              "
-            >
-              Book A 15-Min Call
-            </button>
-          </GlassSurface>
+            className="px-8 sm:px-11 py-3.5 sm:py-4 text-base sm:text-lg tracking-tight"
+          />
         </div>
 
         {/* Embedded Cal.com Widget Card Container */}

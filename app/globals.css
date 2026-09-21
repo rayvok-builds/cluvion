@@ -340,12 +340,45 @@ html.lenis, html.lenis body {
 }
 
 /* Hide fixed bottom gradual blur overlay specifically in the process section or footer */
-body.in-process-section .gradual-blur-page,
-body.in-footer-section .gradual-blur-page {
+body.in-process-section .gradual-blur-bottom,
+body.in-footer-section .gradual-blur-bottom {
   opacity: 0 !important;
   visibility: hidden !important;
   pointer-events: none !important;
   transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
+}
+
+/* ── Hero Section Desktop Nav Link Hover Effect ── */
+.hero-nav-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.65);
+  transition: color 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  padding-bottom: 2px;
+}
+
+.hero-nav-link:hover {
+  color: #ffffff;
+  transform: translateX(4px);
+}
+
+.hero-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  background-color: #ffffff;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-nav-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
 }
 
 /* ==========================================================================
@@ -390,4 +423,120 @@ html.lenis, html.lenis body {
   font-weight: inherit !important;
 }
 
+/* ── Button Component Variants ── */
+
+/* Elastic scale keyframe (from reference design) */
+@keyframes elastic-scale {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(0.94); }
+  60%  { transform: scale(1.04); }
+  80%  { transform: scale(0.98); }
+  100% { transform: scale(1); }
+}
+.animate-elastic-scale:active {
+  animation: elastic-scale 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ── WHITE variant: bubble wipes UP from below on hover ── */
+.btn-white {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  transition: color 0.45s cubic-bezier(0.55, 0, 0.1, 1);
+}
+/* Bubble starts BELOW the button (top: 100%) and rises on hover */
+.btn-white::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translateX(-50%) scaleY(1) scaleX(1.25);
+  width: 140%;
+  height: 180%;
+  background-color: #ffffff;
+  border-radius: 50%;
+  display: block;
+  transition: top 0.5s 0.05s cubic-bezier(0.55, 0, 0.1, 1),
+              transform 0.5s 0.05s cubic-bezier(0.55, 0, 0.1, 1);
+  z-index: -1;
+}
+.btn-white::after {
+  content: "";
+  position: absolute;
+  left: 55%;
+  top: 100%;
+  transform: translateX(-50%) scaleY(1) scaleX(1.45);
+  width: 160%;
+  height: 190%;
+  background-color: #ffffff;
+  border-radius: 50%;
+  display: block;
+  transition: top 0.5s cubic-bezier(0.55, 0, 0.1, 1),
+              transform 0.5s cubic-bezier(0.55, 0, 0.1, 1);
+  z-index: -1;
+}
+.btn-white:hover::before {
+  top: -35%;
+  transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
+}
+.btn-white:hover::after {
+  top: -45%;
+  transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
+}
+
+/* ── TRANSPARENT variant: white bubble wipes up from below ── */
+.btn-transparent {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  transition: color 0.45s cubic-bezier(0.55, 0, 0.1, 1);
+}
+.btn-transparent::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translateX(-50%) scaleY(1) scaleX(1.25);
+  width: 140%;
+  height: 180%;
+  background-color: #ffffff;
+  border-radius: 50%;
+  display: block;
+  transition: top 0.5s 0.05s cubic-bezier(0.55, 0, 0.1, 1),
+              transform 0.5s 0.05s cubic-bezier(0.55, 0, 0.1, 1);
+  z-index: -1;
+}
+.btn-transparent::after {
+  content: "";
+  position: absolute;
+  left: 55%;
+  top: 100%;
+  transform: translateX(-50%) scaleY(1) scaleX(1.45);
+  width: 160%;
+  height: 190%;
+  background-color: #ffffff;
+  border-radius: 50%;
+  display: block;
+  transition: top 0.5s cubic-bezier(0.55, 0, 0.1, 1),
+              transform 0.5s cubic-bezier(0.55, 0, 0.1, 1);
+  z-index: -1;
+}
+.btn-transparent:hover::before {
+  top: -35%;
+  transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
+}
+.btn-transparent:hover::after {
+  top: -45%;
+  transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
+}
+
+/* ── GLASS variant: inside GlassSurface, text goes dark on hover ── */
+.btn-glass {
+  position: relative;
+  transition: color 0.3s ease, background 0.3s ease;
+}
+.btn-glass:hover {
+  color: #000000;
+  background: rgba(255, 255, 255, 0.9);
+}
 

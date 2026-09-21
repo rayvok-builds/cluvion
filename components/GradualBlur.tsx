@@ -210,13 +210,14 @@ const GradualBlur: React.FC<GradualBlurProps> = (props) => {
     const isVertical = ["top", "bottom"].includes(position);
     const isHorizontal = ["left", "right"].includes(position);
     const isPageTarget = config.target === "page";
+    const explicitZIndex = config.style?.zIndex ?? props.zIndex;
 
     const baseStyle: React.CSSProperties = {
       position: isPageTarget ? "fixed" : "absolute",
       pointerEvents: config.hoverIntensity ? "auto" : "none",
       opacity: isVisible ? 1 : 0,
       transition: config.animated ? `opacity ${config.duration} ${config.easing}` : undefined,
-      zIndex: isPageTarget ? (config.zIndex || 1000) + 100 : config.zIndex,
+      zIndex: explicitZIndex !== undefined ? explicitZIndex : (isPageTarget ? (config.zIndex || 1000) + 100 : config.zIndex),
       ...config.style,
     };
 
@@ -235,7 +236,7 @@ const GradualBlur: React.FC<GradualBlurProps> = (props) => {
     }
 
     return baseStyle;
-  }, [config, responsiveHeight, responsiveWidth, isVisible]);
+  }, [config, responsiveHeight, responsiveWidth, isVisible, props.zIndex]);
 
   const { hoverIntensity, animated, onAnimationComplete, duration } = config;
   useEffect(() => {
@@ -245,10 +246,12 @@ const GradualBlur: React.FC<GradualBlurProps> = (props) => {
     }
   }, [isVisible, animated, onAnimationComplete, duration]);
 
+  const position = config.position || "bottom";
+
   return (
     <div
       ref={containerRef}
-      className={`gradual-blur ${
+      className={`gradual-blur gradual-blur-${position} ${
         config.target === "page" ? "gradual-blur-page" : "gradual-blur-parent"
       } ${config.className || ""}`}
       style={containerStyle}
