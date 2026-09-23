@@ -9,7 +9,7 @@ import { ArrowLeft } from "lucide-react";
 export default function LegalPage() {
   return (
     <main className="relative w-full bg-[#050608] text-[#F4F4F6] min-h-screen overflow-x-clip">
-      <Navbar />
+      <Navbar defaultCollapsed />
 
       <section className="relative w-full pt-36 sm:pt-44 pb-20 sm:pb-32 px-6 sm:px-12 max-w-4xl mx-auto">
         <div className="mb-8">

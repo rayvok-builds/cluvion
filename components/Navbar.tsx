@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { X , Menu  } from "lucide-react";
 import GlassSurface from "./GlassSurface";
+import { Button } from "./ui/Button";
 
 const NAV_LINKS = [
   { label: "HOME", href: "/#hero" },
@@ -12,6 +13,7 @@ const NAV_LINKS = [
   { label: "SERVICES", href: "#services" },
   { label: "PROCESS", href: "#process" },
   { label: "CASE STUDIES", href: "/case-studies" },
+  { label: "PRICING", href: "/pricing" },
   { label: "CONTACT", href: "#contact" },
 ];
 
@@ -21,6 +23,7 @@ const DESKTOP_LINKS = [
   { label: "SERVICES", href: "#services" },
   { label: "PROCESS", href: "#process" },
   { label: "CASE STUDIES", href: "/case-studies" },
+  { label: "PRICING", href: "/pricing" },
   { label: "CONTACT", href: "#contact" },
 ];
 
@@ -41,13 +44,22 @@ function TwoLineHamburger({ className = "" }: { className?: string }) {
   );
 }
 
-export default function Navbar() {
+interface NavbarProps {
+  /** If true the nav starts in collapsed (hamburger) mode — use on non-home pages */
+  defaultCollapsed?: boolean;
+}
+
+export default function Navbar({ defaultCollapsed = false }: NavbarProps) {
   const [visible, setVisible] = useState(false);
   const [open, setOpen] = useState(false);
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(defaultCollapsed);
 
-  // Preloader visibility
+  // Preloader visibility — on defaultCollapsed pages show immediately, no preloader wait
   useEffect(() => {
+    if (defaultCollapsed) {
+      setVisible(true);
+      return;
+    }
     const handleComplete = () => setTimeout(() => setVisible(true), 150);
     window.addEventListener("preloaderComplete", handleComplete);
     const timer = setTimeout(() => setVisible(true), 4000);
@@ -55,7 +67,7 @@ export default function Navbar() {
       window.removeEventListener("preloaderComplete", handleComplete);
       clearTimeout(timer);
     };
-  }, []);
+  }, [defaultCollapsed]);
 
   // Body scroll lock when drawer is open
   useEffect(() => {
@@ -63,8 +75,9 @@ export default function Navbar() {
     return () => { document.body.style.overflow = ""; };
   }, [open]);
 
-  // Collapse nav links after scrolling past hero
+  // Collapse nav links after scrolling past hero (skip on pages that start collapsed)
   useEffect(() => {
+    if (defaultCollapsed) return; // always collapsed, no need to track scroll
     const check = () => {
       const threshold = window.innerHeight * 0.8;
       setCollapsed(window.scrollY > threshold);
@@ -72,7 +85,7 @@ export default function Navbar() {
     check();
     window.addEventListener("scroll", check, { passive: true });
     return () => window.removeEventListener("scroll", check);
-  }, []);
+  }, [defaultCollapsed]);
 
   const handleNavClick = (href: string) => {
     setOpen(false);
@@ -174,27 +187,14 @@ export default function Navbar() {
 
           {/* ── Right: CTA + Mobile hamburger (mobile only) ── */}
           <div className="flex items-center gap-2.5 sm:gap-3 pointer-events-auto ml-auto md:ml-0">
-            <GlassSurface
-              as="div"
-              borderRadius={9999}
-              height="auto"
-              width="auto"
-              brightness={25}
-              backgroundOpacity={0.10}
-              saturation={1.2}
-              distortionScale={-120}
-              className="group p-[4px] sm:p-[5px] border border-white/20 hover:border-white/40 cursor-pointer transition-colors duration-300"
-              style={{ display: "inline-flex" }}
-            >
-              <a
-                href="https://cal.com/cluvion/15min"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="relative rounded-full px-4 sm:px-7 py-1.5 sm:py-2.5 hover:bg-transparent bg-white text-black hover:text-white font-secondary font-medium text-[11px] sm:text-sm tracking-tight transition-all duration-300 cursor-pointer select-none whitespace-nowrap inline-flex items-center justify-center"
-              >
-                Book A 15-Min Call
-              </a>
-            </GlassSurface>
+            <Button
+              variant="white"
+              darkHover
+              text="Book A 15-Min Call"
+              href="https://cal.com/cluvion/15min"
+              target="_blank"
+              className="px-4 sm:px-7 py-1.5 sm:py-2.5 text-[11px] sm:text-sm tracking-tight"
+            />
 
             {/* Mobile-only hamburger (2 lines) */}
             <button
@@ -227,10 +227,10 @@ export default function Navbar() {
           }`}
         />
 
-        {/* Right slide-in drawer panel */}
+        {/* Left slide-in drawer panel */}
         <div
-          className={`absolute top-0 right-0 bottom-0 w-[85%] max-w-sm sm:max-w-md bg-[#08080B]/95 backdrop-blur-2xl border-l border-white/10 shadow-[0_0_60px_rgba(0,0,0,0.8)] flex flex-col justify-between p-6 sm:p-10 z-10 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-            open ? "translate-x-0" : "translate-x-full"
+          className={`absolute top-0 left-0 bottom-0 w-[85%] max-w-sm sm:max-w-md bg-[#08080B]/95 backdrop-blur-2xl border-r border-white/10 shadow-[0_0_60px_rgba(0,0,0,0.8)] flex flex-col justify-between p-6 sm:p-10 z-10 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            open ? "translate-x-0" : "-translate-x-full"
           }`}
         >
           {/* Drawer header */}
@@ -260,7 +260,7 @@ export default function Navbar() {
                 key={label}
                 style={{
                   opacity: open ? 1 : 0,
-                  transform: open ? "translateX(0)" : "translateX(36px)",
+                  transform: open ? "translateX(0)" : "translateX(-36px)",
                   transition: "opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1)",
                   transitionDelay: open ? `${120 + index * 50}ms` : "0ms",
                 }}

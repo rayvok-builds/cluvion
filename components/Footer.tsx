@@ -88,6 +88,7 @@ export default function Footer() {
     { label: "Services", href: "/#services" },
     { label: "Process", href: "/#process" },
     { label: "Case Studies", href: "/case-studies" },
+    { label: "Pricing", href: "/pricing" },
     { label: "Contact", href: "/#contact" },
     { label: "Privacy Policy", href: "/privacy" },
     { label: "Legal", href: "/legal" },

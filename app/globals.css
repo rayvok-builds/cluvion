@@ -437,51 +437,67 @@ html.lenis, html.lenis body {
   animation: elastic-scale 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* ── WHITE variant: bubble wipes UP from below on hover ── */
-.btn-white {
+/* ── WHITE variant: dark bubble wipes UP from below on hover (Black on hover with white border) ── */
+.btn-white,
+.btn-white-dark {
   position: relative;
   overflow: hidden;
   z-index: 1;
-  transition: color 0.45s cubic-bezier(0.55, 0, 0.1, 1);
+  transition: color 0.45s cubic-bezier(0.55, 0, 0.1, 1), border-color 0.45s ease;
+  border: 1px solid #ffffff;
 }
-/* Bubble starts BELOW the button (top: 100%) and rises on hover */
-.btn-white::before {
+.btn-white::before,
+.btn-white-dark::before {
   content: "";
   position: absolute;
   left: 50%;
   top: 100%;
   transform: translateX(-50%) scaleY(1) scaleX(1.25);
-  width: 140%;
-  height: 180%;
-  background-color: #ffffff;
+  width: 150%;
+  height: 200%;
+  background-color: #070709;
   border-radius: 50%;
   display: block;
   transition: top 0.5s 0.05s cubic-bezier(0.55, 0, 0.1, 1),
               transform 0.5s 0.05s cubic-bezier(0.55, 0, 0.1, 1);
   z-index: -1;
 }
-.btn-white::after {
+.btn-white::after,
+.btn-white-dark::after {
   content: "";
   position: absolute;
   left: 55%;
   top: 100%;
   transform: translateX(-50%) scaleY(1) scaleX(1.45);
-  width: 160%;
-  height: 190%;
-  background-color: #ffffff;
+  width: 170%;
+  height: 210%;
+  background-color: #070709;
   border-radius: 50%;
   display: block;
   transition: top 0.5s cubic-bezier(0.55, 0, 0.1, 1),
               transform 0.5s cubic-bezier(0.55, 0, 0.1, 1);
   z-index: -1;
 }
-.btn-white:hover::before {
-  top: -35%;
-  transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
-}
-.btn-white:hover::after {
+.btn-white:hover::before,
+.btn-white-dark:hover::before,
+.group:hover .btn-white::before,
+.group:hover .btn-white-dark::before {
   top: -45%;
   transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
+}
+.btn-white:hover::after,
+.btn-white-dark:hover::after,
+.group:hover .btn-white::after,
+.group:hover .btn-white-dark::after {
+  top: -55%;
+  transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
+}
+.btn-white:hover,
+.btn-white-dark:hover,
+.group:hover .btn-white,
+.group:hover .btn-white-dark {
+  color: #ffffff;
+  border-color: #ffffff;
 }
 
 /* ── TRANSPARENT variant: white bubble wipes up from below ── */
@@ -497,8 +513,8 @@ html.lenis, html.lenis body {
   left: 50%;
   top: 100%;
   transform: translateX(-50%) scaleY(1) scaleX(1.25);
-  width: 140%;
-  height: 180%;
+  width: 150%;
+  height: 200%;
   background-color: #ffffff;
   border-radius: 50%;
   display: block;
@@ -512,8 +528,8 @@ html.lenis, html.lenis body {
   left: 55%;
   top: 100%;
   transform: translateX(-50%) scaleY(1) scaleX(1.45);
-  width: 160%;
-  height: 190%;
+  width: 170%;
+  height: 210%;
   background-color: #ffffff;
   border-radius: 50%;
   display: block;
@@ -521,22 +537,72 @@ html.lenis, html.lenis body {
               transform 0.5s cubic-bezier(0.55, 0, 0.1, 1);
   z-index: -1;
 }
-.btn-transparent:hover::before {
-  top: -35%;
-  transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
-}
-.btn-transparent:hover::after {
+.btn-transparent:hover::before,
+.group:hover .btn-transparent::before {
   top: -45%;
   transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
 }
+.btn-transparent:hover::after,
+.group:hover .btn-transparent::after {
+  top: -55%;
+  transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
+}
+.btn-transparent:hover,
+.group:hover .btn-transparent {
+  color: #070709;
+}
 
-/* ── GLASS variant: inside GlassSurface, text goes dark on hover ── */
+/* ── GLASS variant: bubble wipes UP from below with white fill, text goes dark ── */
 .btn-glass {
   position: relative;
-  transition: color 0.3s ease, background 0.3s ease;
+  overflow: hidden;
+  z-index: 1;
+  color: #ffffff;
+  transition: color 0.45s cubic-bezier(0.55, 0, 0.1, 1);
+  border: none;
+  background: transparent;
 }
-.btn-glass:hover {
-  color: #000000;
-  background: rgba(255, 255, 255, 0.9);
+.btn-glass::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translateX(-50%) scaleY(1) scaleX(1.25);
+  width: 150%;
+  height: 200%;
+  background-color: #ffffff;
+  border-radius: 50%;
+  display: block;
+  transition: top 0.5s 0.05s cubic-bezier(0.55, 0, 0.1, 1),
+              transform 0.5s 0.05s cubic-bezier(0.55, 0, 0.1, 1);
+  z-index: -1;
 }
-
+.btn-glass::after {
+  content: "";
+  position: absolute;
+  left: 55%;
+  top: 100%;
+  transform: translateX(-50%) scaleY(1) scaleX(1.45);
+  width: 170%;
+  height: 210%;
+  background-color: #ffffff;
+  border-radius: 50%;
+  display: block;
+  transition: top 0.5s cubic-bezier(0.55, 0, 0.1, 1),
+              transform 0.5s cubic-bezier(0.55, 0, 0.1, 1);
+  z-index: -1;
+}
+.btn-glass:hover::before,
+.group:hover .btn-glass::before {
+  top: -45%;
+  transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
+}
+.btn-glass:hover::after,
+.group:hover .btn-glass::after {
+  top: -55%;
+  transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
+}
+.btn-glass:hover,
+.group:hover .btn-glass {
+  color: #070709;
+}

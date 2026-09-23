@@ -7,6 +7,7 @@ import ExpandingWorkVideo from "./ExpandingWorkVideo";
 import TextReveal from "./TextReveal";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import Button from "./ui/Button";
 
 export default function WorkGrid() {
   const [mobileView, setMobileView] = useState<"single" | "grid">("grid");
@@ -96,13 +97,16 @@ export default function WorkGrid() {
 
       {/* Bottom Action: Redirect to Case Studies Page */}
       <div className="w-full pt-12 sm:pt-16 flex flex-col items-center justify-center px-4">
-        <Link
+        <Button
+          variant="glass"
           href="/case-studies"
-          className="group inline-flex items-center justify-center gap-3 px-8 sm:px-12 py-3.5 sm:py-4 bg-white hover:bg-black text-black hover:text-white border border-white font-mono text-xs sm:text-sm uppercase tracking-[0.15em] transition-all duration-300 cursor-pointer rounded-none select-none shadow-sm"
+          className="px-8 sm:px-11 py-3.5 sm:py-4 text-sm sm:text-base tracking-tight"
         >
-          <span>VIEW MORE</span>
-          <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1.5" />
-        </Link>
+          <span className="inline-flex items-center gap-2">
+            <span>View All</span>
+            <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+          </span>
+        </Button>
       </div>
     </section>
   );

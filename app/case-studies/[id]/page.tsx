@@ -49,7 +49,7 @@ export default function CaseStudyDetailPage({ params }: CaseStudyDetailPageProps
 
   return (
     <main className="relative w-full bg-[#050608] text-[#F4F4F6] min-h-screen overflow-x-clip">
-      <Navbar />
+      <Navbar defaultCollapsed />
 
       {/* ─── Hero Section: Title + Description + Specifications ───── */}
       <section className="w-full pt-32 sm:pt-40 lg:pt-44 pb-10 sm:pb-14 px-6 sm:px-10 lg:px-14">

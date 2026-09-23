@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowUpRight, Volume2, VolumeX } from "lucide-react";
 import { useFilm } from "./FilmContext";
 import TextReveal from "./TextReveal";
+import Button from "./ui/Button";
 
 interface ServiceItem {
   id: string;
@@ -637,15 +638,17 @@ function ServicePanel({
           </div>
         </div>
 
-        {/* CTA Button — completely accessible, visible, and clickable */}
-        <button
-          type="button"
+        {/* CTA Button — white variant button */}
+        <Button
+          variant="white"
           onClick={() => openProjectModal(service.title)}
-          className="group relative z-20 inline-flex items-center gap-3 px-6 py-3.5 bg-white hover:bg-black text-black hover:text-white border border-white font-mono text-xs uppercase tracking-[0.15em] transition-all duration-300 self-start cursor-pointer rounded-none shadow-md active:scale-95"
+          className="self-start text-xs sm:text-sm font-semibold tracking-wide"
         >
-          <span>Brief {service.title}</span>
-          <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-        </button>
+          <span className="inline-flex items-center gap-2">
+            <span>Brief {service.title}</span>
+            <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </span>
+        </Button>
       </div>
 
       {/* ── RIGHT: Panel — Phone mockup for UGC, cinematic video for rest (Desktop >= lg) ── */}

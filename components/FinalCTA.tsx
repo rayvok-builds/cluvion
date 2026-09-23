@@ -63,12 +63,12 @@ export default function FinalCTA() {
         </div>
 
         {/* CTA Button — glass variant */}
-        <div className="mb-12 sm:mb-16">
+        <div className="mb-12 sm:mb-16 flex justify-center">
           <Button
             variant="glass"
             text="Book A 15-Min Call"
             onClick={scrollToCal}
-            className="px-8 sm:px-11 py-3.5 sm:py-4 text-base sm:text-lg tracking-tight"
+            className="px-8 sm:px-11 py-3.5 sm:py-4 text-base sm:text-lg"
           />
         </div>
 

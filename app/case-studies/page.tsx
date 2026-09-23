@@ -37,7 +37,7 @@ export default function CaseStudiesPage() {
 
   return (
     <main className="relative w-full  min-h-screen overflow-x-clip">
-      <Navbar />
+      <Navbar defaultCollapsed />
 
       {/* ─── Header ───────────────────────────────────────────────── */}
       <section className="w-full pt-36 sm:pt-44 pb-10 px-6 sm:px-10 lg:px-14">
