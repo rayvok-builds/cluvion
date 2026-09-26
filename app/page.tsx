@@ -21,6 +21,7 @@ export default function Home() {
         strength={2}
         curve="bezier"
         divCount={5}
+        className="hidden md:block"
         style={{ zIndex: 35 }}
       />
 

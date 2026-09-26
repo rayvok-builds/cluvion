@@ -348,6 +348,16 @@ body.in-footer-section .gradual-blur-bottom {
   transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
 }
 
+/* Hide top gradual blur in navbar on mobile screens */
+@media (max-width: 767px) {
+  .gradual-blur-top {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+}
+
 /* ── Hero Section Desktop Nav Link Hover Effect ── */
 .hero-nav-link {
   position: relative;
