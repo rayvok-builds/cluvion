@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Volume2, VolumeX } from "lucide-react";
-import TextReveal from "./TextReveal";
 
 /* ─── Storyboard Items (Single Full Widescreen Image) ─────────────────────── */
 const STORYBOARD_ITEMS = [
@@ -67,7 +66,7 @@ const BRIEF_FIELDS = [
 const STEP_LABELS = ["BRIEF", "STORYBOARD", "PRODUCTION", "DELIVERY"];
 
 /* ─── Step Threshold Helpers ─────────────────────────────────────────────── */
-const T = [0, 0.18, 0.42, 0.68, 0.90, 1.0];
+const T = [0, 0.20, 0.45, 0.70, 0.90, 1.0];
 
 function getStep(p: number): [number, number] {
   if (p < T[1]) return [-1, p / T[1]];
@@ -131,8 +130,7 @@ export default function HowWeWork() {
         start: "top top",
         end: "bottom bottom",
         pin: sticky,
-        scrub: 0.8,
-        anticipatePin: 1,
+        scrub: true,
         invalidateOnRefresh: true,
         onToggle: (self) => {
           if (self.isActive) {
@@ -203,12 +201,12 @@ export default function HowWeWork() {
     >
       <div
         ref={containerRef}
-        className="relative w-full h-[400vh] overflow-x-clip"
+        className="relative w-full h-[500vh] overflow-x-clip"
       >
         {/* ── PINNED VIEWPORT (100vh Full Screen) ── */}
         <div
           ref={stickyRef}
-          className="w-full h-screen sticky top-0 flex flex-col overflow-hidden bg-[#060708]"
+          className="w-full h-screen flex flex-col overflow-hidden bg-[#060708]"
         >
           {/* ── TOP BAR (Minimal Header & Step Counter) ── */}
           <div className="flex items-center justify-between px-4 sm:px-8 lg:px-12 pt-3 sm:pt-4 pb-2.5 sm:pb-3 border-b border-white/[0.06] shrink-0 bg-[#060708] z-30">
@@ -278,18 +276,17 @@ export default function HowWeWork() {
 
                   {/* Main Body: Cinematic center statement */}
                   <div className="flex-1 flex flex-col items-center justify-center text-center my-auto py-6">
-                    <TextReveal
-                      as="h1"
-                      lines={["HOW", "WE WORK"]}
+                    <h1
                       style={{ fontSize: "clamp(3.5rem, 8vw, 6rem)" }}
                       className="font-primary font-bold uppercase text-white tracking-tight leading-[0.88] select-none text-center"
-                      innerClassName="text-center"
-                      paragraph={
-                        <p className="font-mono text-xs sm:text-sm text-white/45 max-w-md mx-auto mt-4 sm:mt-6 leading-relaxed text-center">
-                          Four synchronized phases engineered to convert raw creative ambition into cinema-grade production.
-                        </p>
-                      }
-                    />
+                    >
+                      <span>HOW</span>
+                      <br />
+                      <span>WE WORK</span>
+                    </h1>
+                    <p className="font-mono text-xs sm:text-sm text-white/45 max-w-md mx-auto mt-4 sm:mt-6 leading-relaxed text-center">
+                      Four synchronized phases engineered to convert raw creative ambition into cinema-grade production.
+                    </p>
                   </div>
 
                   {/* Bottom Row: Steps & Scroll prompt */}
